@@ -1,0 +1,6 @@
+name: Popopo
+version: 0.0
+description: '複数の機能を一つのプラグインで提供します'
+author: koshianpan
+
+main: online.popopo.popopo.Main
