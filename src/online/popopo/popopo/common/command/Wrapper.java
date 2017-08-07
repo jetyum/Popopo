@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class Wrapper implements TabExecutor {
-    private final Object source;
+    private final Definition definition;
     private final String command;
     private final List<SubCommand> subCommands;
     private final Completer completer;
@@ -26,14 +26,14 @@ public class Wrapper implements TabExecutor {
         Collections.sort(subCommands);
         Collections.reverse(subCommands);
 
-        this.source = def;
+        this.definition = def;
         this.command = def.getCommand();
         this.subCommands = subCommands;
         this.completer = comp;
     }
 
-    public void registerToPlugin(JavaPlugin plugin) {
-        plugin.getCommand(this.command).setExecutor(this);
+    public void setTo(JavaPlugin p) {
+        p.getCommand(this.command).setExecutor(this);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Wrapper implements TabExecutor {
             }
 
             return (Boolean) s.getMethod()
-                    .invoke(this.source, arg);
+                    .invoke(this.definition, arg);
         } catch (Exception e) {
             return false;
         }
