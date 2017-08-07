@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Factory {
-    private Completer completer;
+    private final Completer completer;
 
     public  Factory() {
         this.completer = new DefaultCompleter();

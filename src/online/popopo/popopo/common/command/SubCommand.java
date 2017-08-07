@@ -1,7 +1,11 @@
 package online.popopo.popopo.common.command;
 
+import org.bukkit.command.CommandSender;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SubCommand implements Comparable<SubCommand> {
     private final String command;
@@ -26,10 +30,6 @@ public class SubCommand implements Comparable<SubCommand> {
         return this.command;
     }
 
-    public Method getMethod() {
-        return this.method;
-    }
-
     public String[] getArgKeys() {
         return this.argKeys;
     }
@@ -42,17 +42,31 @@ public class SubCommand implements Comparable<SubCommand> {
         return this.commandSize;
     }
 
-    public boolean isParent() {
-        return this.command.isEmpty();
-    }
-
     public boolean matchWith(String s) {
-        return isParent() ||
+        return this.command.isEmpty() ||
                 (s + " ").startsWith(this.command + " ");
     }
 
     public boolean resembleWith(String s) {
-        return !isParent() && this.command.startsWith(s);
+        return !this.command.isEmpty() &&
+                this.command.startsWith(s);
+    }
+
+    public boolean run(Object o, CommandSender s, String[] a){
+        Map<String, String> map = new HashMap<>();
+        int start = this.commandSize;
+
+        for (int i = start; i < a.length; i++) {
+            map.put(this.argKeys[i - start], a[i]);
+        }
+
+        Argument arg = new Argument(s, map);
+
+        try {
+            return (Boolean) this.method .invoke(o, arg);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

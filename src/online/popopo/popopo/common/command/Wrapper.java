@@ -9,15 +9,15 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class Wrapper implements TabExecutor {
-    private final Definition definition;
+    private final Definition object;
     private final String command;
     private final List<SubCommand> subCommands;
     private final Completer completer;
 
-    public Wrapper(Definition def, Completer comp) {
+    public Wrapper(Definition d, Completer c) {
         List<SubCommand> subCommands = new ArrayList<>();
 
-        for (Method m : def.getClass().getMethods()) {
+        for (Method m : d.getClass().getMethods()) {
             if (m.isAnnotationPresent(Executor.class)) {
                 subCommands.add(new SubCommand(m));
             }
@@ -26,10 +26,10 @@ public class Wrapper implements TabExecutor {
         Collections.sort(subCommands);
         Collections.reverse(subCommands);
 
-        this.definition = def;
-        this.command = def.getCommand();
+        this.object = d;
+        this.command = d.getCommand();
         this.subCommands = subCommands;
-        this.completer = comp;
+        this.completer = c;
     }
 
     public void setTo(JavaPlugin p) {
@@ -49,24 +49,7 @@ public class Wrapper implements TabExecutor {
             }
         }
 
-        if (s == null) {
-            return false;
-        }
-
-        try {
-            Map<String, String> arg = new HashMap<>();
-            int start = s.getCommandSize();
-            int top = args.length - s.getCommandSize();
-
-            for (int i = 0; i < top; i++) {
-                arg.put(s.getArgKeys()[i], args[i + start]);
-            }
-
-            return (Boolean) s.getMethod()
-                    .invoke(this.definition, arg);
-        } catch (Exception e) {
-            return false;
-        }
+        return s != null && s.run(this.object, sender, args);
     }
 
     @Override
@@ -76,19 +59,19 @@ public class Wrapper implements TabExecutor {
         int end = args.length - 1;
 
         for (SubCommand c : this.subCommands) {
-            int top = end - c.getCommandSize();
-
             if (c.getSize() >= args.length) {
                 if (c.resembleWith(in)) {
                     res.add(c.getCommand().split(" ")[end]);
                 } else if (c.matchWith(in)) {
-                    String key = c.getArgKeys()[top];
-                    res.addAll(this.completer.candidateOf(key));
+                    int i = end - c.getCommandSize();
+                    String k = c.getArgKeys()[i];
+
+                    res.addAll(this.completer.candidateOf(k));
                 }
             }
-
-            res.removeIf(s -> !s.startsWith(args[end]));
         }
+
+        res.removeIf(s -> !s.startsWith(args[end]));
 
         return new ArrayList<>(res);
     }
