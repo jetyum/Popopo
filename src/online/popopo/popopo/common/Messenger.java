@@ -55,7 +55,7 @@ public class Messenger implements Configurable {
     }
 
     @Override
-    public String getConfigName() {
+    public String getSectionName() {
         return "theme";
     }
 }
