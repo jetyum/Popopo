@@ -1,5 +1,8 @@
 package online.popopo.popopo.common.command;
 
+import online.popopo.popopo.common.message.Caster;
+import online.popopo.popopo.common.message.PluginCaster;
+import online.popopo.popopo.common.message.Theme;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -13,8 +16,9 @@ public class Wrapper implements TabExecutor {
     private final String command;
     private final List<SubCommand> subCommands;
     private final Completer completer;
+    private final Theme theme;
 
-    public Wrapper(Definition d, Completer c) {
+    public Wrapper(Definition d, Completer c, Theme t) {
         List<SubCommand> subCommands = new ArrayList<>();
 
         for (Method m : d.getClass().getMethods()) {
@@ -30,6 +34,7 @@ public class Wrapper implements TabExecutor {
         this.command = d.getCommand();
         this.subCommands = subCommands;
         this.completer = c;
+        this.theme = t;
     }
 
     public void setTo(JavaPlugin p) {
@@ -49,7 +54,9 @@ public class Wrapper implements TabExecutor {
             }
         }
 
-        return s != null && s.run(this.object, sender, args);
+        Caster c = PluginCaster.newFrom(this.theme, sender);
+
+        return s != null && s.run(this.object, c, args);
     }
 
     @Override

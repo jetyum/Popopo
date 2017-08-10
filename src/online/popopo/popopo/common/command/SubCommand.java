@@ -1,6 +1,6 @@
 package online.popopo.popopo.common.command;
 
-import org.bukkit.command.CommandSender;
+import online.popopo.popopo.common.message.Caster;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -52,7 +52,7 @@ public class SubCommand implements Comparable<SubCommand> {
                 this.command.startsWith(s);
     }
 
-    public boolean run(Object o, CommandSender s, String[] a){
+    public boolean run(Object o, Caster c, String[] a){
         Map<String, String> map = new HashMap<>();
         int start = this.commandSize;
 
@@ -60,11 +60,13 @@ public class SubCommand implements Comparable<SubCommand> {
             map.put(this.argKeys[i - start], a[i]);
         }
 
-        Argument arg = new Argument(s, map);
+        Argument arg = new Argument(c, map);
 
         try {
-            return (Boolean) this.method .invoke(o, arg);
+            return (Boolean) this.method.invoke(o, arg);
         } catch (Exception e) {
+            c.bad("Error", "正しく入力してください");
+
             return false;
         }
     }

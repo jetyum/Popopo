@@ -1,5 +1,6 @@
 package online.popopo.popopo.common.command;
 
+import online.popopo.popopo.common.message.Theme;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,13 +11,15 @@ import java.util.stream.Collectors;
 
 public class Factory {
     private final Completer completer;
+    private final Theme theme;
 
-    public  Factory() {
+    public  Factory(Theme t) {
         this.completer = new DefaultCompleter();
+        this.theme = t;
     }
 
-    public Wrapper create(Definition def) {
-        return new Wrapper(def, this.completer);
+    public Wrapper create(Definition d) {
+        return new Wrapper(d, this.completer, this.theme);
     }
 
     private class DefaultCompleter implements Completer {

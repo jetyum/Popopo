@@ -1,23 +1,23 @@
 package online.popopo.popopo.common.command;
 
-import org.bukkit.command.CommandSender;
+import online.popopo.popopo.common.message.Caster;
 
 import java.util.Map;
 
-public class InputProperty {
-    private final CommandSender sender;
+public class Argument {
+    private final Caster caster;
     private final Map<String, String> argMap;
 
-    public InputProperty(CommandSender s, Map<String, String> a) {
-        this.sender = s;
+    public Argument(Caster c, Map<String, String> a) {
+        this.caster = c;
         this.argMap = a;
     }
 
     public String get(String key) {
-        return argMap.get(key);
+        return this.argMap.get(key);
     }
 
-    public CommandSender getSender() {
-        return
+    public Caster respond() {
+        return this.caster;
     }
 }
