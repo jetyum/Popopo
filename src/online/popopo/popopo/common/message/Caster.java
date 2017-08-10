@@ -4,10 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public abstract class PluginCaster implements Caster {
+public abstract class Caster implements Casting {
     private final Theme theme;
 
-    public PluginCaster(Theme theme) {
+    public Caster(Theme theme) {
         this.theme = theme;
     }
 
@@ -55,7 +55,7 @@ public abstract class PluginCaster implements Caster {
         cast(prefix + message);
     }
 
-    public static class Messenger extends PluginCaster {
+    public static class Messenger extends Caster {
         private final CommandSender sender;
 
         public Messenger(Theme t, CommandSender s) {
@@ -69,7 +69,7 @@ public abstract class PluginCaster implements Caster {
         }
     }
 
-    public static class Broadcaster extends PluginCaster {
+    public static class Broadcaster extends Caster {
         public Broadcaster(Theme t) {
             super(t);
         }

@@ -1,6 +1,6 @@
 package online.popopo.popopo.common.message;
 
-public interface Caster {
+public interface Casting {
     void cast(String message);
 
     void info(String title, String message);
