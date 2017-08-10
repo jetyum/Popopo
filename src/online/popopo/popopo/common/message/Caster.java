@@ -1,13 +1,90 @@
 package online.popopo.popopo.common.message;
 
-public interface Caster {
-    void cast(String m);
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
-    void info(String title, String m);
+public abstract class PluginCaster implements Caster {
+    private final Theme theme;
 
-    void good(String title, String m);
+    public PluginCaster(Theme theme) {
+        this.theme = theme;
+    }
 
-    void bad(String title, String m);
+    protected String buildPrefix(ChatColor c, String s) {
+        StringBuilder buf = new StringBuilder();
 
-    void warning(String title, String m);
+        buf.append("[");
+        buf.append(c);
+        buf.append(s);
+        buf.append(ChatColor.RESET);
+        buf.append("] ");
+
+        return buf.toString();
+    }
+
+    @Override
+    public void info(String title, String message){
+        ChatColor info = this.theme.getInfo();
+        String prefix = buildPrefix(info, title);
+
+        cast(prefix + message);
+    }
+
+    @Override
+    public void good(String title, String message){
+        ChatColor good = this.theme.getGood();
+        String prefix = buildPrefix(good, title);
+
+        cast(prefix + message);
+    }
+
+    @Override
+    public void bad(String title, String message){
+        ChatColor bad = this.theme.getBad();
+        String prefix = buildPrefix(bad, title);
+
+        cast(prefix + message);
+    }
+
+    @Override
+    public void warning(String title, String message){
+        ChatColor warning = this.theme.getWarning();
+        String prefix = buildPrefix(warning, title);
+
+        cast(prefix + message);
+    }
+
+    public static class Messenger extends PluginCaster {
+        private final CommandSender sender;
+
+        public Messenger(Theme t, CommandSender s) {
+            super(t);
+            this.sender = s;
+        }
+
+        @Override
+        public void cast(String message) {
+            this.sender.sendMessage(message);
+        }
+    }
+
+    public static class Broadcaster extends PluginCaster {
+        public Broadcaster(Theme t) {
+            super(t);
+        }
+
+        @Override
+        public void cast(String message) {
+            Bukkit.broadcastMessage(message);
+        }
+    }
+
+    public static Messenger newFrom(Theme t, CommandSender s) {
+        return new Messenger(t, s);
+    }
+
+    public static Broadcaster newFrom(Theme t) {
+        return new Broadcaster(t);
+    }
 }

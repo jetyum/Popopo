@@ -2,10 +2,9 @@ package online.popopo.popopo.common.command;
 
 import online.popopo.popopo.common.message.Caster;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SubCommand implements Comparable<SubCommand> {
     private final String command;
@@ -52,21 +51,13 @@ public class SubCommand implements Comparable<SubCommand> {
                 this.command.startsWith(s);
     }
 
-    public boolean run(Object o, Caster c, String[] a){
-        Map<String, String> map = new HashMap<>();
-        int start = this.commandSize;
-
-        for (int i = start; i < a.length; i++) {
-            map.put(this.argKeys[i - start], a[i]);
-        }
-
-        Argument arg = new Argument(c, map);
-
+    public boolean run(Object o, Caster c, Argument a){
         try {
-            return (Boolean) this.method.invoke(o, arg);
-        } catch (Exception e) {
-            c.bad("Error", "正しく入力してください");
+            this.method.invoke(o, c, a);
 
+            return true;
+        } catch (InvocationTargetException
+                | IllegalAccessException e) {
             return false;
         }
     }

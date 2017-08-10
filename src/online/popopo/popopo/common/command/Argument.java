@@ -1,15 +1,15 @@
 package online.popopo.popopo.common.command;
 
-import online.popopo.popopo.common.message.Caster;
+import org.bukkit.command.CommandSender;
 
 import java.util.Map;
 
 public class Argument {
-    private final Caster caster;
+    private final CommandSender sender;
     private final Map<String, String> argMap;
 
-    public Argument(Caster c, Map<String, String> a) {
-        this.caster = c;
+    public Argument(CommandSender s, Map<String, String> a) {
+        this.sender = s;
         this.argMap = a;
     }
 
@@ -17,7 +17,7 @@ public class Argument {
         return this.argMap.get(key);
     }
 
-    public Caster respond() {
-        return this.caster;
+    public CommandSender getSender() {
+        return this.sender;
     }
 }

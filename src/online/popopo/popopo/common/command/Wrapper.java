@@ -1,7 +1,6 @@
 package online.popopo.popopo.common.command;
 
 import online.popopo.popopo.common.message.Caster;
-import online.popopo.popopo.common.message.PluginCaster;
 import online.popopo.popopo.common.message.Theme;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -44,19 +43,29 @@ public class Wrapper implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
         String in = String.join(" ", args);
-        SubCommand s = null;
+        Caster m = Caster.newFrom(this.theme, sender);
 
         for (SubCommand c : this.subCommands) {
             if (c.getSize() == args.length) {
                 if (c.matchWith(in)) {
-                    s = c;
+                    Map<String, String> map = new HashMap<>();
+                    int start = c.getCommandSize();
+                    int argSize = args.length - start;
+
+                    for (int i = 0; i < argSize; i++) {
+                        String key = c.getArgKeys()[i];
+
+                        map.put(key, args[i + start]);
+                    }
+
+                    Argument a = new Argument(sender, map);
+
+                    return c.run(this.object, m, a);
                 }
             }
         }
 
-        Caster c = PluginCaster.newFrom(this.theme, sender);
-
-        return s != null && s.run(this.object, c, args);
+        return false;
     }
 
     @Override

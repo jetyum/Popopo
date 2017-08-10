@@ -11,15 +11,13 @@ import java.util.stream.Collectors;
 
 public class Factory {
     private final Completer completer;
-    private final Theme theme;
 
-    public  Factory(Theme t) {
+    public  Factory() {
         this.completer = new DefaultCompleter();
-        this.theme = t;
     }
 
-    public Wrapper create(Definition d) {
-        return new Wrapper(d, this.completer, this.theme);
+    public Wrapper create(Definition d, Theme t) {
+        return new Wrapper(d, this.completer, t);
     }
 
     private class DefaultCompleter implements Completer {
