@@ -4,11 +4,11 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Map;
 
-public class Argument {
+public class InputProperty {
     private final CommandSender sender;
     private final Map<String, String> argMap;
 
-    public Argument(CommandSender s, Map<String, String> a) {
+    public InputProperty(CommandSender s, Map<String, String> a) {
         this.sender = s;
         this.argMap = a;
     }
@@ -18,6 +18,6 @@ public class Argument {
     }
 
     public CommandSender getSender() {
-        return this.sender;
+        return
     }
 }
