@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public abstract class PluginCaster implements Castable {
+public abstract class PluginCaster implements Caster {
     private final Theme theme;
 
     public PluginCaster(Theme theme) {
