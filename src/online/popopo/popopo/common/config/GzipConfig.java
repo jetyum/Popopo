@@ -1,6 +1,7 @@
 package online.popopo.popopo.common.config;
 
 import com.google.common.io.Files;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.HashMap;
@@ -9,29 +10,39 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class GzipConfig extends Config {
-    private final String filepath;
+    private final String path;
     private Map<String, Map<String, Object>> table;
 
-    public GzipConfig(String filepath) {
-        this.filepath = filepath;
+    public GzipConfig(String path) {
+        this.path = path;
         this.table = new HashMap<>();
+    }
+
+    public static GzipConfig newFrom(JavaPlugin p, String path) throws IOException {
+        String dir = p.getDataFolder().getAbsolutePath();
+        String abs = dir + "/" + path;
+
+        if (!new File(abs).exists()) {
+            p.saveResource(path, false);
+        }
+
+        return new GzipConfig(abs);
     }
 
     @Override
     public boolean load() {
         try {
-            File file = new File(this.filepath);
+            File file = new File(this.path);
             InputStream fileIn, gzipIn;
             ObjectInputStream in;
 
-            if (!file.exists()) {
+            if (!new File(this.path).exists()) {
                 return false;
             }
 
             fileIn = new FileInputStream(file);
             gzipIn = new GZIPInputStream(fileIn);
             in = new ObjectInputStream(gzipIn);
-
             Object data = in.readObject();
 
             this.table = this.table.getClass().cast(data);
@@ -47,7 +58,7 @@ public class GzipConfig extends Config {
     @Override
     public boolean save() {
         try {
-            File file = new File(this.filepath);
+            File file = new File(this.path);
             OutputStream fileOut, gzipOut;
             ObjectOutputStream out;
 
@@ -71,7 +82,7 @@ public class GzipConfig extends Config {
     @Override
     public boolean contain(String section, String key) {
         return this.table.containsKey(section)
-                || table.get(section).containsKey(key);
+                && table.get(section).containsKey(key);
     }
 
     @Override

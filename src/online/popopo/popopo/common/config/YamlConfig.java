@@ -5,21 +5,22 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 
 public class YamlConfig extends Config {
-    private final String filepath;
+    private final String path;
     private final FileConfiguration config;
     private final JavaPlugin plugin;
 
-    public YamlConfig(String filepath) {
-        this.filepath = filepath;
+    public YamlConfig(String path) {
+        this.path = path;
         this.config = new YamlConfiguration();
         this.plugin = null;
     }
 
     private YamlConfig(FileConfiguration c, JavaPlugin p) {
-        this.filepath = "";
+        this.path = "";
         this.config = c;
         this.plugin = p;
     }
@@ -28,6 +29,17 @@ public class YamlConfig extends Config {
         p.saveDefaultConfig();
 
         return new YamlConfig(p.getConfig(), p);
+    }
+
+    public static YamlConfig newFrom(JavaPlugin p, String path) throws IOException {
+        String dir = p.getDataFolder().getAbsolutePath();
+        String abs = dir + "/" + path;
+
+        if (!new File(abs).exists()) {
+            p.saveResource(path, false);
+        }
+
+        return new YamlConfig(abs);
     }
 
     @Override
@@ -39,7 +51,7 @@ public class YamlConfig extends Config {
         }
 
         try {
-            this.config.load(this.filepath);
+            this.config.load(this.path);
 
             return true;
         } catch (InvalidConfigurationException
@@ -57,7 +69,7 @@ public class YamlConfig extends Config {
         }
 
         try {
-            this.config.save(this.filepath);
+            this.config.save(this.path);
 
             return true;
         } catch (IOException e) {
