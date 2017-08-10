@@ -4,6 +4,7 @@ import com.sun.management.OperatingSystemMXBean;
 import online.popopo.popopo.common.command.Argument;
 import online.popopo.popopo.common.command.Definition;
 import online.popopo.popopo.common.command.Executor;
+import online.popopo.popopo.common.message.Caster;
 
 import java.lang.management.ManagementFactory;
 
@@ -39,7 +40,7 @@ public class SystemCommand implements Definition {
     }
 
     @Executor({"cpu"})
-    public boolean onCpuCommand(Argument arg) {
+    public void onCpuCommand(Caster c, Argument arg) {
         OperatingSystemMXBean bean = (OperatingSystemMXBean)
                 ManagementFactory.getOperatingSystemMXBean();
         double rate = bean.getSystemCpuLoad() * 100;
@@ -49,18 +50,15 @@ public class SystemCommand implements Definition {
         buf.append((int) rate);
         buf.append("%");
 
-        arg.respond().info("CPU", buf.toString());
-
-        return true;
+        c.info("CPU", buf.toString());
     }
 
     @Executor({"ram"})
-    public boolean onRamCommand(Argument arg) {
+    public void onRamCommand(Caster c, Argument arg) {
         long total = Runtime.getRuntime().totalMemory();
         long free = Runtime.getRuntime().freeMemory();
         long used = total - free;
         long rate = used * 100 / total;
-
         StringBuilder buf = new StringBuilder();
 
         buf.append("Current usage is ");
@@ -71,8 +69,6 @@ public class SystemCommand implements Definition {
         buf.append(memoryToString(total));
         buf.append(")");
 
-        arg.respond().info("RAM", buf.toString());
-
-        return true;
+        c.info("RAM", buf.toString());
     }
 }
