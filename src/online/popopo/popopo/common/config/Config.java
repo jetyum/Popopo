@@ -4,7 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class PluginConfig implements Config {
+public abstract class Config implements Configuring {
+    @Override
     public boolean injectInto(Configurable i) {
         String section = i.getSectionName();
 
@@ -43,6 +44,7 @@ public abstract class PluginConfig implements Config {
         return true;
     }
 
+    @Override
     public boolean extractFrom(Configurable i) {
         String section = i.getSectionName();
 

@@ -1,6 +1,6 @@
 package online.popopo.popopo.common.config;
 
-public interface Config {
+public interface Configuring {
     boolean load();
 
     boolean save();
@@ -10,4 +10,8 @@ public interface Config {
     void set(String section, String key, Object value);
 
     Object get(String section, String key);
+
+    boolean injectInto(Configurable i);
+
+    boolean extractFrom(Configurable i);
 }

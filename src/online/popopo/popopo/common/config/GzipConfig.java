@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class GzipConfig extends PluginConfig {
+public class GzipConfig extends Config {
     private final String filepath;
     private Map<String, Map<String, Object>> table;
 

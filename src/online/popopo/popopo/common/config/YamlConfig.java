@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
-public class YamlConfig extends PluginConfig {
+public class YamlConfig extends Config {
     private final String filepath;
     private final FileConfiguration config;
     private final JavaPlugin plugin;
