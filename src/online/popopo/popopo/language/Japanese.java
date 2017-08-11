@@ -81,6 +81,7 @@ public class Japanese implements Converter, Configurable {
                 set.add(base + s);
             }
 
+            set.add(base + kana);
             set.addAll(Arrays.asList(token, ""));
         }
 

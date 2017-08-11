@@ -1,6 +1,7 @@
 package online.popopo.popopo.language;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class InputListener implements Listener {
     private static final long MAX_LENGTH = 40;
@@ -17,17 +20,18 @@ public class InputListener implements Listener {
     private final JavaPlugin plugin;
     private final Converter converter;
     private final Deque<Set<String>> buffer;
+    private final Set<String> roster;
 
     public InputListener(JavaPlugin p, Converter c) {
         this.plugin = p;
         this.converter = c;
-        this.buffer = new ArrayDeque<>();
+        this.buffer = new LinkedBlockingDeque<>();
+        this.roster = new CopyOnWriteArraySet<>();
 
         Bukkit.getPluginManager().registerEvents(this, p);
-
     }
 
-    public Set<String> candidateOf(String token) {
+    private Set<String> candidateOf(String token) {
         for (Set<String> s : this.buffer) {
             if (s.contains(token)) {
                 return s;
@@ -42,7 +46,9 @@ public class InputListener implements Listener {
         Player p = e.getPlayer();
         String token = e.getLastToken();
 
-        if (token.length() > MAX_LENGTH) {
+        if (this.roster.contains(p.getName())) {
+            return;
+        } else if (token.length() > MAX_LENGTH) {
             return;
         }
 
@@ -54,21 +60,23 @@ public class InputListener implements Listener {
             return;
         }
 
-        InputListener o = this;
-
         e.getTabCompletions().clear();
+        this.roster.add(p.getName());
+        if (this.buffer.size() > BUFF_SIZE) {
+            this.buffer.pop();
+        }
+
+        InputListener o = this;
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                Set<String> s = o.converter.convert(token);
+                o.buffer.push(o.converter.convert(token));
+                o.roster.remove(p.getName());
 
-                if (o.buffer.size() > BUFF_SIZE) {
-                    o.buffer.pop();
-                }
-
-                o.buffer.push(s);
+                p.playSound(p.getLocation(),
+                        Sound.ENTITY_CHICKEN_EGG, 1.0f, 0.9f);
             }
-        }.runTask(this.plugin);
+        }.runTaskAsynchronously(this.plugin);
     }
 }
