@@ -40,22 +40,44 @@ public class Wrapper implements TabExecutor {
         p.getCommand(this.command).setExecutor(this);
     }
 
+    public List<String> inputToArg(String in) {
+        List<String> args = new ArrayList<>();
+        String[] array = in.split("\"");
+
+        for (int i = 0; i < array.length; i++) {
+            if (i % 2 == 1) {
+                args.add(array[i]);
+
+                continue;
+            }
+
+            for (String s : array[i].split(" ")) {
+                if (!s.isEmpty()) {
+                    args.add(s);
+                }
+            }
+        }
+
+        return args;
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
-        String in = String.join(" ", args);
+    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] rawArgs) {
+        String in = String.join(" ", rawArgs);
+        List<String> args = inputToArg(in);
         Caster m = Caster.newFrom(this.theme, sender);
 
         for (SubCommand c : this.subCommands) {
-            if (c.getSize() == args.length) {
+            if (c.getSize() == args.size()) {
                 if (c.matchWith(in)) {
                     Map<String, String> map = new HashMap<>();
                     int start = c.getCommandSize();
-                    int argSize = args.length - start;
+                    int argSize = args.size() - start;
 
                     for (int i = 0; i < argSize; i++) {
                         String key = c.getArgKeys()[i];
 
-                        map.put(key, args[i + start]);
+                        map.put(key, args.get(i + start));
                     }
 
                     Argument a = new Argument(sender, map);
