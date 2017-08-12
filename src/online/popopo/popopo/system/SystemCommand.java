@@ -1,4 +1,4 @@
-package online.popopo.popopo.command;
+package online.popopo.popopo.system;
 
 import com.sun.management.OperatingSystemMXBean;
 import online.popopo.popopo.common.command.Argument;
