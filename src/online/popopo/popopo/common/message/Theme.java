@@ -10,6 +10,9 @@ public class Theme implements Configurable {
         return "theme";
     }
 
+    @Parameter("text")
+    private ChatColor text = ChatColor.WHITE;
+
     @Parameter("info")
     private ChatColor info = ChatColor.WHITE;
 
@@ -22,19 +25,23 @@ public class Theme implements Configurable {
     @Parameter("warning")
     private ChatColor warning = ChatColor.WHITE;
 
+    public ChatColor getText() {
+        return this.text;
+    }
+
     public ChatColor getInfo() {
-        return info;
+        return this.info;
     }
 
     public ChatColor getGood() {
-        return good;
+        return this.good;
     }
 
     public ChatColor getBad() {
-        return bad;
+        return this.bad;
     }
 
     public ChatColor getWarning() {
-        return warning;
+        return this.warning;
     }
 }

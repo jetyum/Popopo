@@ -14,11 +14,11 @@ public abstract class Caster implements Casting {
     protected String buildPrefix(ChatColor c, String s) {
         StringBuilder buf = new StringBuilder();
 
-        buf.append("[");
         buf.append(c);
+        buf.append("[");
         buf.append(s);
-        buf.append(ChatColor.RESET);
         buf.append("] ");
+        buf.append(ChatColor.RESET);
 
         return buf.toString();
     }
@@ -28,7 +28,7 @@ public abstract class Caster implements Casting {
         ChatColor info = this.theme.getInfo();
         String prefix = buildPrefix(info, title);
 
-        cast(prefix + message);
+        cast(prefix + this.theme.getText() + message);
     }
 
     @Override
@@ -36,7 +36,7 @@ public abstract class Caster implements Casting {
         ChatColor good = this.theme.getGood();
         String prefix = buildPrefix(good, title);
 
-        cast(prefix + message);
+        cast(prefix + this.theme.getText() + message);
     }
 
     @Override
@@ -44,7 +44,7 @@ public abstract class Caster implements Casting {
         ChatColor bad = this.theme.getBad();
         String prefix = buildPrefix(bad, title);
 
-        cast(prefix + message);
+        cast(prefix + this.theme.getText() + message);
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class Caster implements Casting {
         ChatColor warning = this.theme.getWarning();
         String prefix = buildPrefix(warning, title);
 
-        cast(prefix + message);
+        cast(prefix + this.theme.getText() + message);
     }
 
     public static class Messenger extends Caster {
