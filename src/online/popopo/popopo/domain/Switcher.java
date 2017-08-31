@@ -13,9 +13,9 @@ import java.util.UUID;
 public abstract class Switcher {
     private final JavaPlugin plugin;
     private final Player player;
-    private final PlayerData from;
-    private final PlayerData to;
-    private final PlayerData main;
+    private final Domain from;
+    private final Domain to;
+    private final PlayerData data;
 
     public Switcher(JavaPlugin plugin, Player p,
                     Domain from, Domain to) {
@@ -23,9 +23,9 @@ public abstract class Switcher {
 
         this.plugin = plugin;
         this.player = p;
-        this.from = from.getPlayerData(p);
-        this.to = to.getPlayerData(p);
-        this.main = main.getPlayerData(p);
+        this.from = from;
+        this.to = to;
+        this.data = main.getPlayerData(p);
     }
 
     private void resetPotionEffect(PotionEffect e) {
@@ -38,7 +38,7 @@ public abstract class Switcher {
     }
 
     private void fixPlayerData() throws IOException {
-        NBT t = this.main.readData();
+        NBT t = this.data.readData();
         Map<String, NBT> m = t.getCompound();
         UUID uuid = this.player.getWorld().getUID();
         long most = uuid.getMostSignificantBits();
@@ -48,7 +48,7 @@ public abstract class Switcher {
         m.get("WorldUUIDLeast").setValue(least);
         m.get("PortalCooldown").setValue(900);
         t.setValue(m);
-        this.main.writeData(t);
+        this.data.writeData(t);
     }
 
     private class SwitchingTask extends BukkitRunnable {
@@ -61,14 +61,17 @@ public abstract class Switcher {
         @Override
         public void run() {
             Switcher i = this.instance;
+            PlayerData from, to;
 
+            from = i.from.getPlayerData(i.player);
+            to = i.to.getPlayerData(i.player);
             preProcess();
             i.player.saveData();
             resetPotionEffects();
 
             try {
-                i.from.swapMain();
-                i.to.swapMain();
+                from.swapData(i.data);
+                to.swapData(i.data);
                 fixPlayerData();
             } catch (IOException e) {
                 throw new RuntimeException(e);

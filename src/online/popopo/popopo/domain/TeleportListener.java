@@ -1,6 +1,7 @@
 package online.popopo.popopo.domain;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,12 @@ public class TeleportListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, p);
     }
 
+    private boolean needSwitch(Domain a, Domain b) {
+        boolean bool = a.available() && b.available();
+
+        return bool && !a.equals(b);
+    }
+
     private void setFrag(Player p) {
         users.add(p.getName());
     }
@@ -43,10 +50,8 @@ public class TeleportListener implements Listener {
         Player p = e.getPlayer();
         Domain from = new Domain(e.getFrom());
         Domain to = new Domain(e.getTo());
-        boolean able = from.available() && to.available();
 
-        if (!from.equals(to) && able && !hasFrag(p)) {
-
+        if (needSwitch(from, to) && !hasFrag(p)) {
             new Switcher(this.plugin, p, from, to) {
                 @Override
                 public void preProcess() {
@@ -67,8 +72,13 @@ public class TeleportListener implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
         Player p = e.getPlayer();
-        Domain d = new Domain(p.getWorld());
+        Domain from = new Domain(p.getWorld());
+        Domain to = new Domain(e.getRespawnLocation());
 
-        e.setRespawnLocation(d.getSpawnLocation());
+        if (needSwitch(from, to)) {
+            Location l = from.getSpawnLocation();
+
+            e.setRespawnLocation(l);
+        }
     }
 }

@@ -30,8 +30,12 @@ public class Domain {
         return this.name;
     }
 
+    public World getMainWorld() {
+        return Bukkit.getWorld(this.name);
+    }
+
     public PlayerData getPlayerData(Player p) {
-        World w = Bukkit.getWorld(this.name);
+        World w = getMainWorld();
         File dir = w.getWorldFolder();
         StringBuilder s = new StringBuilder();
 
@@ -42,19 +46,17 @@ public class Domain {
 
         File dat = new File(s.toString());
 
-        return new PlayerData(dat, p);
+        return new PlayerData(dat);
     }
 
     public Location getSpawnLocation() {
-        World w = Bukkit.getWorld(this.name);
+        World w = getMainWorld();
 
         return w.getSpawnLocation();
     }
 
     public boolean available() {
-        World w = Bukkit.getWorld(this.name);
-
-        return w != null;
+        return getMainWorld() != null;
     }
 
     @Override
