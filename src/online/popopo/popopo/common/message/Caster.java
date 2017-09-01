@@ -1,90 +1,95 @@
 package online.popopo.popopo.common.message;
 
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_12_R1.ChatMessageType;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_12_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_12_R1.PlayerConnection;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
-public abstract class Caster implements Casting {
+public class Caster implements Casting {
     private final Theme theme;
+    private final CommandSender sender;
 
-    public Caster(Theme theme) {
-        this.theme = theme;
+    public Caster(Theme t, CommandSender s) {
+        this.theme = t;
+        this.sender = s;
     }
 
-    protected String buildPrefix(ChatColor c, String s) {
+    public CommandSender getSender() {
+        return this.sender;
+    }
+
+    private String buildPrefix(ChatColor c, String s) {
         StringBuilder buf = new StringBuilder();
 
         buf.append(c);
         buf.append("[");
         buf.append(s);
-        buf.append("] ");
+        buf.append("]");
         buf.append(ChatColor.RESET);
 
         return buf.toString();
     }
 
-    @Override
-    public void info(String title, String message){
-        ChatColor info = this.theme.getInfo();
-        String prefix = buildPrefix(info, title);
+    protected String decorateMessage(String msg) {
+        return this.theme.getText() + msg;
+    }
 
-        cast(prefix + this.theme.getText() + message);
+    private void cast(ChatColor c, String p, String m) {
+        String prefix = buildPrefix(c, p);
+        String msg = decorateMessage(m);
+
+        getSender().sendMessage(prefix + " " + msg);
     }
 
     @Override
-    public void good(String title, String message){
-        ChatColor good = this.theme.getGood();
-        String prefix = buildPrefix(good, title);
-
-        cast(prefix + this.theme.getText() + message);
+    public void info(String prefix, String msg){
+        cast(this.theme.getInfo(), prefix, msg);
     }
 
     @Override
-    public void bad(String title, String message){
-        ChatColor bad = this.theme.getBad();
-        String prefix = buildPrefix(bad, title);
-
-        cast(prefix + this.theme.getText() + message);
+    public void good(String prefix, String msg){
+        cast(this.theme.getGood(), prefix, msg);
     }
 
     @Override
-    public void warning(String title, String message){
-        ChatColor warning = this.theme.getWarning();
-        String prefix = buildPrefix(warning, title);
-
-        cast(prefix + this.theme.getText() + message);
+    public void bad(String prefix, String msg){
+        cast(this.theme.getBad(), prefix, msg);
     }
 
-    public static class Messenger extends Caster {
-        private final CommandSender sender;
-
-        public Messenger(Theme t, CommandSender s) {
-            super(t);
-            this.sender = s;
-        }
-
-        @Override
-        public void cast(String message) {
-            this.sender.sendMessage(message);
-        }
+    @Override
+    public void warning(String prefix, String msg){
+        cast(this.theme.getWarning(), prefix, msg);
     }
 
-    public static class Broadcaster extends Caster {
-        public Broadcaster(Theme t) {
-            super(t);
+    public static class PlayerCaster extends Caster {
+        public PlayerCaster(Theme t, Player p) {
+            super(t, p);
         }
 
-        @Override
-        public void cast(String message) {
-            Bukkit.broadcastMessage(message);
+        public void castGameInfo(String msg) {
+            CraftPlayer p = ((CraftPlayer) getSender());
+            EntityPlayer e = p.getHandle();
+            PlayerConnection c = e.playerConnection;
+            String s = decorateMessage(msg);
+            String r = "{\"text\":\"" + s + "\"}";
+            IChatBaseComponent m = ChatSerializer.a(r);
+            ChatMessageType t = ChatMessageType.GAME_INFO;
+
+            c.sendPacket(new PacketPlayOutChat(m, t));
         }
     }
 
-    public static Messenger newFrom(Theme t, CommandSender s) {
-        return new Messenger(t, s);
-    }
-
-    public static Broadcaster newFrom(Theme t) {
-        return new Broadcaster(t);
+    public static Caster newFrom(Theme t, CommandSender s) {
+        if (s instanceof Player) {
+            return new PlayerCaster(t, (Player) s);
+        } else {
+            return new Caster(t, s);
+        }
     }
 }
