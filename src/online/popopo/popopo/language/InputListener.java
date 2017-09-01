@@ -1,7 +1,6 @@
 package online.popopo.popopo.language;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class InputListener implements Listener {
-    private static final long MAX_LENGTH = 40;
+    private static final long MAX_LENGTH = 50;
     private static final long BUFF_SIZE = 10;
 
     private final JavaPlugin plugin;
@@ -38,7 +37,7 @@ public class InputListener implements Listener {
             }
         }
 
-        return null;
+        return new HashSet<>();
     }
 
     @EventHandler
@@ -52,31 +51,29 @@ public class InputListener implements Listener {
             return;
         }
 
-        Set<String> set = candidateOf(token);
+        Set<String> c = candidateOf(token);
 
-        if (set != null) {
-            e.getTabCompletions().addAll(set);
+        if (c.isEmpty()) {
+            InputListener o = this;
 
-            return;
+            c.addAll(this.converter.convert(token, true));
+            e.getTabCompletions().clear();
+
+            this.roster.add(p.getName());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (o.buffer.size() > BUFF_SIZE) {
+                        o.buffer.pop();
+                    }
+
+                    o.buffer.push(o.converter
+                            .convert(token, false));
+                    o.roster.remove(p.getName());
+                }
+            }.runTaskAsynchronously(this.plugin);
         }
 
-        e.getTabCompletions().clear();
-        this.roster.add(p.getName());
-        if (this.buffer.size() > BUFF_SIZE) {
-            this.buffer.pop();
-        }
-
-        InputListener o = this;
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                o.buffer.push(o.converter.convert(token));
-                o.roster.remove(p.getName());
-
-                p.playSound(p.getLocation(),
-                        Sound.ENTITY_CHICKEN_EGG, 1.0f, 0.9f);
-            }
-        }.runTaskAsynchronously(this.plugin);
+        e.getTabCompletions().addAll(c);
     }
 }

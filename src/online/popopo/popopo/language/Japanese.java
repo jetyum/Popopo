@@ -69,20 +69,23 @@ public class Japanese implements Converter, Configurable {
     }
 
     @Override
-    public Set<String> convert(String token) {
-        Matcher m = this.pattern.matcher(token);
+    public Set<String> convert(String s, boolean single) {
+        Matcher m = this.pattern.matcher(s);
         Set<String> set = new HashSet<>();
 
         if (m.find()) {
-            String base = token.substring(0, m.start());
+            String base = s.substring(0, m.start());
             String kana = romaToKana(m.group());
 
-            for (String s : candidateOf(kana)) {
-                set.add(base + s);
-            }
-
             set.add(base + kana);
-            set.addAll(Arrays.asList(token, ""));
+
+            if (!single) {
+                for (String c : candidateOf(kana)) {
+                    set.add(base + c);
+                }
+
+                set.addAll(Arrays.asList(s, ""));
+            }
         }
 
         return set;
