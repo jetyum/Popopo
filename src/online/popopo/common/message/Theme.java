@@ -1,7 +1,7 @@
-package online.popopo.popopo.common.message;
+package online.popopo.common.message;
 
-import online.popopo.popopo.common.config.Configurable;
-import online.popopo.popopo.common.config.Parameter;
+import online.popopo.common.config.Configurable;
+import online.popopo.common.config.Parameter;
 import org.bukkit.ChatColor;
 
 public class Theme implements Configurable {

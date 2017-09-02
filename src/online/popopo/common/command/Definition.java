@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.command;
+package online.popopo.common.command;
 
 public interface Definition {
     String getCommand();

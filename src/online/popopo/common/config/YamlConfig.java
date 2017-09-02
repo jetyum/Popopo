@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.config;
+package online.popopo.common.config;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;

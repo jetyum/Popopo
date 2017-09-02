@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.nbt;
+package online.popopo.common.nbt;
 
 import java.io.Closeable;
 import java.io.DataOutputStream;

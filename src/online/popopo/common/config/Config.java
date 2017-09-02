@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.config;
+package online.popopo.common.config;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

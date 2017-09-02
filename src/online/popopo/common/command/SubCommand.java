@@ -1,6 +1,6 @@
-package online.popopo.popopo.common.command;
+package online.popopo.common.command;
 
-import online.popopo.popopo.common.message.Caster;
+import online.popopo.common.message.Caster;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

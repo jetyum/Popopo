@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.message;
+package online.popopo.common.message;
 
 public interface Casting {
     void info(String prefix, String msg);

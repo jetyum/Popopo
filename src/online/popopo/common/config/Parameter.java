@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.config;
+package online.popopo.common.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

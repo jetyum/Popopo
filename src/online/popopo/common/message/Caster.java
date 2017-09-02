@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.message;
+package online.popopo.common.message;
 
 import net.minecraft.server.v1_12_R1.ChatMessageType;
 import net.minecraft.server.v1_12_R1.EntityPlayer;

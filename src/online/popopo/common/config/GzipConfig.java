@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.config;
+package online.popopo.common.config;
 
 import com.google.common.io.Files;
 import org.bukkit.plugin.java.JavaPlugin;

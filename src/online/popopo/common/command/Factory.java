@@ -1,6 +1,6 @@
-package online.popopo.popopo.common.command;
+package online.popopo.common.command;
 
-import online.popopo.popopo.common.message.Theme;
+import online.popopo.common.message.Theme;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;

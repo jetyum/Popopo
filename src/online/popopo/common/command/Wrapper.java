@@ -1,7 +1,7 @@
-package online.popopo.popopo.common.command;
+package online.popopo.common.command;
 
-import online.popopo.popopo.common.message.Caster;
-import online.popopo.popopo.common.message.Theme;
+import online.popopo.common.message.Caster;
+import online.popopo.common.message.Theme;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;

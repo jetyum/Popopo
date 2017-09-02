@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.config;
+package online.popopo.common.config;
 
 public interface Configuring {
     boolean load();

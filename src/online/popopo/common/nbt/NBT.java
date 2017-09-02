@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.nbt;
+package online.popopo.common.nbt;
 
 import java.util.ArrayList;
 import java.util.HashMap;

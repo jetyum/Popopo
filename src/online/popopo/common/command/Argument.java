@@ -1,4 +1,4 @@
-package online.popopo.popopo.common.command;
+package online.popopo.common.command;
 
 import org.bukkit.command.CommandSender;
 
@@ -15,9 +15,5 @@ public class Argument {
 
     public String get(String key) {
         return this.argMap.get(key);
-    }
-
-    public CommandSender getSender() {
-        return this.sender;
     }
 }
