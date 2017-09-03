@@ -1,48 +1,82 @@
 package online.popopo.common.message;
 
-import org.bukkit.ChatColor;
+import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
+import org.bukkit.block.Block;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
-public abstract class Caster {
-    private final Theme theme;
+public class Caster extends Castable {
+    private final CommandSender target;
 
-    public Caster(Theme t) {
-        this.theme = t;
+    public Caster(Theme t, CommandSender s) {
+        super(t);
+        this.target = s;
     }
 
-    public Theme getTheme() {
-        return this.theme;
+    public CommandSender getTarget() {
+        return this.target;
     }
 
-    String decoratePrefix(ChatColor c, String p) {
-        return c + "[" + p + "]" + ChatColor.RESET;
+    @Override
+    public void cast(String msg) {
+        this.target.sendMessage(msg);
     }
 
-    String decorateText(ChatColor c, String m) {
-        return this.theme.getText() + m;
+    public static class PlayerCaster extends Caster {
+        public PlayerCaster(Theme t, CommandSender s) {
+            super(t, s);
+        }
+
+        public Player getPlayer() {
+            return (Player) getTarget();
+        }
+
+        public void castBar(String msg) {
+            CraftPlayer p = ((CraftPlayer) getPlayer());
+            EntityPlayer e = p.getHandle();
+            PlayerConnection i = e.playerConnection;
+            String m = getTheme().getText() + msg;
+            String r = "{\"text\":\"" + m + "\"}";
+            IChatBaseComponent s = ChatSerializer.a(r);
+            ChatMessageType t = ChatMessageType.GAME_INFO;
+
+            i.sendPacket(new PacketPlayOutChat(s, t));
+        }
     }
 
-    private void cast(ChatColor c, String p, String m) {
-        String prefix = decoratePrefix(c, p);
-        String msg = decorateText(c, m);
+    public static class BlockCaster extends Caster {
+        public BlockCaster(Theme t, CommandSender s) {
+            super(t, s);
+        }
 
-        cast(prefix + " " + msg);
+        public Block getBlock() {
+            BlockCommandSender s;
+
+            s = (BlockCommandSender) getTarget();
+
+            return s.getBlock();
+        }
     }
 
-    public void info(String prefix, String msg){
-        cast(this.theme.getInfo(), prefix, msg);
+    public static class ConsoleCaster extends Caster {
+        public ConsoleCaster(Theme t, CommandSender s) {
+            super(t, s);
+        }
     }
 
-    public void good(String prefix, String msg){
-        cast(this.theme.getGood(), prefix, msg);
+    public static Caster newFrom(Theme t, CommandSender s) {
+        if (s instanceof Player) {
+            return new PlayerCaster(t, s);
+        } else if (s instanceof BlockCommandSender) {
+            return new BlockCaster(t, s);
+        } else if (s instanceof ConsoleCommandSender) {
+            return new ConsoleCaster(t, s);
+        } else {
+            return new Caster(t, s);
+        }
     }
-
-    public void bad(String prefix, String msg){
-        cast(this.theme.getBad(), prefix, msg);
-    }
-
-    public void warning(String prefix, String msg){
-        cast(this.theme.getWarning(), prefix, msg);
-    }
-
-    public abstract void cast(String msg);
 }
