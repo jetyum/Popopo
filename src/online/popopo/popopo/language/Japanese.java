@@ -1,8 +1,8 @@
 package online.popopo.popopo.language;
 
 import com.google.gson.Gson;
-import online.popopo.popopo.common.config.Configurable;
-import online.popopo.popopo.common.config.Parameter;
+import online.popopo.common.config.Configurable;
+import online.popopo.common.config.Parameter;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;

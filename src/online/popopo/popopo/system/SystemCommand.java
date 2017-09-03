@@ -1,10 +1,10 @@
 package online.popopo.popopo.system;
 
 import com.sun.management.OperatingSystemMXBean;
-import online.popopo.popopo.common.command.Argument;
-import online.popopo.popopo.common.command.Definition;
-import online.popopo.popopo.common.command.Executor;
-import online.popopo.popopo.common.message.Caster;
+import online.popopo.common.command.Argument;
+import online.popopo.common.command.Definition;
+import online.popopo.common.command.Executor;
+import online.popopo.common.message.Caster;
 
 import java.lang.management.ManagementFactory;
 

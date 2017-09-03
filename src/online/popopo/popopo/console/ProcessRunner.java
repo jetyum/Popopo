@@ -1,6 +1,6 @@
 package online.popopo.popopo.console;
 
-import online.popopo.popopo.common.message.Caster;
+import online.popopo.common.message.Caster;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.scheduler.BukkitRunnable;
 

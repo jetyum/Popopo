@@ -40,7 +40,7 @@ public class Wrapper implements TabExecutor {
         p.getCommand(this.command).setExecutor(this);
     }
 
-    public List<String> inputToArg(String in) {
+    private List<String> inputToArg(String in) {
         List<String> args = new ArrayList<>();
         String[] array = in.split("\"");
 
@@ -62,10 +62,10 @@ public class Wrapper implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] rawArgs) {
+    public boolean onCommand(CommandSender s, Command cmd, String alias, String[] rawArgs) {
         String in = String.join(" ", rawArgs);
         List<String> args = inputToArg(in);
-        Caster m = Caster.newFrom(this.theme, sender);
+        Caster m = Caster.newFrom(this.theme, s);
 
         for (SubCommand c : this.subCommands) {
             if (c.getSize() == args.size()) {
@@ -80,7 +80,7 @@ public class Wrapper implements TabExecutor {
                         map.put(key, args.get(i + start));
                     }
 
-                    Argument a = new Argument(sender, map);
+                    Argument a = new Argument(s, map);
 
                     return c.run(this.object, m, a);
                 }
@@ -91,7 +91,7 @@ public class Wrapper implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+    public List<String> onTabComplete(CommandSender s, Command cmd, String alias, String[] args) {
         String in = String.join(" ", args);
         Set<String> res = new HashSet<>();
         int end = args.length - 1;
@@ -109,7 +109,7 @@ public class Wrapper implements TabExecutor {
             }
         }
 
-        res.removeIf(s -> !s.startsWith(args[end]));
+        res.removeIf(c -> !c.startsWith(args[end]));
 
         return new ArrayList<>(res);
     }

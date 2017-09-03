@@ -1,7 +1,7 @@
 package online.popopo.popopo.world;
 
-import online.popopo.popopo.common.config.Configurable;
-import online.popopo.popopo.common.config.Parameter;
+import online.popopo.common.config.Configurable;
+import online.popopo.common.config.Parameter;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldType;
 import org.bukkit.configuration.MemorySection;

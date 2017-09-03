@@ -1,10 +1,11 @@
 package online.popopo.popopo.console;
 
-import online.popopo.popopo.common.command.Argument;
-import online.popopo.popopo.common.command.Definition;
-import online.popopo.popopo.common.command.Executor;
-import online.popopo.popopo.common.message.Caster;
+import online.popopo.common.command.Argument;
+import online.popopo.common.command.Definition;
+import online.popopo.common.command.Executor;
+import online.popopo.common.message.Caster;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,11 +13,9 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ConsoleCommand implements Definition, Listener {
-    private final JavaPlugin plugin;
     private final MultiProcess processes;
 
     public ConsoleCommand(JavaPlugin p) {
-        this.plugin = p;
         this.processes = new MultiProcess(p);
 
         Bukkit.getPluginManager().registerEvents(this, p);
@@ -29,8 +28,14 @@ public class ConsoleCommand implements Definition, Listener {
 
     @Executor({"", "text"})
     public void onCommand(Caster c, Argument arg) {
+        if (!SystemUtils.IS_OS_LINUX) {
+            c.bad("$", "Can not used except linux");
+
+            return;
+        }
+
         String text = arg.get("text");
-        String name = arg.getSender().getName();
+        String name = c.getTarget().getName();
 
         if (!this.processes.exec(c, name, text)) {
             c.bad("$", "Already process started");
@@ -38,8 +43,8 @@ public class ConsoleCommand implements Definition, Listener {
     }
 
     @Executor({"destroy"})
-    public void onCloseCommand(Caster c, Argument arg) {
-        String name = arg.getSender().getName();
+    public void onDestroyCommand(Caster c, Argument arg) {
+        String name = c.getTarget().getName();
 
         if (!this.processes.destroy(name)) {
             c.bad("$", "Process was not found");

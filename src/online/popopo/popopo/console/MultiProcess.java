@@ -1,6 +1,6 @@
 package online.popopo.popopo.console;
 
-import online.popopo.popopo.common.message.Caster;
+import online.popopo.common.message.Caster;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
