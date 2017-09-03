@@ -1,9 +1,9 @@
 package online.popopo.popopo.domain;
 
 import com.google.common.io.Files;
-import online.popopo.popopo.common.nbt.NBT;
-import online.popopo.popopo.common.nbt.NBTReader;
-import online.popopo.popopo.common.nbt.NBTWriter;
+import online.popopo.common.nbt.NBT;
+import online.popopo.common.nbt.NBTReader;
+import online.popopo.common.nbt.NBTWriter;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -60,6 +60,7 @@ public class PlayerData {
 
         m.get("foodLevel").setValue(20);
         m.get("XpP").setValue((float) 0.0);
+        m.get("Score").setValue(0);
         m.get("XpLevel").setValue(0);
         m.get("XpTotal").setValue(0);
         m.get("SelectedItemSlot").setValue(0);

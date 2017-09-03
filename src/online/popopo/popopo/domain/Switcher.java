@@ -1,6 +1,6 @@
 package online.popopo.popopo.domain;
 
-import online.popopo.popopo.common.nbt.NBT;
+import online.popopo.common.nbt.NBT;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;

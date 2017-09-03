@@ -56,7 +56,13 @@ public class Domain {
     }
 
     public boolean available() {
-        return getMainWorld() != null;
+        World w = getMainWorld();
+
+        if (w == null) {
+            return false;
+        }
+
+        return w.getWorldFolder().exists();
     }
 
     @Override
