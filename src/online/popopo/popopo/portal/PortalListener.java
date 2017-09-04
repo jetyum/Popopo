@@ -1,7 +1,5 @@
 package online.popopo.popopo.portal;
 
-import online.popopo.common.message.Caster.PlayerCaster;
-import online.popopo.common.message.Theme;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,13 +9,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PortalListener implements Listener {
     private final PortalList portals;
-    private final Theme theme;
 
-    public PortalListener(JavaPlugin plugin, PortalList p, Theme t) {
-        this.portals = p;
-        this.theme = t;
+    public PortalListener(JavaPlugin p, PortalList l) {
+        this.portals = l;
 
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     @EventHandler
@@ -37,12 +33,12 @@ public class PortalListener implements Listener {
         }
 
         Location l = to.getAppearanceLocation();
-        PlayerCaster c = new PlayerCaster(theme, p);
 
         l.setYaw(p.getLocation().getYaw());
         l.setPitch(p.getLocation().getPitch());
         p.teleport(l);
-        c.castBar("teleported");
+        p.playSound(l, Sound.ENTITY_EGG_THROW,
+                SoundCategory.PLAYERS, 1.0f, 1.0f);
         e.setCancelled(true);
     }
 }

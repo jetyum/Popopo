@@ -14,9 +14,9 @@ public class PortalCommand implements Definition {
     private final AreaSelector selector;
     private final PortalList portals;
 
-    public PortalCommand(AreaSelector s, PortalList p) {
+    public PortalCommand(AreaSelector s, PortalList l) {
         this.selector = s;
-        this.portals = p;
+        this.portals = l;
     }
 
     @Executor({"create", "name"})
