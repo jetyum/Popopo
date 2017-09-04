@@ -1,60 +1,85 @@
 package online.popopo.popopo.world;
 
 import online.popopo.popopo.world.MultiWorld.WorldConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class WorldLoader {
     private final MultiWorld worlds;
 
-    public WorldLoader(MultiWorld w) {
+    private World lobby;
+
+    public WorldLoader(JavaPlugin p, MultiWorld w) {
         this.worlds = w;
+
+        Listener l = new PlayerJoinListener();
+
+        Bukkit.getPluginManager().registerEvents(l, p);
     }
 
     private boolean loadWorld(String name) {
-        WorldCreator c = WorldCreator.name(name);
-        WorldConfig w = worlds.getConfig(name);
+        WorldCreator creator = WorldCreator.name(name);
+        WorldConfig config = worlds.getConfig(name);
 
-        if (w.hasEnvironment()) {
-            Environment e = w.getEnvironment();
+        if (config.hasEnvironment()) {
+            Environment e = config.getEnvironment();
 
             if (e != null) {
-                c.environment(e);
+                creator.environment(e);
             } else {
                 return false;
             }
         }
 
-        if (w.hasSeed()) {
-            long seed = w.getSeed();
+        if (config.hasSeed()) {
+            long seed = config.getSeed();
 
-            c.seed(seed);
+            creator.seed(seed);
         }
 
-        if (w.hasStructures()) {
-            boolean structures = w.getStructures();
+        if (config.hasStructures()) {
+            boolean structures = config.getStructures();
 
-            c.generateStructures(structures);
+            creator.generateStructures(structures);
         }
 
-        if (w.hasWorldPreset()) {
-            String worldPreset = w.getWorldPreset();
+        if (config.hasWorldPreset()) {
+            String worldPreset = config.getWorldPreset();
 
-            c.generatorSettings(worldPreset);
+            creator.generatorSettings(worldPreset);
         }
 
-        if (w.hasWorldType()) {
-            WorldType t = w.getWorldType();
+        if (config.hasWorldType()) {
+            WorldType t = config.getWorldType();
 
             if (t != null) {
-                c.type(t);
+                creator.type(t);
             } else {
                 return false;
             }
         }
 
-        return c.createWorld() != null;
+        World w = creator.createWorld();
+
+        if (w != null) {
+            if (config.hasLobbyWorld()) {
+                if (config.getLobbyWorld()) {
+                    lobby = w;
+                }
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean loadWorlds() {
@@ -65,5 +90,16 @@ public class WorldLoader {
         }
 
         return true;
+    }
+
+    private class PlayerJoinListener implements Listener {
+        @EventHandler
+        public void onPlayerJoin(PlayerJoinEvent e) {
+            Player p = e.getPlayer();
+
+            if (!p.hasPlayedBefore() && lobby != null) {
+                p.teleport(lobby.getSpawnLocation());
+            }
+        }
     }
 }

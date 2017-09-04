@@ -90,6 +90,14 @@ public class MultiWorld implements Configurable {
 
             return WorldType.getByName(n);
         }
+
+        public boolean hasLobbyWorld() {
+            return section.contains("lobby_world");
+        }
+
+        public boolean getLobbyWorld() {
+            return section.getBoolean("lobby_world");
+        }
     }
 
     @Override
