@@ -32,11 +32,11 @@ public class GzipConfig extends Config {
     @Override
     public boolean load() {
         try {
-            File file = new File(this.path);
+            File file = new File(path);
             InputStream fileIn, gzipIn;
             ObjectInputStream in;
 
-            if (!new File(this.path).exists()) {
+            if (!new File(path).exists()) {
                 return false;
             }
 
@@ -45,7 +45,7 @@ public class GzipConfig extends Config {
             in = new ObjectInputStream(gzipIn);
             Object data = in.readObject();
 
-            this.table = this.table.getClass().cast(data);
+            table = table.getClass().cast(data);
             in.close();
 
             return true;
@@ -58,7 +58,7 @@ public class GzipConfig extends Config {
     @Override
     public boolean save() {
         try {
-            File file = new File(this.path);
+            File file = new File(path);
             OutputStream fileOut, gzipOut;
             ObjectOutputStream out;
 
@@ -70,7 +70,7 @@ public class GzipConfig extends Config {
             gzipOut = new GZIPOutputStream(fileOut);
             out = new ObjectOutputStream(gzipOut);
 
-            out.writeObject(this.table);
+            out.writeObject(table);
             out.close();
 
             return true;
@@ -81,21 +81,21 @@ public class GzipConfig extends Config {
 
     @Override
     public boolean contain(String section, String key) {
-        return this.table.containsKey(section)
+        return table.containsKey(section)
                 && table.get(section).containsKey(key);
     }
 
     @Override
     public void set(String section, String key, Object value) {
-        if (!this.table.containsKey(section)) {
-            this.table.put(section, new HashMap<>());
+        if (!table.containsKey(section)) {
+            table.put(section, new HashMap<>());
         }
 
-        this.table.get(section).put(key, value);
+        table.get(section).put(key, value);
     }
 
     @Override
     public Object get(String section, String key) {
-        return this.table.get(section).get(key);
+        return table.get(section).get(key);
     }
 }

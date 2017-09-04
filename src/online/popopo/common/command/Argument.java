@@ -14,6 +14,6 @@ public class Argument {
     }
 
     public String get(String key) {
-        return this.argMap.get(key);
+        return argMap.get(key);
     }
 }

@@ -27,19 +27,19 @@ public class Cuboid implements Serializable {
     }
 
     public World getWorld() {
-        return Bukkit.getWorld(this.world);
+        return Bukkit.getWorld(world);
     }
 
     public Vector getMaximum() {
-        Vector v1 = new Vector(this.x1, this.y1, this.z1);
-        Vector v2 = new Vector(this.x2, this.y2, this.z2);
+        Vector v1 = new Vector(x1, y1, z1);
+        Vector v2 = new Vector(x2, y2, z2);
 
         return Vector.getMaximum(v1, v2);
     }
 
     public Vector getMinimum() {
-        Vector v1 = new Vector(this.x1, this.y1, this.z1);
-        Vector v2 = new Vector(this.x2, this.y2, this.z2);
+        Vector v1 = new Vector(x1, y1, z1);
+        Vector v2 = new Vector(x2, y2, z2);
 
         return Vector.getMinimum(v1, v2);
     }
@@ -67,9 +67,9 @@ public class Cuboid implements Serializable {
     }
 
     public int getVolume() {
-        int x = Math.abs(this.x1 - this.x2);
-        int y = Math.abs(this.y1 - this.y2);
-        int z = Math.abs(this.z1 - this.z2);
+        int x = Math.abs(x1 - x2);
+        int y = Math.abs(y1 - y2);
+        int z = Math.abs(z1 - z2);
 
         return x * y * z;
     }
@@ -77,7 +77,7 @@ public class Cuboid implements Serializable {
     public boolean contains(Location l) {
         World w = l.getWorld();
 
-        if (!w.getName().equals(this.world)) {
+        if (!w.getName().equals(world)) {
             return false;
         }
 
@@ -85,15 +85,15 @@ public class Cuboid implements Serializable {
         int y = l.getBlockY();
         int z = l.getBlockZ();
 
-        if ((x - this.x1) * (x - this.x2) > 0) {
+        if ((x - x1) * (x - x2) > 0) {
             return false;
         }
 
-        if ((y - this.y1) * (y - this.y2) > 0) {
+        if ((y - y1) * (y - y2) > 0) {
             return false;
         }
 
-        if ((z - this.z1) * (z - this.z2) > 0) {
+        if ((z - z1) * (z - z2) > 0) {
             return false;
         }
 

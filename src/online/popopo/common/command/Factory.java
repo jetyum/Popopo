@@ -17,7 +17,7 @@ public class Factory {
     }
 
     public Wrapper create(Definition d, Theme t) {
-        return new Wrapper(d, this.completer, t);
+        return new Wrapper(d, completer, t);
     }
 
     private class DefaultCompleter implements Completer {

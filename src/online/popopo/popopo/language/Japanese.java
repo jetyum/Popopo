@@ -26,8 +26,9 @@ public class Japanese implements Converter, Configurable {
         try {
             String raw = kana + ",";
             String utf = URLEncoder.encode(raw, "UTF-8");
-            URL url = new URL(this.url + utf);
-            InputStream in = url.openStream();
+            InputStream in;
+
+            in = new URL(url + utf).openStream();
 
             return new InputStreamReader(in);
         } catch (IOException e) {
@@ -55,8 +56,8 @@ public class Japanese implements Converter, Configurable {
             for (int i = 0; i < buf.length(); i++) {
                 String key = buf.substring(i);
 
-                if (this.table.containsKey(key)) {
-                    String[] a = this.table.get(key);
+                if (table.containsKey(key)) {
+                    String[] a = table.get(key);
                     String head = buf.substring(0, i);
 
                     ret.append(head).append(a[0]);
@@ -70,7 +71,7 @@ public class Japanese implements Converter, Configurable {
 
     @Override
     public Set<String> convert(String s, boolean single) {
-        Matcher m = this.pattern.matcher(s);
+        Matcher m = pattern.matcher(s);
         Set<String> set = new HashSet<>();
 
         if (m.find()) {

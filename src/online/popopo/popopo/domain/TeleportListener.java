@@ -14,6 +14,8 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TeleportListener implements Listener {
+    private static final String METADATA_KEY = "domain_switch";
+
     private final JavaPlugin plugin;
     private final Theme theme;
 
@@ -31,16 +33,16 @@ public class TeleportListener implements Listener {
     private void setFrag(Player p) {
         MetadataValue v;
 
-        v = new FixedMetadataValue(this.plugin, true);
-        p.setMetadata("domain_switch", v);
+        v = new FixedMetadataValue(plugin, true);
+        p.setMetadata(METADATA_KEY, v);
     }
 
     private void removeFrag(Player p) {
-        p.removeMetadata("domain_switch", this.plugin);
+        p.removeMetadata(METADATA_KEY, plugin);
     }
 
     private boolean hasFrag(Player p) {
-        return p.hasMetadata("domain_switch");
+        return p.hasMetadata(METADATA_KEY);
     }
 
     @EventHandler
@@ -52,14 +54,14 @@ public class TeleportListener implements Listener {
         if (from.equals(to) || hasFrag(p)) {
             return;
         } else if (!canSwitch(from, to)) {
-            Caster c = Caster.newFrom(this.theme, p);
+            Caster c = Caster.newFrom(theme, p);
 
             c.bad("Error", "Can't switch domain!");
 
             return;
         }
 
-        new Switcher(this.plugin, p, from, to) {
+        new Switcher(plugin, p, from, to) {
             @Override
             public void preProcess() {
                 setFrag(p);

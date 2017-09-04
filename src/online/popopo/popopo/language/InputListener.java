@@ -31,7 +31,7 @@ public class InputListener implements Listener {
     }
 
     private Set<String> candidateOf(String token) {
-        for (Set<String> s : this.buffer) {
+        for (Set<String> s : buffer) {
             if (s.contains(token)) {
                 return s;
             }
@@ -45,7 +45,7 @@ public class InputListener implements Listener {
         Player p = e.getPlayer();
         String token = e.getLastToken();
 
-        if (this.roster.contains(p.getName())) {
+        if (roster.contains(p.getName())) {
             return;
         } else if (token.length() > MAX_LENGTH) {
             return;
@@ -54,24 +54,22 @@ public class InputListener implements Listener {
         Set<String> c = candidateOf(token);
 
         if (c.isEmpty()) {
-            InputListener o = this;
-
-            c.addAll(this.converter.convert(token, true));
+            c.addAll(converter.convert(token, true));
             e.getTabCompletions().clear();
 
-            this.roster.add(p.getName());
+            roster.add(p.getName());
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (o.buffer.size() > BUFF_SIZE) {
-                        o.buffer.pop();
+                    if (buffer.size() > BUFF_SIZE) {
+                        buffer.pop();
                     }
 
-                    o.buffer.push(o.converter
+                    buffer.push(converter
                             .convert(token, false));
-                    o.roster.remove(p.getName());
+                    roster.remove(p.getName());
                 }
-            }.runTaskAsynchronously(this.plugin);
+            }.runTaskAsynchronously(plugin);
         }
 
         e.getTabCompletions().addAll(c);

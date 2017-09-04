@@ -19,30 +19,30 @@ public class MultiProcess implements Closeable {
     }
 
     public Map<String, Process> getProcesses() {
-        return this.processes;
+        return processes;
     }
 
     public Map<String, File> getDirectories() {
-        return this.directories;
+        return directories;
     }
 
     public boolean exec(Caster c, String user, String cmd) {
-        if (this.processes.containsKey(user)) {
+        if (processes.containsKey(user)) {
             return false;
         }
 
         String[] a = {"/bin/bash", "-c", cmd + ";pwd"};
         ProcessBuilder builder = new ProcessBuilder(a);
 
-        if (this.directories.containsKey(user)) {
-            builder.directory(this.directories.get(user));
+        if (directories.containsKey(user)) {
+            builder.directory(directories.get(user));
         }
 
         try {
             c.good("$", cmd);
-            this.processes.put(user, builder.start());
+            processes.put(user, builder.start());
             new ProcessRunner(this, user, c)
-                    .runTaskAsynchronously(this.plugin);
+                    .runTaskAsynchronously(plugin);
 
             return true;
         } catch (IOException e) {
@@ -51,8 +51,8 @@ public class MultiProcess implements Closeable {
     }
 
     public boolean destroy(String user) {
-        if (this.processes.containsKey(user)) {
-            this.processes.get(user).destroy();
+        if (processes.containsKey(user)) {
+            processes.get(user).destroy();
 
             return true;
         }
@@ -62,11 +62,11 @@ public class MultiProcess implements Closeable {
 
     @Override
     public void close() throws IOException {
-        for (Process p : this.processes.values()) {
+        for (Process p : processes.values()) {
             p.destroy();
         }
 
-        this.processes.clear();
-        this.directories.clear();
+        processes.clear();
+        directories.clear();
     }
 }

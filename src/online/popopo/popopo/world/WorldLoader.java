@@ -6,15 +6,15 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
 public class WorldLoader {
-    private final MultiWorld set;
+    private final MultiWorld worlds;
 
     public WorldLoader(MultiWorld w) {
-        this.set = w;
+        this.worlds = w;
     }
 
     private boolean loadWorld(String name) {
         WorldCreator c = WorldCreator.name(name);
-        WorldConfig w = this.set.getConfig(name);
+        WorldConfig w = worlds.getConfig(name);
 
         if (w.hasEnvironment()) {
             Environment e = w.getEnvironment();
@@ -58,7 +58,7 @@ public class WorldLoader {
     }
 
     public boolean loadWorlds() {
-        for (String n : this.set.getNames()) {
+        for (String n : worlds.getNames()) {
             if (!loadWorld(n)) {
                 return false;
             }

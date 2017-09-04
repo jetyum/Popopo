@@ -21,43 +21,43 @@ public class NBTReader implements Closeable {
             case NBT.END:
                 return null;
             default:
-                return this.in.readUTF();
+                return in.readUTF();
         }
     }
 
     private Object readByteArray() throws IOException {
-        byte[] v = new byte[this.in.readInt()];
+        byte[] v = new byte[in.readInt()];
 
         for (int i = 0; i < v.length; i++) {
-            v[i] = this.in.readByte();
+            v[i] = in.readByte();
         }
 
         return v;
     }
 
     private Object readIntArray() throws IOException {
-        int[] v = new int[this.in.readInt()];
+        int[] v = new int[in.readInt()];
 
         for (int i = 0; i < v.length; i++) {
-            v[i] = this.in.readInt();
+            v[i] = in.readInt();
         }
 
         return v;
     }
 
     private Object readShortArray() throws IOException {
-        short[] v = new short[this.in.readInt()];
+        short[] v = new short[in.readInt()];
 
         for (int i = 0; i < v.length; i++) {
-            v[i] = this.in.readShort();
+            v[i] = in.readShort();
         }
 
         return v;
     }
 
     private Object readList() throws IOException {
-        int type = this.in.readByte();
-        int size = this.in.readInt();
+        int type = in.readByte();
+        int size = in.readInt();
         List<NBT> v = new ArrayList<>(size);
 
         for (int i = 0; i < size; i++) {
@@ -82,21 +82,21 @@ public class NBTReader implements Closeable {
         if (type == NBT.END) {
             return null;
         } else if (type == NBT.BYTE) {
-            return this.in.readByte();
+            return in.readByte();
         } else if (type == NBT.SHORT) {
-            return this.in.readShort();
+            return in.readShort();
         } else if (type == NBT.INT) {
-            return this.in.readInt();
+            return in.readInt();
         } else if (type == NBT.LONG) {
-            return this.in.readLong();
+            return in.readLong();
         } else if (type == NBT.FLOAT) {
-            return this.in.readFloat();
+            return in.readFloat();
         } else if (type == NBT.DOUBLE) {
-            return this.in.readDouble();
+            return in.readDouble();
         } else if (type == NBT.BYTE_ARRAY) {
             return readByteArray();
         } else if (type == NBT.STRING) {
-            return this.in.readUTF();
+            return in.readUTF();
         } else if (type == NBT.LIST) {
             return readList();
         } else if (type == NBT.COMPOUND) {
@@ -111,7 +111,7 @@ public class NBTReader implements Closeable {
     }
 
     public NBT read() throws IOException {
-        int type = this.in.readByte();
+        int type = in.readByte();
         String name = readName(type);
         Object payload = readObject(type);
 
@@ -120,6 +120,6 @@ public class NBTReader implements Closeable {
 
     @Override
     public void close() throws IOException {
-        this.in.close();
+        in.close();
     }
 }

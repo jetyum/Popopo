@@ -44,14 +44,14 @@ public class YamlConfig extends Config {
 
     @Override
     public boolean load() {
-        if (this.plugin != null) {
-            this.plugin.reloadConfig();
+        if (plugin != null) {
+            plugin.reloadConfig();
 
             return true;
         }
 
         try {
-            this.config.load(this.path);
+            config.load(path);
 
             return true;
         } catch (InvalidConfigurationException
@@ -62,14 +62,14 @@ public class YamlConfig extends Config {
 
     @Override
     public boolean save() {
-        if (this.plugin != null) {
-            this.plugin.saveConfig();
+        if (plugin != null) {
+            plugin.saveConfig();
 
             return true;
         }
 
         try {
-            this.config.save(this.path);
+            config.save(path);
 
             return true;
         } catch (IOException e) {
@@ -79,16 +79,16 @@ public class YamlConfig extends Config {
 
     @Override
     public boolean contain(String section, String key) {
-        return this.config.isSet(section + "." + key);
+        return config.isSet(section + "." + key);
     }
 
     @Override
     public void set(String section, String key, Object value) {
-        this.config.set(section + "." + key, value);
+        config.set(section + "." + key, value);
     }
 
     @Override
     public Object get(String section, String key) {
-        return this.config.get(section + "." + key);
+        return config.get(section + "." + key);
     }
 }

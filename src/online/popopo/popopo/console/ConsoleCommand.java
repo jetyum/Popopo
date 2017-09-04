@@ -21,11 +21,6 @@ public class ConsoleCommand implements Definition, Listener {
         Bukkit.getPluginManager().registerEvents(this, p);
     }
 
-    @Override
-    public String getCommand() {
-        return "console";
-    }
-
     @Executor({"", "text"})
     public void onCommand(Caster c, Argument arg) {
         if (!SystemUtils.IS_OS_LINUX) {
@@ -37,7 +32,7 @@ public class ConsoleCommand implements Definition, Listener {
         String text = arg.get("text");
         String name = c.getTarget().getName();
 
-        if (!this.processes.exec(c, name, text)) {
+        if (!processes.exec(c, name, text)) {
             c.bad("$", "Already process started");
         }
     }
@@ -46,13 +41,18 @@ public class ConsoleCommand implements Definition, Listener {
     public void onDestroyCommand(Caster c, Argument arg) {
         String name = c.getTarget().getName();
 
-        if (!this.processes.destroy(name)) {
+        if (!processes.destroy(name)) {
             c.bad("$", "Process was not found");
         }
     }
 
     @EventHandler
     public void onPluginDisable(PluginDisableEvent e) {
-        IOUtils.closeQuietly(this.processes);
+        IOUtils.closeQuietly(processes);
+    }
+
+    @Override
+    public String getCommand() {
+        return "console";
     }
 }

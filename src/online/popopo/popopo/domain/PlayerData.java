@@ -23,7 +23,7 @@ public class PlayerData {
     public NBT readData() throws IOException {
         InputStream in, zip;
 
-        in = new FileInputStream(this.dat);
+        in = new FileInputStream(dat);
         zip = new GZIPInputStream(in);
 
         NBTReader reader = new NBTReader(zip);
@@ -37,7 +37,7 @@ public class PlayerData {
     public void writeData(NBT t) throws IOException {
         OutputStream out, zip;
 
-        out = new FileOutputStream(this.dat);
+        out = new FileOutputStream(dat);
         zip = new GZIPOutputStream(out);
 
         NBTWriter writer = new NBTWriter(zip);
@@ -75,16 +75,16 @@ public class PlayerData {
     }
 
     public void swapData(PlayerData d) throws IOException {
-        if (!this.dat.equals(d.dat)) {
-            if (this.dat.exists()) {
+        if (!dat.equals(d.dat)) {
+            if (dat.exists()) {
                 String path = dat.getPath();
                 File tmp = new File(path + ".tmp");
 
-                Files.move(this.dat, tmp);
-                Files.move(d.dat, this.dat);
+                Files.move(dat, tmp);
+                Files.move(d.dat, dat);
                 Files.move(tmp, d.dat);
             } else {
-                Files.copy(d.dat, this.dat);
+                Files.copy(d.dat, dat);
                 d.resetData();
             }
         }

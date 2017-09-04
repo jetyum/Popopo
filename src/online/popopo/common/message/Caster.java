@@ -18,12 +18,12 @@ public class Caster extends Castable {
     }
 
     public CommandSender getTarget() {
-        return this.target;
+        return target;
     }
 
     @Override
     public void cast(String msg) {
-        this.target.sendMessage(msg);
+        target.sendMessage(msg);
     }
 
     public static class PlayerCaster extends Caster {
@@ -36,7 +36,7 @@ public class Caster extends Castable {
         }
 
         public void castBar(String msg) {
-            CraftPlayer p = ((CraftPlayer) getPlayer());
+            CraftPlayer p = (CraftPlayer) getPlayer();
             EntityPlayer e = p.getHandle();
             PlayerConnection i = e.playerConnection;
             String m = getTheme().getText() + msg;

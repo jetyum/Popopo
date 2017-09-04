@@ -9,11 +9,6 @@ import online.popopo.common.message.Caster;
 import java.lang.management.ManagementFactory;
 
 public class SystemCommand implements Definition {
-    @Override
-    public String getCommand() {
-        return "system";
-    }
-
     private String memoryToString(long m) {
         int uint = 0;
         long memory = m;
@@ -70,5 +65,10 @@ public class SystemCommand implements Definition {
         buf.append(")");
 
         c.info("RAM", buf.toString());
+    }
+
+    @Override
+    public String getCommand() {
+        return "system";
     }
 }

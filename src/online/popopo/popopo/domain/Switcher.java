@@ -29,18 +29,18 @@ public abstract class Switcher {
     }
 
     private void resetPotionEffect(PotionEffect e) {
-        this.player.removePotionEffect(e.getType());
+        player.removePotionEffect(e.getType());
     }
 
     private void resetPotionEffects() {
-        this.player.getActivePotionEffects()
+        player.getActivePotionEffects()
                 .forEach(this::resetPotionEffect);
     }
 
     private void fixPlayerData() throws IOException {
-        NBT t = this.data.readData();
+        NBT t = data.readData();
         Map<String, NBT> m = t.getCompound();
-        UUID uuid = this.player.getWorld().getUID();
+        UUID uuid = player.getWorld().getUID();
         long most = uuid.getMostSignificantBits();
         long least = uuid.getLeastSignificantBits();
 
@@ -48,30 +48,23 @@ public abstract class Switcher {
         m.get("WorldUUIDLeast").setValue(least);
         m.get("PortalCooldown").setValue(900);
         t.setValue(m);
-        this.data.writeData(t);
+        data.writeData(t);
     }
 
     private class SwitchingTask extends BukkitRunnable {
-        private final Switcher instance;
-
-        public SwitchingTask(Switcher i) {
-            this.instance = i;
-        }
-
         @Override
         public void run() {
-            Switcher i = this.instance;
-            PlayerData from, to;
+            PlayerData fromData, toData;
 
-            from = i.from.getPlayerData(i.player);
-            to = i.to.getPlayerData(i.player);
+            fromData = from.getPlayerData(player);
+            toData = to.getPlayerData(player);
             preProcess();
-            i.player.saveData();
+            player.saveData();
             resetPotionEffects();
 
             try {
-                from.swapData(i.data);
-                to.swapData(i.data);
+                fromData.swapData(data);
+                toData.swapData(data);
                 fixPlayerData();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -80,17 +73,16 @@ public abstract class Switcher {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    i.player.loadData();
+                    player.loadData();
                     postProcess();
                 }
-            }.runTask(i.plugin);
+            }.runTask(plugin);
         }
     }
 
     public void switchDomain() {
-        BukkitRunnable r = new SwitchingTask(this);
-
-        r.runTaskAsynchronously(this.plugin);
+        new SwitchingTask()
+                .runTaskAsynchronously(plugin);
     }
 
     public abstract void preProcess();

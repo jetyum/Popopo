@@ -10,7 +10,7 @@ public abstract class Castable {
     }
 
     public Theme getTheme() {
-        return this.theme;
+        return theme;
     }
 
     String decoratePrefix(ChatColor c, String p) {
@@ -18,7 +18,7 @@ public abstract class Castable {
     }
 
     String decorateText(ChatColor c, String m) {
-        return this.theme.getText() + m;
+        return theme.getText() + m;
     }
 
     private void cast(ChatColor c, String p, String m) {
@@ -29,19 +29,19 @@ public abstract class Castable {
     }
 
     public void info(String prefix, String msg){
-        cast(this.theme.getInfo(), prefix, msg);
+        cast(theme.getInfo(), prefix, msg);
     }
 
     public void good(String prefix, String msg){
-        cast(this.theme.getGood(), prefix, msg);
+        cast(theme.getGood(), prefix, msg);
     }
 
     public void bad(String prefix, String msg){
-        cast(this.theme.getBad(), prefix, msg);
+        cast(theme.getBad(), prefix, msg);
     }
 
     public void warning(String prefix, String msg){
-        cast(this.theme.getWarning(), prefix, msg);
+        cast(theme.getWarning(), prefix, msg);
     }
 
     public abstract void cast(String msg);

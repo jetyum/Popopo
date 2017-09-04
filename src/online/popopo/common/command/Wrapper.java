@@ -37,7 +37,7 @@ public class Wrapper implements TabExecutor {
     }
 
     public void setTo(JavaPlugin p) {
-        p.getCommand(this.command).setExecutor(this);
+        p.getCommand(command).setExecutor(this);
     }
 
     private List<String> inputToArg(String in) {
@@ -65,9 +65,9 @@ public class Wrapper implements TabExecutor {
     public boolean onCommand(CommandSender s, Command cmd, String alias, String[] rawArgs) {
         String in = String.join(" ", rawArgs);
         List<String> args = inputToArg(in);
-        Caster m = Caster.newFrom(this.theme, s);
+        Caster m = Caster.newFrom(theme, s);
 
-        for (SubCommand c : this.subCommands) {
+        for (SubCommand c : subCommands) {
             if (c.getSize() == args.size()) {
                 if (c.matchWith(in)) {
                     Map<String, String> map = new HashMap<>();
@@ -82,7 +82,7 @@ public class Wrapper implements TabExecutor {
 
                     Argument a = new Argument(s, map);
 
-                    return c.run(this.object, m, a);
+                    return c.run(object, m, a);
                 }
             }
         }
@@ -96,7 +96,7 @@ public class Wrapper implements TabExecutor {
         Set<String> res = new HashSet<>();
         int end = args.length - 1;
 
-        for (SubCommand c : this.subCommands) {
+        for (SubCommand c : subCommands) {
             if (c.getSize() >= args.length) {
                 if (c.resembleWith(in)) {
                     res.add(c.getCommand().split(" ")[end]);
@@ -104,7 +104,7 @@ public class Wrapper implements TabExecutor {
                     int i = end - c.getCommandSize();
                     String k = c.getArgKeys()[i];
 
-                    res.addAll(this.completer.candidateOf(k));
+                    res.addAll(completer.candidateOf(k));
                 }
             }
         }

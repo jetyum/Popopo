@@ -15,39 +15,39 @@ public class MultiWorld implements Configurable {
     private MemorySection config = null;
 
     public Set<String> getNames() {
-        if (this.config == null) {
+        if (config == null) {
             return new HashSet<>();
         } else {
-            return this.config.getKeys(false);
+            return config.getKeys(false);
         }
     }
 
     public WorldConfig getConfig(String name) {
-        if (this.config == null) {
+        if (config == null) {
             return null;
-        } else if (!this.config.contains(name)) {
+        } else if (!config.contains(name)) {
             return null;
         } else {
-            Map map = this.config.getValues(false);
+            Map map = config.getValues(false);
             Object o = map.get(name);
 
             return new WorldConfig((MemorySection) o);
         }
     }
 
-    public static class WorldConfig {
-        private final MemorySection c;
+    public class WorldConfig {
+        private final MemorySection section;
 
         private WorldConfig(MemorySection c) {
-            this.c = c;
+            this.section = c;
         }
 
         public boolean hasEnvironment() {
-            return this.c.contains("environment");
+            return section.contains("environment");
         }
 
         public Environment getEnvironment() {
-            String n = this.c.getString("environment")
+            String n = section.getString("environment")
                     .toUpperCase();
 
             try {
@@ -58,35 +58,35 @@ public class MultiWorld implements Configurable {
         }
 
         public boolean hasSeed() {
-            return this.c.contains("seed");
+            return section.contains("seed");
         }
 
         public long getSeed() {
-            return this.c.getLong("seed");
+            return section.getLong("seed");
         }
 
         public boolean hasWorldPreset() {
-            return this.c.contains("world_preset");
+            return section.contains("world_preset");
         }
 
         public String getWorldPreset() {
-            return this.c.getString("world_preset");
+            return section.getString("world_preset");
         }
 
         public boolean hasStructures() {
-            return this.c.contains("structures");
+            return section.contains("structures");
         }
 
         public boolean getStructures() {
-            return this.c.getBoolean("structures");
+            return section.getBoolean("structures");
         }
 
         public boolean hasWorldType() {
-            return this.c.contains("world_type");
+            return section.contains("world_type");
         }
 
         public WorldType getWorldType() {
-            String n = this.c.getString("world_type");
+            String n = section.getString("world_type");
 
             return WorldType.getByName(n);
         }

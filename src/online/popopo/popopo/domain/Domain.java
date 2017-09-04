@@ -27,11 +27,11 @@ public class Domain {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public World getMainWorld() {
-        return Bukkit.getWorld(this.name);
+        return Bukkit.getWorld(name);
     }
 
     public PlayerData getPlayerData(Player p) {
@@ -69,9 +69,8 @@ public class Domain {
     public boolean equals(Object o) {
         if (o instanceof Domain) {
             Domain d = (Domain) o;
-            String name = d.getName();
 
-            return name.equals(this.name);
+            return name.equals(d.name);
         } else {
             return false;
         }

@@ -26,34 +26,34 @@ public class SubCommand implements Comparable<SubCommand> {
     }
 
     public String getCommand() {
-        return this.command;
+        return command;
     }
 
     public String[] getArgKeys() {
-        return this.argKeys;
+        return argKeys;
     }
 
     public int getSize() {
-        return this.size;
+        return size;
     }
 
     public int getCommandSize() {
-        return this.commandSize;
+        return commandSize;
     }
 
     public boolean matchWith(String s) {
-        return this.command.isEmpty() ||
-                (s + " ").startsWith(this.command + " ");
+        return command.isEmpty()
+                || (s + " ").startsWith(command + " ");
     }
 
     public boolean resembleWith(String s) {
-        return !this.command.isEmpty() &&
-                this.command.startsWith(s);
+        return !command.isEmpty()
+                && command.startsWith(s);
     }
 
     public boolean run(Object o, Caster c, Argument a){
         try {
-            this.method.invoke(o, c, a);
+            method.invoke(o, c, a);
 
             return true;
         } catch (InvocationTargetException
@@ -64,6 +64,6 @@ public class SubCommand implements Comparable<SubCommand> {
 
     @Override
     public int compareTo(SubCommand c) {
-        return this.size - c.size;
+        return size - c.size;
     }
 }

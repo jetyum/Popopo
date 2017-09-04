@@ -32,66 +32,66 @@ public class NBT {
     }
 
     public int getType() {
-        return this.type;
+        return type;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public byte getByte() {
-        return Byte.class.cast(this.value);
+        return Byte.class.cast(value);
     }
 
     public short getShort() {
-        return Short.class.cast(this.value);
+        return Short.class.cast(value);
     }
 
     public int getInt() {
-        return Integer.class.cast(this.value);
+        return Integer.class.cast(value);
     }
 
     public long getLong() {
-        return Long.class.cast(this.value);
+        return Long.class.cast(value);
     }
 
     public float getFloat() {
-        return Float.class.cast(this.value);
+        return Float.class.cast(value);
     }
 
     public double getDouble() {
-        return Double.class.cast(this.value);
+        return Double.class.cast(value);
     }
 
     public byte[] getByteArray() {
-        return byte[].class.cast(this.value);
+        return byte[].class.cast(value);
     }
 
     public String getString() {
-        return String.class.cast(this.value);
+        return String.class.cast(value);
     }
 
     public List<NBT> getList() {
         List<NBT> list = new ArrayList<>();
 
-        return list.getClass().cast(this.value);
+        return list.getClass().cast(value);
     }
 
     public Map<String, NBT> getCompound() {
         Map<String, NBT> map = new HashMap<>();
 
-        return map.getClass().cast(this.value);
+        return map.getClass().cast(value);
     }
 
     public int[] getIntArray() {
-        return int[].class.cast(this.value);
+        return int[].class.cast(value);
     }
 
     public short[] getShortArray() {
-        return short[].class.cast(this.value);
+        return short[].class.cast(value);
     }
 
-    public void setValue(Object value) {
-        this.value = value;
+    public void setValue(Object v) {
+        value = v;
     }
 }

@@ -35,19 +35,19 @@ public class AreaSelector {
         Bukkit.getPluginManager().registerEvents(l, p);
     }
 
-    public void cancelSelectionIfHas(Player p) {
-        this.viewer.hideArea(p);
+    public void disableSelectionMode(Player p) {
+        viewer.hideArea(p);
 
         if (p.hasMetadata(METADATA_KEY)) {
             p.removeMetadata(METADATA_KEY, plugin);
         }
     }
 
-    public void requestSelection(Player p) {
+    public void enableSelectionMode(Player p) {
         Location[] v = new Location[2];
         MetadataValue m;
 
-        cancelSelectionIfHas(p);
+        disableSelectionMode(p);
         m = new FixedMetadataValue(plugin, v);
         p.setMetadata(METADATA_KEY, m);
     }
@@ -60,7 +60,7 @@ public class AreaSelector {
         MetadataValue m;
 
         m = p.getMetadata(METADATA_KEY).get(0);
-        cancelSelectionIfHas(p);
+        disableSelectionMode(p);
 
         Location[] v = (Location[]) m.value();
 
@@ -110,12 +110,12 @@ public class AreaSelector {
 
         @EventHandler
         public void onTeleport(PlayerTeleportEvent e) {
-            cancelSelectionIfHas(e.getPlayer());
+            disableSelectionMode(e.getPlayer());
         }
 
         @EventHandler
         public void onLogout(PlayerQuitEvent e) {
-            cancelSelectionIfHas(e.getPlayer());
+            disableSelectionMode(e.getPlayer());
         }
     }
 }

@@ -39,36 +39,36 @@ public class ProcessRunner extends BukkitRunnable {
             String m = null;
 
             while (true) {
-                String t = this.msgReader.readLine();
-                String e = this.errReader.readLine();
+                String t = msgReader.readLine();
+                String e = errReader.readLine();
 
                 if (e != null) {
-                    this.caster.bad(":", e);
+                    caster.bad(":", e);
                 }
 
                 if (t == null && m != null) {
                     File d = new File(m);
 
                     if (d.exists()) {
-                        this.object.getDirectories()
-                                .put(this.user, d);
+                        object.getDirectories()
+                                .put(user, d);
                     }
 
                     break;
                 } else {
                     if (m != null) {
-                        this.caster.info(":", m);
+                        caster.info(":", m);
                     }
 
                     m = t;
                 }
             }
         } catch (IOException e) {
-            this.caster.bad("$", "Stopped");
+            caster.bad("$", "Stopped");
         } finally {
-            IOUtils.closeQuietly(this.msgReader);
-            IOUtils.closeQuietly(this.msgReader);
-            this.object.getProcesses().remove(this.user);
+            IOUtils.closeQuietly(msgReader);
+            IOUtils.closeQuietly(msgReader);
+            object.getProcesses().remove(user);
         }
     }
 }
