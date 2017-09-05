@@ -58,7 +58,7 @@ public class SubCommand implements Comparable<SubCommand> {
             return true;
         } catch (InvocationTargetException
                 | IllegalAccessException e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 

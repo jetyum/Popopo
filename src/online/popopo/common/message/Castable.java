@@ -3,45 +3,41 @@ package online.popopo.common.message;
 import org.bukkit.ChatColor;
 
 public abstract class Castable {
-    private final Theme theme;
+    private final Formatter formatter;
 
-    public Castable(Theme t) {
-        this.theme = t;
+    public Castable(Formatter f) {
+        this.formatter = f;
+    }
+
+    public Formatter getFormatter() {
+        return formatter;
     }
 
     public Theme getTheme() {
-        return theme;
-    }
-
-    String decoratePrefix(ChatColor c, String p) {
-        return c + "[" + p + "]" + ChatColor.RESET;
-    }
-
-    String decorateText(ChatColor c, String m) {
-        return theme.getText() + m;
+        return formatter.getTheme();
     }
 
     private void cast(ChatColor c, String p, String m) {
-        String prefix = decoratePrefix(c, p);
-        String msg = decorateText(c, m);
+        String prefix = formatter.prefix(p, c);
+        String msg = formatter.text(m);
 
         cast(prefix + " " + msg);
     }
 
     public void info(String prefix, String msg){
-        cast(theme.getInfo(), prefix, msg);
+        cast(getTheme().getInfo(), prefix, msg);
     }
 
     public void good(String prefix, String msg){
-        cast(theme.getGood(), prefix, msg);
+        cast(getTheme().getGood(), prefix, msg);
     }
 
     public void bad(String prefix, String msg){
-        cast(theme.getBad(), prefix, msg);
+        cast(getTheme().getBad(), prefix, msg);
     }
 
     public void warning(String prefix, String msg){
-        cast(theme.getWarning(), prefix, msg);
+        cast(getTheme().getWarning(), prefix, msg);
     }
 
     public abstract void cast(String msg);

@@ -1,19 +1,19 @@
 package online.popopo.common.message;
 
-import net.minecraft.server.v1_12_R1.*;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent.ChatSerializer;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Caster extends Castable {
     private final CommandSender target;
 
-    public Caster(Theme t, CommandSender s) {
-        super(t);
+    public Caster(Formatter f, CommandSender s) {
+        super(f);
         this.target = s;
     }
 
@@ -27,8 +27,8 @@ public class Caster extends Castable {
     }
 
     public static class PlayerCaster extends Caster {
-        public PlayerCaster(Theme t, CommandSender s) {
-            super(t, s);
+        public PlayerCaster(Formatter f, CommandSender s) {
+            super(f, s);
         }
 
         public Player getPlayer() {
@@ -36,21 +36,17 @@ public class Caster extends Castable {
         }
 
         public void castBar(String msg) {
-            CraftPlayer p = (CraftPlayer) getPlayer();
-            EntityPlayer e = p.getHandle();
-            PlayerConnection i = e.playerConnection;
-            String m = getTheme().getText() + msg;
-            String r = "{\"text\":\"" + m + "\"}";
-            IChatBaseComponent s = ChatSerializer.a(r);
-            ChatMessageType t = ChatMessageType.GAME_INFO;
+            String m = getFormatter().text(msg);
+            BaseComponent s = new TextComponent(m);
+            ChatMessageType t = ChatMessageType.ACTION_BAR;
 
-            i.sendPacket(new PacketPlayOutChat(s, t));
+            getPlayer().spigot().sendMessage(t, s);
         }
     }
 
     public static class BlockCaster extends Caster {
-        public BlockCaster(Theme t, CommandSender s) {
-            super(t, s);
+        public BlockCaster(Formatter f, CommandSender s) {
+            super(f, s);
         }
 
         public Block getBlock() {
@@ -63,20 +59,20 @@ public class Caster extends Castable {
     }
 
     public static class ConsoleCaster extends Caster {
-        public ConsoleCaster(Theme t, CommandSender s) {
-            super(t, s);
+        public ConsoleCaster(Formatter f, CommandSender s) {
+            super(f, s);
         }
     }
 
-    public static Caster newFrom(Theme t, CommandSender s) {
+    public static Caster newFrom(Formatter f, CommandSender s) {
         if (s instanceof Player) {
-            return new PlayerCaster(t, s);
+            return new PlayerCaster(f, s);
         } else if (s instanceof BlockCommandSender) {
-            return new BlockCaster(t, s);
+            return new BlockCaster(f, s);
         } else if (s instanceof ConsoleCommandSender) {
-            return new ConsoleCaster(t, s);
+            return new ConsoleCaster(f, s);
         } else {
-            return new Caster(t, s);
+            return new Caster(f, s);
         }
     }
 }

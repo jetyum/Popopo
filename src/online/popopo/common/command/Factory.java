@@ -1,6 +1,6 @@
 package online.popopo.common.command;
 
-import online.popopo.common.message.Theme;
+import online.popopo.common.message.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,14 +10,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Factory {
+    private final Formatter formatter;
     private final Completer completer;
 
-    public  Factory() {
+    public  Factory(Formatter f) {
+        this.formatter = f;
         this.completer = new DefaultCompleter();
     }
 
-    public Wrapper create(Definition d, Theme t) {
-        return new Wrapper(d, completer, t);
+    public Wrapper create(Definition d) {
+        return new Wrapper(d, completer, formatter);
     }
 
     private class DefaultCompleter implements Completer {
