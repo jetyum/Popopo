@@ -2,7 +2,6 @@ package online.popopo.popopo.domain;
 
 import online.popopo.common.message.Caster;
 import online.popopo.common.message.Formatter;
-import online.popopo.common.message.Theme;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

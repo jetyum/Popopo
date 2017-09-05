@@ -4,7 +4,6 @@ package online.popopo.common.selection;
 import net.minecraft.server.v1_12_R1.EnumParticle;
 import online.popopo.common.message.Caster.PlayerCaster;
 import online.popopo.common.message.Formatter;
-import online.popopo.common.message.Theme;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
