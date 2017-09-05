@@ -1,4 +1,4 @@
-package online.popopo.popopo.language;
+package online.popopo.popopo.input;
 
 import com.google.gson.Gson;
 import online.popopo.common.config.Configurable;
@@ -13,14 +13,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Japanese implements Converter, Configurable {
+    private static final Pattern pattern
+            = Pattern.compile("\\p{ASCII}+$");
+
     @Parameter("table")
     private Map<String, String[]> table;
 
     @Parameter("url")
     private String url;
-
-    @Parameter("pattern")
-    private final Pattern pattern = null;
 
     private Reader requestJsonFrom(String kana) {
         try {
