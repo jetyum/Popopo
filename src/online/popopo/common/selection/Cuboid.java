@@ -97,6 +97,6 @@ public class Cuboid implements Serializable {
             return false;
         }
 
-        return false;
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package online.popopo.popopo.domain;
 
 import online.popopo.common.message.Caster;
+import online.popopo.common.message.Formatter;
 import online.popopo.common.message.Theme;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,11 +18,11 @@ public class TeleportListener implements Listener {
     private static final String METADATA_KEY = "domain_switch";
 
     private final JavaPlugin plugin;
-    private final Theme theme;
+    private final Formatter formatter;
 
-    public TeleportListener(JavaPlugin p, Theme t) {
+    public TeleportListener(JavaPlugin p, Formatter f) {
         this.plugin = p;
-        this.theme = t;
+        this.formatter = f;
 
         Bukkit.getPluginManager().registerEvents(this, p);
     }
@@ -54,7 +55,7 @@ public class TeleportListener implements Listener {
         if (from.equals(to) || hasFrag(p)) {
             return;
         } else if (!canSwitch(from, to)) {
-            Caster c = Caster.newFrom(theme, p);
+            Caster c = Caster.newFrom(formatter, p);
 
             c.bad("Error", "Can't switch domain!");
 

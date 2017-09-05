@@ -15,8 +15,8 @@ public class SelectCommand implements Definition {
         this.selector = s;
     }
 
-    @Executor("enable")
-    public void onCommand(Caster c, Argument arg) {
+    @Executor("enter")
+    public void onEnterCommand(Caster c, Argument arg) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");
 
@@ -26,11 +26,11 @@ public class SelectCommand implements Definition {
         Player p = (Player) c.getTarget();
 
         selector.enableSelectionMode(p);
-        c.info("Info", "Please click block and select");
+        c.info("Info", "Entered into selection mode");
     }
 
-    @Executor("disable")
-    public void oncancelCommand(Caster c, Argument arg) {
+    @Executor("exit")
+    public void onExitCommand(Caster c, Argument arg) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");
 
@@ -40,7 +40,7 @@ public class SelectCommand implements Definition {
         Player p = (Player) c.getTarget();
 
         selector.disableSelectionMode(p);
-        c.info("Info", "Selection is canceled");
+        c.info("Info", "Exited from selection mode");
     }
 
     @Override

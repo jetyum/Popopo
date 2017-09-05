@@ -28,7 +28,6 @@ public class TransferCommand implements Definition {
 
         Player p = (Player) c.getTarget();
         World w = Bukkit.getWorld(worldName);
-
         long start = System.nanoTime();
 
         p.teleport(w.getSpawnLocation());
