@@ -1,22 +1,21 @@
 package online.popopo.popopo.selection;
 
-import online.popopo.common.command.Argument;
-import online.popopo.common.command.Definition;
-import online.popopo.common.command.Executor;
+import online.popopo.common.command.Command;
+import online.popopo.common.command.SubCommand;
 import online.popopo.common.message.Caster;
 import online.popopo.common.message.Caster.PlayerCaster;
 import online.popopo.common.selection.AreaSelector;
 import org.bukkit.entity.Player;
 
-public class SelectCommand implements Definition {
+public class SelectCommand implements Command {
     private final AreaSelector selector;
 
     public SelectCommand(AreaSelector s) {
         this.selector = s;
     }
 
-    @Executor("enter")
-    public void onEnterCommand(Caster c, Argument arg) {
+    @SubCommand(name = "enter")
+    public void enter(Caster c) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");
 
@@ -29,8 +28,8 @@ public class SelectCommand implements Definition {
         c.info("Info", "Entered into selection mode");
     }
 
-    @Executor("exit")
-    public void onExitCommand(Caster c, Argument arg) {
+    @SubCommand(name = "exit")
+    public void exit(Caster c) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");
 
@@ -41,10 +40,5 @@ public class SelectCommand implements Definition {
 
         selector.disableSelectionMode(p);
         c.info("Info", "Exited from selection mode");
-    }
-
-    @Override
-    public String getCommand() {
-        return "select";
     }
 }
