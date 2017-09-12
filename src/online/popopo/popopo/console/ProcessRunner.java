@@ -9,14 +9,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ProcessRunner extends BukkitRunnable {
+class ProcessRunner extends BukkitRunnable {
     private final MultiProcess object;
     private final String user;
     private final Caster caster;
     private final BufferedReader msgReader;
     private final BufferedReader errReader;
 
-    public ProcessRunner(MultiProcess o, String user, Caster c) {
+    ProcessRunner(MultiProcess o, String user, Caster c) {
         this.object = o;
         this.user = user;
         this.caster = c;

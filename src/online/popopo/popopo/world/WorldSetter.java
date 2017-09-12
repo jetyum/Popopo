@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class WorldSetter implements Configurable {
         return settings;
     }
 
-    public boolean initWorlds(JavaPlugin p) {
+    public boolean initWorlds(Plugin p) {
         Set<World> lobbys = new HashSet<>();
 
         for (WorldSetting s : getSettings()) {

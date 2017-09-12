@@ -1,32 +1,32 @@
 package online.popopo.popopo.console;
 
 import online.popopo.common.message.Caster;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiProcess implements Closeable {
-    private final JavaPlugin plugin;
+class MultiProcess implements Closeable {
+    private final Plugin plugin;
     private final Map<String, Process> processes;
     private final Map<String, File> directories;
 
-    public MultiProcess(JavaPlugin plugin) {
+    MultiProcess(Plugin plugin) {
         this.plugin = plugin;
         this.processes = new ConcurrentHashMap<>();
         this.directories = new ConcurrentHashMap<>();
     }
 
-    public Map<String, Process> getProcesses() {
+    Map<String, Process> getProcesses() {
         return processes;
     }
 
-    public Map<String, File> getDirectories() {
+    Map<String, File> getDirectories() {
         return directories;
     }
 
-    public boolean exec(Caster c, String user, String cmd) {
+    boolean exec(Caster c, String user, String cmd) {
         if (processes.containsKey(user)) {
             return false;
         }
@@ -50,7 +50,7 @@ public class MultiProcess implements Closeable {
         }
     }
 
-    public boolean destroy(String user) {
+    boolean destroy(String user) {
         if (processes.containsKey(user)) {
             processes.get(user).destroy();
 

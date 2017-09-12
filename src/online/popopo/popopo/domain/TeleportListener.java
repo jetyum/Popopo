@@ -11,15 +11,15 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class TeleportListener implements Listener {
     private static final String METADATA_KEY = "domain_switch";
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private final Formatter formatter;
 
-    public TeleportListener(JavaPlugin p, Formatter f) {
+    public TeleportListener(Plugin p, Formatter f) {
         this.plugin = p;
         this.formatter = f;
 
@@ -30,19 +30,28 @@ public class TeleportListener implements Listener {
         return a.available() && b.available();
     }
 
-    private void setFrag(Player p) {
-        MetadataValue v;
-
-        v = new FixedMetadataValue(plugin, true);
-        p.setMetadata(METADATA_KEY, v);
-    }
-
     private void removeFrag(Player p) {
         p.removeMetadata(METADATA_KEY, plugin);
     }
 
     private boolean hasFrag(Player p) {
         return p.hasMetadata(METADATA_KEY);
+    }
+
+    private void setFrag(Player p, boolean bool) {
+        MetadataValue v;
+
+        if (hasFrag(p)) removeFrag(p);
+        v = new FixedMetadataValue(plugin, bool);
+        p.setMetadata(METADATA_KEY, v);
+    }
+
+    private boolean getFrag(Player p) {
+        MetadataValue v;
+
+        v = p.getMetadata(METADATA_KEY).get(0);
+
+        return v.asBoolean();
     }
 
     @EventHandler
@@ -52,29 +61,27 @@ public class TeleportListener implements Listener {
         Domain to = new Domain(e.getTo());
 
         if (from.equals(to) || hasFrag(p)) {
-            return;
+            e.setCancelled(hasFrag(p) && !getFrag(p));
         } else if (!canSwitch(from, to)) {
             Caster c = Caster.newFrom(formatter, p);
 
             c.bad("Error", "Can't switch domain!");
+        } else {
+            new Switcher(plugin, p, from, to) {
+                @Override
+                public void preProcess() {
+                    setFrag(p, false);
+                }
 
-            return;
+                @Override
+                public void postProcess() {
+                    setFrag(p, true);
+                    p.teleport(e.getTo());
+                    removeFrag(p);
+                }
+            }.switchDomain();
+            e.setCancelled(true);
         }
-
-        new Switcher(plugin, p, from, to) {
-            @Override
-            public void preProcess() {
-                setFrag(p);
-            }
-
-            @Override
-            public void postProcess() {
-                p.teleport(e.getTo());
-                removeFrag(p);
-            }
-        }.switchDomain();
-
-        e.setCancelled(true);
     }
 
     @EventHandler

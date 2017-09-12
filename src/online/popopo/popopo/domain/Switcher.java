@@ -2,7 +2,7 @@ package online.popopo.popopo.domain;
 
 import online.popopo.common.nbt.NBT;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -10,14 +10,14 @@ import java.io.*;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class Switcher {
-    private final JavaPlugin plugin;
+abstract class Switcher {
+    private final Plugin plugin;
     private final Player player;
     private final Domain from;
     private final Domain to;
     private final PlayerData data;
 
-    public Switcher(JavaPlugin plugin, Player p,
+    Switcher(Plugin plugin, Player p,
                     Domain from, Domain to) {
         Domain main = Domain.getMain();
 
@@ -51,14 +51,19 @@ public abstract class Switcher {
         data.writeData(t);
     }
 
-    private class SwitchingTask extends BukkitRunnable {
+    void switchDomain() {
+        preProcess();
+        new SwitchingTask()
+                .runTaskAsynchronously(plugin);
+    }
+
+    class SwitchingTask extends BukkitRunnable {
         @Override
         public void run() {
             PlayerData fromData, toData;
 
             fromData = from.getPlayerData(player);
             toData = to.getPlayerData(player);
-            preProcess();
             player.saveData();
             resetPotionEffects();
 
@@ -80,12 +85,7 @@ public abstract class Switcher {
         }
     }
 
-    public void switchDomain() {
-        new SwitchingTask()
-                .runTaskAsynchronously(plugin);
-    }
+    abstract void preProcess();
 
-    public abstract void preProcess();
-
-    public abstract void postProcess();
+    abstract void postProcess();
 }

@@ -5,12 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class PortalListener implements Listener {
     private final PortalList portals;
 
-    public PortalListener(JavaPlugin p, PortalList l) {
+    public PortalListener(Plugin p, PortalList l) {
         this.portals = l;
 
         Bukkit.getPluginManager().registerEvents(this, p);
@@ -37,8 +37,6 @@ public class PortalListener implements Listener {
         l.setYaw(p.getLocation().getYaw());
         l.setPitch(p.getLocation().getPitch());
         p.teleport(l);
-        p.playSound(l, Sound.ENTITY_EGG_THROW,
-                SoundCategory.PLAYERS, 1.0f, 1.0f);
         e.setCancelled(true);
     }
 }

@@ -1,11 +1,10 @@
 package online.popopo.common.selection;
 
-
-import net.minecraft.server.v1_12_R1.EnumParticle;
 import online.popopo.common.message.Caster.PlayerCaster;
 import online.popopo.common.message.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,17 +14,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class AreaSelector {
     private static final String METADATA_KEY = "area_selection";
-    private static final EnumParticle PARTICLE = EnumParticle.REDSTONE;
+    private static final Particle PARTICLE = Particle.REDSTONE;
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private final Formatter formatter;
     private final AreaViewer viewer;
 
-    public AreaSelector(JavaPlugin p, Formatter f) {
+    public AreaSelector(Plugin p, Formatter f) {
         this.plugin = p;
         this.formatter = f;
         this.viewer = new AreaViewer(p, PARTICLE);

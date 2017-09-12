@@ -1,17 +1,13 @@
 package online.popopo.common.selection;
 
-import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.EnumParticle;
-import net.minecraft.server.v1_12_R1.Packet;
-import net.minecraft.server.v1_12_R1.PacketPlayOutWorldParticles;
-import net.minecraft.server.v1_12_R1.PlayerConnection;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_12_R1.Overridden;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -22,16 +18,17 @@ import java.util.Set;
 public class AreaViewer {
     private static final String METADATA_KEY = "cuboid_effect";
 
-    private final JavaPlugin plugin;
-    private final EnumParticle particle;
+    private final Plugin plugin;
+    private final Particle particle;
 
-    public AreaViewer(JavaPlugin plugin, EnumParticle p) {
+    public AreaViewer(Plugin plugin, Particle p) {
         this.plugin = plugin;
         this.particle = p;
     }
 
-    private Set<Vector> getVectors(Cuboid c) {
-        Set<Vector> vectors = new HashSet<>();
+    private Set<Location> getLocations(Cuboid c) {
+        Set<Location> locations = new HashSet<>();
+        World w = c.getWorld();
         Vector[] vertex = c.getVertex();
         int[][] sideIndex = {
                 {0, 2}, {0, 4}, {6, 2}, {6, 4},
@@ -49,30 +46,11 @@ public class AreaViewer {
             int num = (int) div;
 
             for (int i = 0; i <= num; i++, a.add(diff)) {
-                vectors.add(a.clone());
+                locations.add(a.toLocation(w));
             }
         }
 
-        return vectors;
-    }
-
-    private Packet createPacket(Vector v) {
-        return new PacketPlayOutWorldParticles(
-                particle, true,
-                (float) v.getX(),
-                (float) v.getY(),
-                (float) v.getZ(),
-                0.0f, 0.0f, 0.0f, 0.0f, 0);
-    }
-
-    private Set<Packet> createPackets(Set<Vector> set) {
-        Set<Packet> packets = new HashSet<>();
-
-        for (Vector v : set) {
-            packets.add(createPacket(v));
-        }
-
-        return packets;
+        return locations;
     }
 
     public void hideArea(Player p) {
@@ -85,22 +63,20 @@ public class AreaViewer {
         }
     }
 
-    public void showArea(Player target, Cuboid c) {
+    public void showArea(Player p, Cuboid c) {
         World w = c.getWorld();
-        CraftPlayer p = (CraftPlayer) target;
-        EntityPlayer e = p.getHandle();
-        PlayerConnection i = e.playerConnection;
-        Set<Vector> vectors = getVectors(c);
-        Set<Packet> packets = createPackets(vectors);
+        Set<Location> locations = getLocations(c);
         MetadataValue m;
 
         BukkitTask task = new BukkitRunnable() {
             @Overridden
             public void run() {
-                if (target.getWorld().equals(w)) {
-                    for (Packet packet : packets) {
-                        i.sendPacket(packet);
-                    }
+                if (!p.getWorld().equals(w)) {
+                    return;
+                }
+
+                for (Location l : locations) {
+                    p.spawnParticle(particle, l, 0);
                 }
             }
         }.runTaskTimer(plugin, 0, 10);

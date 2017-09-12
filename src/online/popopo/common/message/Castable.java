@@ -13,7 +13,7 @@ public abstract class Castable {
         return formatter;
     }
 
-    public Theme getTheme() {
+    private Theme getTheme() {
         return formatter.getTheme();
     }
 

@@ -1,7 +1,7 @@
 package online.popopo.common.config;
 
 import com.google.common.io.Files;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class GzipConfig extends Config {
         this.table = new HashMap<>();
     }
 
-    public static GzipConfig newFrom(JavaPlugin p, String path) throws IOException {
+    public static GzipConfig newFrom(Plugin p, String path) throws IOException {
         String dir = p.getDataFolder().getAbsolutePath();
         String abs = dir + "/" + path;
 
@@ -86,12 +86,12 @@ public class GzipConfig extends Config {
     }
 
     @Override
-    public void set(String section, String key, Object value) {
+    public void set(String section, String key, Object v) {
         if (!table.containsKey(section)) {
             table.put(section, new HashMap<>());
         }
 
-        table.get(section).put(key, value);
+        table.get(section).put(key, v);
     }
 
     @Override

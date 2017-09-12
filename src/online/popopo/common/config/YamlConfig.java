@@ -3,7 +3,7 @@ package online.popopo.common.config;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.IOException;
 public class YamlConfig extends Config {
     private final String path;
     private final FileConfiguration config;
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
 
     public YamlConfig(String path) {
         this.path = path;
@@ -19,19 +19,19 @@ public class YamlConfig extends Config {
         this.plugin = null;
     }
 
-    private YamlConfig(FileConfiguration c, JavaPlugin p) {
+    private YamlConfig(FileConfiguration c, Plugin p) {
         this.path = "";
         this.config = c;
         this.plugin = p;
     }
 
-    public static YamlConfig newFrom(JavaPlugin p) {
+    public static YamlConfig newFrom(Plugin p) {
         p.saveDefaultConfig();
 
         return new YamlConfig(p.getConfig(), p);
     }
 
-    public static YamlConfig newFrom(JavaPlugin p, String path) throws IOException {
+    public static YamlConfig newFrom(Plugin p, String path) throws IOException {
         String dir = p.getDataFolder().getAbsolutePath();
         String abs = dir + "/" + path;
 

@@ -4,12 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class Config implements Configuring {
-    @Override
-    public boolean injectInto(Configurable i) {
-        String section = i.getSectionName();
+public abstract class Config {
+    public boolean injectInto(Configurable c) {
+        String section = c.getSectionName();
 
-        for (Field f : i.getClass().getDeclaredFields()) {
+        for (Field f : c.getClass().getDeclaredFields()) {
             if (!f.isAnnotationPresent(Parameter.class)) {
                 continue;
             }
@@ -33,7 +32,7 @@ public abstract class Config implements Configuring {
                 }
 
                 f.setAccessible(true);
-                f.set(i, o);
+                f.set(c, o);
             } catch (IllegalAccessException
                     | NoSuchMethodException
                     | InvocationTargetException e) {
@@ -44,11 +43,10 @@ public abstract class Config implements Configuring {
         return true;
     }
 
-    @Override
-    public boolean extractFrom(Configurable i) {
-        String section = i.getSectionName();
+    public boolean extractFrom(Configurable c) {
+        String section = c.getSectionName();
 
-        for (Field f : i.getClass().getDeclaredFields()) {
+        for (Field f : c.getClass().getDeclaredFields()) {
             if (!f.isAnnotationPresent(Parameter.class)) {
                 continue;
             }
@@ -58,7 +56,7 @@ public abstract class Config implements Configuring {
             try {
                 f.setAccessible(true);
 
-                Object o = f.get(i);
+                Object o = f.get(c);
                 Class<?> t = f.getType();
 
                 if (t.isEnum()) {
@@ -76,4 +74,14 @@ public abstract class Config implements Configuring {
 
         return true;
     }
+
+    abstract boolean load();
+
+    abstract boolean save();
+
+    abstract boolean contain(String section, String key);
+
+    abstract void set(String section, String key, Object v);
+
+    abstract Object get(String section, String key);
 }

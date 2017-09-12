@@ -25,7 +25,7 @@ public class WorldSetting {
         try {
             return Environment.valueOf(n.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 

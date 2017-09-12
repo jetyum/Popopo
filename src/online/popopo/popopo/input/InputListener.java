@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -19,13 +19,13 @@ public class InputListener implements Listener {
     private static final long MAX_LENGTH = 50;
     private static final long BUFF_SIZE = 10;
 
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private final Converter converter;
     private final Formatter formatter;
     private final Deque<Set<String>> buffer;
     private final Set<String> roster;
 
-    public InputListener(JavaPlugin p, Converter c, Formatter f) {
+    public InputListener(Plugin p, Converter c, Formatter f) {
         this.plugin = p;
         this.converter = c;
         this.formatter = f;
