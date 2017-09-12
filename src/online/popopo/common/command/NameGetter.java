@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SubCommand {
-    String[] name() default {};
+public @interface NameGetter {
+    Class type();
 }
