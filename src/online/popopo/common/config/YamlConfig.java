@@ -3,92 +3,47 @@ package online.popopo.common.config;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-public class YamlConfig extends Config {
-    private final String path;
+public class YamlConfig implements Config {
     private final FileConfiguration config;
-    private final Plugin plugin;
 
-    public YamlConfig(String path) {
-        this.path = path;
+    public YamlConfig() {
         this.config = new YamlConfiguration();
-        this.plugin = null;
-    }
-
-    private YamlConfig(FileConfiguration c, Plugin p) {
-        this.path = "";
-        this.config = c;
-        this.plugin = p;
-    }
-
-    public static YamlConfig newFrom(Plugin p) {
-        p.saveDefaultConfig();
-
-        return new YamlConfig(p.getConfig(), p);
-    }
-
-    public static YamlConfig newFrom(Plugin p, String path) throws IOException {
-        String dir = p.getDataFolder().getAbsolutePath();
-        String abs = dir + "/" + path;
-
-        if (!new File(abs).exists()) {
-            p.saveResource(path, false);
-        }
-
-        return new YamlConfig(abs);
     }
 
     @Override
-    public boolean load() {
-        if (plugin != null) {
-            plugin.reloadConfig();
-
-            return true;
-        }
-
+    public void load(InputStream in) {
         try {
-            config.load(path);
-
-            return true;
+            config.load(new InputStreamReader(in));
         } catch (InvalidConfigurationException
                 | IOException e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public boolean save() {
-        if (plugin != null) {
-            plugin.saveConfig();
-
-            return true;
-        }
-
+    public void save(File file) {
         try {
-            config.save(path);
-
-            return true;
+            config.save(file);
         } catch (IOException e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public boolean contain(String section, String key) {
-        return config.isSet(section + "." + key);
+    public boolean contains(String key) {
+        return config.contains(key);
     }
 
     @Override
-    public void set(String section, String key, Object value) {
-        config.set(section + "." + key, value);
+    public void set(String key, Object value) {
+        config.set(key, value);
     }
 
     @Override
-    public Object get(String section, String key) {
-        return config.get(section + "." + key);
+    public Object get(String key) {
+        return config.get(key);
     }
 }

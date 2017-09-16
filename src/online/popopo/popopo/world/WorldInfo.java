@@ -5,7 +5,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.configuration.MemorySection;
 
-public class WorldSetting {
+public class WorldBean {
     private static final String ENVIRONMENT = "environment";
     private static final String SEED = "seed";
     private static final String STRUCTURES = "structures";
@@ -13,34 +13,20 @@ public class WorldSetting {
     private static final String WORLD_TYPE = "world_type";
     private static final String LOBBY_WORLD = "lobby_world";
 
-    private final MemorySection section;
-
-    public WorldSetting(MemorySection s) {
-        this.section = s;
-    }
-
-    private Environment getEnvironment() {
-        String n = section.getString(ENVIRONMENT);
-
-        try {
-            return Environment.valueOf(n.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private WorldType getWorldType() {
-        String n = section.getString(WORLD_TYPE);
-
-        return WorldType.getByName(n);
-    }
+    private String name = null;
+    private Environment environment = null;
+    private Long seed = null;
+    private Boolean structures = null;
+    private String preset = null;
+    private WorldType type = null;
+    private Boolean lobby = null;
 
     public boolean hasLobbyWorld() {
-        return section.contains(LOBBY_WORLD);
+        return lobby != null;
     }
 
     public boolean getLobbyWorld() {
-        return section.getBoolean(LOBBY_WORLD);
+        return lobby;
     }
 
     public WorldCreator generateCreator() {
