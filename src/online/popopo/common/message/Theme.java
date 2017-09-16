@@ -1,31 +1,25 @@
 package online.popopo.common.message;
 
-import online.popopo.common.config.Configurable;
-import online.popopo.common.config.Parameter;
+import online.popopo.common.config.Property;
 import org.bukkit.ChatColor;
 
-public class Theme implements Configurable {
-    @Override
-    public String getSectionName() {
-        return "theme";
-    }
-
-    @Parameter("text")
+public class Theme {
+    @Property(key = "text")
     private ChatColor text = ChatColor.WHITE;
 
-    @Parameter("highlight")
+    @Property(key = "highlight")
     private ChatColor highlight = ChatColor.WHITE;
 
-    @Parameter("info")
+    @Property(key = "info")
     private ChatColor info = ChatColor.WHITE;
 
-    @Parameter("good")
+    @Property(key = "good")
     private ChatColor good = ChatColor.WHITE;
 
-    @Parameter("bad")
+    @Property(key = "bad")
     private ChatColor bad = ChatColor.WHITE;
 
-    @Parameter("warning")
+    @Property(key = "warning")
     private ChatColor warning = ChatColor.WHITE;
 
     public ChatColor getText() {

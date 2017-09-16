@@ -1,8 +1,7 @@
 package online.popopo.popopo.input;
 
 import com.google.gson.Gson;
-import online.popopo.common.config.Configurable;
-import online.popopo.common.config.Parameter;
+import online.popopo.common.config.Property;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -12,14 +11,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Japanese implements Converter, Configurable {
+public class Japanese implements Converter{
     private static final Pattern pattern
             = Pattern.compile("\\p{ASCII}+$");
 
-    @Parameter("table")
+    @Property(key = "table")
     private Map<String, String[]> table;
 
-    @Parameter("url")
+    @Property(key = "url")
     private String url;
 
     private Reader requestJsonFrom(String kana) {
@@ -90,10 +89,5 @@ public class Japanese implements Converter, Configurable {
         }
 
         return set;
-    }
-
-    @Override
-    public String getSectionName() {
-        return "language.japanese";
     }
 }

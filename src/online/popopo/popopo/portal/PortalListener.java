@@ -7,26 +7,38 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 
-public class PortalListener implements Listener {
-    private final PortalList portals;
+import java.util.Map;
 
-    public PortalListener(Plugin p, PortalList l) {
-        this.portals = l;
+public class PortalListener implements Listener {
+    private final Map<String, Portal> portals;
+
+    public PortalListener(Plugin p, Map<String, Portal> m) {
+        this.portals = m;
 
         Bukkit.getPluginManager().registerEvents(this, p);
+    }
+
+    private Portal getPortalFrom(Location l) {
+        for (Portal p : portals.values()) {
+            if (p.getArea().contains(l)) {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     @EventHandler
     public void onClickBlock(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        Portal from = portals.getPortal(p.getLocation());
+        Portal from = getPortalFrom(p.getLocation());
 
         if (from == null || !from.hasDestination()) {
             return;
         }
 
         String toName = from.getDestination();
-        Portal to = portals.getPortal(toName);
+        Portal to = portals.get(toName);
 
         if (to == null) {
             return;

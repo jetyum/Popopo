@@ -11,16 +11,17 @@ import online.popopo.common.selection.Cuboid;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PortalCommand implements Command {
     private final AreaSelector selector;
-    private final PortalList portals;
+    private final Map<String, Portal> portals;
 
-    public PortalCommand(AreaSelector s, PortalList l) {
+    public PortalCommand(AreaSelector s, Map<String, Portal> m) {
         this.selector = s;
-        this.portals = l;
+        this.portals = m;
     }
 
     @SubCommand(name = "create")
@@ -29,7 +30,7 @@ public class PortalCommand implements Command {
             c.bad("Error", "Can't used except player");
 
             return;
-        } else if (portals.hasPortal(name)) {
+        } else if (portals.containsKey(name)) {
             c.bad("Error", "Portal already exists");
 
             return;
@@ -44,13 +45,13 @@ public class PortalCommand implements Command {
             return;
         }
 
-        portals.addPortal(new Portal(name, area));
+        portals.put(name, new Portal(name, area));
         c.good("Done", "Portal was created");
     }
 
     @SubCommand(name = "delete")
     public void delete(Caster c, Portal p) {
-        portals.removePortal(p.getName());
+        portals.remove(p.getName());
         c.good("Done", "Portal was deleted");
     }
 
@@ -68,7 +69,7 @@ public class PortalCommand implements Command {
 
     @SubCommand(name = "list")
     public void showList(Caster c) {
-        if (portals.getPortals().isEmpty()) {
+        if (portals.isEmpty()) {
             c.info("Info", "Portal doesn't exist");
 
             return;
@@ -76,7 +77,7 @@ public class PortalCommand implements Command {
 
         c.good("Info", "Portal list");
 
-        for (Portal p : portals.getPortals()) {
+        for (Portal p : portals.values()) {
             String name = p.getName();
             World w = p.getArea().getWorld();
             String msg = "It's in " + w.getName();
@@ -96,7 +97,7 @@ public class PortalCommand implements Command {
     @NameGetter(type = Portal.class)
     public Set<String> getPortalNames() {
         return portals
-                .getPortals()
+                .values()
                 .stream()
                 .map(Portal::getName)
                 .collect(Collectors.toSet());
@@ -104,7 +105,7 @@ public class PortalCommand implements Command {
 
     @ValueGetter(type = Portal.class)
     public Portal getPortal(Caster c, String arg) {
-        Portal p = portals.getPortal(arg);
+        Portal p = portals.get(arg);
 
         if (p == null) {
             c.bad("Error", "Portal doesn't exist");

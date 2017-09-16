@@ -1,53 +1,31 @@
 package online.popopo.popopo.world;
 
-import online.popopo.common.config.Configurable;
-import online.popopo.common.config.Parameter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.util.Map.Entry;
 
-public class WorldSetter implements Configurable {
-    @Parameter("")
-    private MemorySection section;
-
-    private Set<WorldSetting> getSettings() {
-        Set<WorldSetting> settings = new HashSet<>();
-
-        if (section != null) {
-            Map map = section.getValues(false);
-
-            for (Object o : map.values()) {
-                MemorySection s = (MemorySection) o;
-
-                settings.add(new WorldSetting(s));
-            }
-        }
-
-        return settings;
-    }
-
-    public boolean initWorlds(Plugin p) {
+public class WorldSetter {
+    public boolean init(Plugin p, Map<String, WorldInfo> m) {
         Set<World> lobbys = new HashSet<>();
 
-        for (WorldSetting s : getSettings()) {
-            WorldCreator c = s.generateCreator();
+        for (Entry<String, WorldInfo> e : m.entrySet()) {
+            String name = e.getKey();
+            WorldInfo info = e.getValue();
+            WorldCreator c = info.worldCreator(name);
             World w = c.createWorld();
 
             if (w == null) {
                 return false;
-            } else if (s.hasLobbyWorld()) {
-                if (s.getLobbyWorld()) {
+            } else if (info.isLobbyWorld()) {
+                if (info.isLobbyWorld()) {
                     lobbys.add(w);
                 }
             }
@@ -60,11 +38,6 @@ public class WorldSetter implements Configurable {
         }
 
         return true;
-    }
-
-    @Override
-    public String getSectionName() {
-        return "worlds";
     }
 
     private class LobbyListener implements Listener {

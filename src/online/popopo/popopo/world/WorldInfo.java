@@ -1,60 +1,56 @@
 package online.popopo.popopo.world;
 
+import online.popopo.common.config.Property;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.configuration.MemorySection;
 
-public class WorldBean {
-    private static final String ENVIRONMENT = "environment";
-    private static final String SEED = "seed";
-    private static final String STRUCTURES = "structures";
-    private static final String WORLD_PRESET = "world_preset";
-    private static final String WORLD_TYPE = "world_type";
-    private static final String LOBBY_WORLD = "lobby_world";
-
-    private String name = null;
+public class WorldInfo {
+    @Property(key = "environment")
     private Environment environment = null;
+
+    @Property(key = "seed")
     private Long seed = null;
+
+    @Property(key = "structures")
     private Boolean structures = null;
+
+    @Property(key = "world_preset")
     private String preset = null;
+
+    @Property(key = "world_type")
     private WorldType type = null;
-    private Boolean lobby = null;
 
-    public boolean hasLobbyWorld() {
-        return lobby != null;
-    }
+    @Property(key = "lobby_world")
+    private boolean lobby = false;
 
-    public boolean getLobbyWorld() {
-        return lobby;
-    }
-
-    public WorldCreator generateCreator() {
-        String name = section.getName();
+    public WorldCreator worldCreator(String name) {
         WorldCreator c = WorldCreator.name(name);
 
-        if (section.contains(ENVIRONMENT)) {
-            c.environment(getEnvironment());
+        if (environment != null) {
+            c.environment(environment);
         }
 
-        if (section.contains(SEED)) {
-            c.seed(section.getLong(SEED));
+        if (seed != null) {
+            c.seed(seed);
         }
 
-        if (section.contains(STRUCTURES)) {
-            c.generateStructures(
-                    section.getBoolean(STRUCTURES));
+        if (structures != null) {
+            c.generateStructures(structures);
         }
 
-        if (section.contains(WORLD_PRESET)) {
-            c.generatorSettings(
-                    section.getString(WORLD_PRESET));
+        if (preset != null) {
+            c.generatorSettings(preset);
         }
 
-        if (section.contains(WORLD_TYPE)) {
-            c.type(getWorldType());
+        if (type != null) {
+            c.type(type);
         }
 
         return c;
+    }
+
+    public boolean isLobbyWorld() {
+        return lobby;
     }
 }
