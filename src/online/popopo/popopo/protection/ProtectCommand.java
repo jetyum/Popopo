@@ -8,9 +8,11 @@ import online.popopo.common.message.Caster;
 import online.popopo.common.message.Caster.PlayerCaster;
 import online.popopo.common.selection.AreaSelector;
 import online.popopo.common.selection.Cuboid;
+import online.popopo.popopo.protection.Reserve.Priority;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,14 +61,20 @@ public class ProtectCommand implements Command {
 
     @SubCommand(name = "join")
     public void join(Caster c, Reserve r, String name) {
-        r.addMember(name);
+        r.getMembers().add(name);
         c.good("Done", "Member was joined");
     }
 
-    @SubCommand(name = "defection")
-    public void defection(Caster c, Reserve r, String name) {
-        r.removeMember(name);
-        c.good("Done", "Member was left");
+    @SubCommand(name = "defect")
+    public void defect(Caster c, Reserve r, String name) {
+        r.getMembers().remove(name);
+        c.good("Done", "Member was defected");
+    }
+
+    @SubCommand(name = "priority")
+    public void priority(Caster c, Reserve r, Priority p) {
+        r.setPriority(p);
+        c.good("Done", "Priority was updated");
     }
 
     @SubCommand(name = "list")
@@ -93,17 +101,23 @@ public class ProtectCommand implements Command {
 
     @NameGetter(type = Reserve.class)
     public Set<String> getReserveNames() {
-        return reserves
-                .values().stream()
+        return reserves.values().stream()
                 .map(Reserve::getName)
                 .collect(Collectors.toSet());
     }
 
     @NameGetter(type = License.class)
     public Set<String> getLicenseNames() {
-        return licenses
-                .values().stream()
+        return licenses.values().stream()
                 .map(License::getName)
+                .collect(Collectors.toSet());
+    }
+
+    @NameGetter(type = Priority.class)
+    public Set<String> getPriorityNames() {
+        return Arrays.stream(Priority.values())
+                .map(Priority::name)
+                .map(String::toLowerCase)
                 .collect(Collectors.toSet());
     }
 
@@ -127,5 +141,16 @@ public class ProtectCommand implements Command {
         }
 
         return l;
+    }
+
+    @ValueGetter(type = Priority.class)
+    public Priority getPriority(Caster c, String arg) {
+        try {
+            return Priority.valueOf(arg.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            c.bad("Error", "Priority doesn't exist");
+
+            return null;
+        }
     }
 }

@@ -1,7 +1,6 @@
 package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
-import online.popopo.popopo.protection.License;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -27,11 +26,11 @@ public class ExplosionListener implements Listener {
     }
 
     private boolean canEntityExplosion(Location l) {
-        return judge.can(l, ENTITY_EXPLOSION);
+        return judge.allows(l, ENTITY_EXPLOSION);
     }
 
     private boolean canBlockExplosion(Location l) {
-        return judge.can(l, BLOCK_EXPLOSION);
+        return judge.allows(l, BLOCK_EXPLOSION);
     }
 
     private boolean canEntityBlastBlock(List<Block> list) {

@@ -1,5 +1,6 @@
 package online.popopo.popopo.protection;
 
+import online.popopo.popopo.protection.Reserve.Priority;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -11,7 +12,8 @@ public class Judge {
     private final Map<String, Reserve> reserves;
     private final Map<String, License> licenses;
 
-    public Judge(Map<String, Reserve> r, Map<String, License> l) {
+    public Judge(Map<String, Reserve> r,
+                 Map<String, License> l) {
         this.reserves = r;
         this.licenses = l;
     }
@@ -25,49 +27,60 @@ public class Judge {
     }
 
     private Reserve getReserve(Location l) {
+        Priority priority = Priority.LOWEST;
+        Reserve reserve = null;
+
         for (Reserve r : reserves.values()) {
             if (r.getArea().contains(l)) {
-                return r;
+                Priority p = r.getPriority();
+
+                if (p.compareTo(priority) >= 0) {
+                    priority = p;
+                    reserve = r;
+                }
             }
         }
 
-        return null;
+        return reserve;
     }
 
-    private boolean can(Reserve r, String act) {
+    private boolean allows(Reserve r, String act) {
         License l = licenses.get(r.getLicense());
 
         return l != null && l.contains(act);
-
     }
 
-    public boolean can(Player p, Location l, String act) {
+    public boolean allows(Player p, Location l, String act) {
         Reserve r = getReserve(l);
-        String name = p.getName();
+        String n = p.getName();
 
-        return r == null || !r.hasMember(name) && can(r, act);
+        if (r == null) return true;
+        if (r.getMembers().contains(n)) return true;
 
+        return allows(r, act);
     }
 
-    public boolean can(Player p, Block b, String act) {
-        return can(p, b.getLocation(), act);
+    public boolean allows(Player p, Block b, String act) {
+        return allows(p, b.getLocation(), act);
     }
 
-    public boolean can(Player p, Entity e, String act) {
-        return can(p, e.getLocation(), act);
+    public boolean allows(Player p, Entity e, String act) {
+        return allows(p, e.getLocation(), act);
     }
 
-    public boolean can(Location l, String act) {
+    public boolean allows(Location l, String act) {
         Reserve r = getReserve(l);
 
-        return r == null || can(r, act);
+        if (r == null) return true;
+
+        return allows(r, act);
     }
 
-    public boolean can(Block b, String act) {
-        return can(b.getLocation(), act);
+    public boolean allows(Block b, String act) {
+        return allows(b.getLocation(), act);
     }
 
-    public boolean can(Entity e, String act) {
-        return can(e.getLocation(), act);
+    public boolean allows(Entity e, String act) {
+        return allows(e.getLocation(), act);
     }
 }

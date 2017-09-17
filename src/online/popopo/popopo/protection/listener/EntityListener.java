@@ -1,7 +1,6 @@
 package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
-import online.popopo.popopo.protection.License;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -37,7 +36,7 @@ public class EntityListener implements Listener {
                 act = PLAYER_ATTACK_ENTITY;
             }
 
-            return judge.can(p, target.getLocation(), act);
+            return judge.allows(p, target.getLocation(), act);
         } else {
             String act;
 
@@ -47,18 +46,18 @@ public class EntityListener implements Listener {
                 act = ENTITY_ATTACK_ENTITY;
             }
 
-            return judge.can(target.getLocation(), act);
+            return judge.allows(target.getLocation(), act);
         }
     }
 
     private boolean canCreatureSpawn(Location l) {
-        return judge.can(l, CREATURE_SPAWN);
+        return judge.allows(l, CREATURE_SPAWN);
     }
 
     private boolean canVehicleChange(Vehicle v) {
         Location l = v.getLocation();
 
-        return judge.can(l, VEHICLE_CHANGE);
+        return judge.allows(l, VEHICLE_CHANGE);
     }
 
     @EventHandler

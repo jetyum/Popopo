@@ -11,6 +11,7 @@ public class Reserve implements Serializable {
     private final Cuboid area;
     private final String license;
 
+    private Priority priority = Priority.NORMAL;
     private Set<String> members = new HashSet<>();
 
     public Reserve(String name, Cuboid c, License l) {
@@ -31,15 +32,19 @@ public class Reserve implements Serializable {
         return license;
     }
 
-    public void addMember(String name) {
-        members.add(name);
+    public Priority getPriority() {
+        return priority;
     }
 
-    public void removeMember(String name) {
-        members.remove(name);
+    public void setPriority(Priority p) {
+        this.priority = p;
     }
 
-    public boolean hasMember(String name) {
-        return members.contains(name);
+    public Set<String> getMembers() {
+        return members;
+    }
+
+    public enum Priority {
+        HIGHEST, ABOVE_NORMAL, NORMAL, BELOW_NORMAL, LOWEST
     }
 }

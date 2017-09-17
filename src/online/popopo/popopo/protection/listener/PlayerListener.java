@@ -26,19 +26,19 @@ public class PlayerListener implements Listener {
     }
 
     private boolean canPlayerClickBlock(Player p, Block b) {
-        return judge.can(p, b, PLAYER_CLICK_BLOCK);
+        return judge.allows(p, b, PLAYER_CLICK_BLOCK);
     }
 
     private boolean canPlayerClickEntity(Player p, Entity e) {
-        return judge.can(p, e, PLAYER_CLICK_ENTITY);
+        return judge.allows(p, e, PLAYER_CLICK_ENTITY);
     }
 
     private boolean canPlayerEnterVehicle(Player p, Vehicle v) {
-        return judge.can(p, v, PLAYER_ENTER_VEHICLE);
+        return judge.allows(p, v, PLAYER_ENTER_VEHICLE);
     }
 
     private boolean canPlayerExitVehicle(Player p, Vehicle v) {
-        return judge.can(p, v, PLAYER_EXIT_VEHICLE);
+        return judge.allows(p, v, PLAYER_EXIT_VEHICLE);
     }
 
     @EventHandler(ignoreCancelled = true)

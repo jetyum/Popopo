@@ -27,19 +27,19 @@ public class BlockListener implements Listener {
     }
 
     private boolean canPlayerChangeBlock(Player p, Block b) {
-        return judge.can(p, b, PLAYER_CHANGE_BLOCK);
+        return judge.allows(p, b, PLAYER_CHANGE_BLOCK);
     }
 
     private boolean canEntityChangeBlock(Block b) {
-        return judge.can(b, ENTITY_CHANGE_BLOCK);
+        return judge.allows(b, ENTITY_CHANGE_BLOCK);
     }
 
     private boolean canBlockChangeBlock(Block b) {
-        return judge.can(b, BLOCK_CHANGE_BLOCK);
+        return judge.allows(b, BLOCK_CHANGE_BLOCK);
     }
 
     private boolean canTimeChangeBlock(Block b) {
-        return judge.can(b, TIME_CHANGE_BLOCK);
+        return judge.allows(b, TIME_CHANGE_BLOCK);
     }
 
     private boolean canPistonMove(List<Block> b, BlockFace f) {
