@@ -10,25 +10,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 public class WorldSetter {
-    public boolean init(Plugin p, Map<String, WorldInfo> m) {
+    public void init(Plugin p, Map<String, WorldInfo> m) {
         Set<World> lobbys = new HashSet<>();
 
-        for (Entry<String, WorldInfo> e : m.entrySet()) {
-            String name = e.getKey();
-            WorldInfo info = e.getValue();
-            WorldCreator c = info.worldCreator(name);
+        for (WorldInfo i : m.values()) {
+            WorldCreator c = i.worldCreator();
             World w = c.createWorld();
 
-            if (w == null) {
-                return false;
-            } else if (info.isLobbyWorld()) {
-                if (info.isLobbyWorld()) {
-                    lobbys.add(w);
-                }
-            }
+            if (i.isLobbyWorld()) lobbys.add(w);
         }
 
         if (!lobbys.isEmpty()) {
@@ -36,8 +27,6 @@ public class WorldSetter {
 
             Bukkit.getPluginManager().registerEvents(l, p);
         }
-
-        return true;
     }
 
     private class LobbyListener implements Listener {
