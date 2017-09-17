@@ -11,8 +11,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
-public class WorldSetter {
-    public void init(Plugin p, Map<String, WorldInfo> m) {
+public class WorldLoader {
+    public void load(Plugin p, Map<String, WorldInfo> m) {
         Set<World> lobbys = new HashSet<>();
 
         for (WorldInfo i : m.values()) {

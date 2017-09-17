@@ -14,9 +14,9 @@ public class Portal implements Serializable {
 
     private String destination = null;
 
-    public Portal(String name, Cuboid area) {
+    public Portal(String name, Cuboid c) {
         this.name = name;
-        this.area = area;
+        this.area = c;
     }
 
     public String getName() {

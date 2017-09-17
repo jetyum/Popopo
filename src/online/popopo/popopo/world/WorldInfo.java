@@ -6,6 +6,9 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
 public class WorldInfo {
+    @Property(key = "name")
+    private String name;
+
     @Property(key = "environment")
     private Environment environment = null;
 
@@ -24,7 +27,7 @@ public class WorldInfo {
     @Property(key = "lobby_world")
     private boolean lobby = false;
 
-    public WorldCreator worldCreator(String name) {
+    public WorldCreator worldCreator() {
         WorldCreator c = WorldCreator.name(name);
 
         if (environment != null) {
