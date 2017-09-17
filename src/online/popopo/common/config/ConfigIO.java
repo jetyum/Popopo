@@ -1,15 +1,19 @@
 package online.popopo.common.config;
 
-import com.google.common.io.Files;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigIO {
+    private final Plugin plugin;
+
+    public ConfigIO(Plugin p) {
+        this.plugin = p;
+    }
+
     private <V> V newV(Class<V> c) {
         try {
             return c.newInstance();
@@ -19,73 +23,60 @@ public class ConfigIO {
         }
     }
 
-    public <V> V read(Config c, InputStream i, V v) {
-        return new Serializer<V>(c).deserialize(i, v);
-    }
+    private Config getConfig(String name) {
+        int dot = name.lastIndexOf(".");
+        String suffix = name.substring(dot + 1);
 
-    public <V> V read(Config c, File f, V v) {
-        try {
-            if (!f.exists()) return v;
-
-            return read(c, new FileInputStream(f), v);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        switch (suffix) {
+            case "yml":
+                return new YamlConfig();
+            default:
+                return new GzipConfig();
         }
     }
 
-    public <V> V readYaml(File f, V v) {
-        return read(new YamlConfig(), f, v);
+    public <V> V read(String path, V v) {
+        File f = new File(plugin.getDataFolder(), path);
+        Config c = getConfig(path);
+
+        return new Serializer<V>(c).read(f, v);
     }
 
-    public <V> V readYaml(File f, Class<V> c) {
-        return readYaml(f, newV(c));
+    public <V> V read(String path, Class<V> c) {
+        return read(path, newV(c));
     }
 
-    public <V> V readGzip(InputStream i, V v) {
-        return read(new GzipConfig(), i, v);
+    public <V> V readResource(String name, V v) {
+        InputStream i = plugin.getResource(name);
+        Config c = getConfig(name);
+
+        return new Serializer<V>(c).read(i, v);
     }
 
-    public <V> V readGzip(InputStream i, Class<V> c) {
-        return readGzip(i, newV(c));
+    public <V> V readResource(String name, Class<V> c) {
+        return readResource(name, newV(c));
     }
 
-    public <V> V readGzip(File f, V v) {
-        return read(new GzipConfig(), f, v);
+    public <V> void write(String path, V v) {
+        File f = new File(plugin.getDataFolder(), path);
+        Config c = getConfig(path);
+
+        new Serializer<V>(c).write(f, v);
     }
 
-    public <V> V readGzip(File f, Class<V> c) {
-        return readGzip(f, newV(c));
-    }
-
-    public <V> void write(Config c, File f, V v) {
-        try {
-            if (!f.exists()) Files.createParentDirs(f);
-
-            new Serializer<V>(c).serialize(f, v);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public <V> void writeYaml(File f, V v) {
-        write(new YamlConfig(), f, v);
-    }
-
-    public <V> void writeGzip(File f, V v) {
-        write(new GzipConfig(), f, v);
-    }
-
-    public <V> Map<String, V> readYamls(File d, Class<V> c) {
+    public <V> Map<String, V> readDir(String path, Class<V> c) {
         Map<String, V> map = new HashMap<>();
+        File d = new File(plugin.getDataFolder(), path);
         File[] files = d.listFiles();
 
         if (files != null) {
             for (File f : files) {
-                String full = f.getName();
-                int dot = full.lastIndexOf(".");
-                String name = full.substring(0, dot);
+                String name = f.getName();
+                String full = path + "/" + name;
+                int dot = name.lastIndexOf(".");
+                String key = name.substring(0, dot);
 
-                map.put(name, readYaml(f, c));
+                map.put(key, read(full, c));
             }
         }
 

@@ -61,7 +61,7 @@ public class GzipConfig implements Config {
     }
 
     @Override
-    public Object get(String key) {
+    public Object get(String key, Class<?> c) {
         return config.get(key);
     }
 }

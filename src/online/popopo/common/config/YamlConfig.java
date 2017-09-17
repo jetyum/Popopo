@@ -1,10 +1,13 @@
 package online.popopo.common.config;
 
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class YamlConfig implements Config {
     private final FileConfiguration config;
@@ -39,11 +42,42 @@ public class YamlConfig implements Config {
 
     @Override
     public void set(String key, Object value) {
-        config.set(key, value);
+        try {
+            Class<?> t = value.getClass();
+
+            if (t.isEnum()) {
+                value = t.getMethod("name").invoke(value);
+                value = ((String) value).toLowerCase();
+            }
+
+            config.set(key, value);
+        } catch (IllegalAccessException
+                | NoSuchMethodException
+                | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public Object get(String key) {
-        return config.get(key);
+    public Object get(String key, Class<?> c) {
+        try {
+            Object o = config.get(key);
+
+            if (c.isEnum() && o instanceof String) {
+                String n = ((String) o).toUpperCase();
+                Method m;
+
+                m = c.getMethod("valueOf", String.class);
+                o = m.invoke(null, n);
+            } else if (o instanceof MemorySection) {
+                o = ((MemorySection) o).getValues(false);
+            }
+
+            return o;
+        } catch (IllegalAccessException
+                | NoSuchMethodException
+                | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

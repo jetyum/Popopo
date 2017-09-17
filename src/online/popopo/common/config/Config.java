@@ -12,5 +12,5 @@ public interface Config {
 
     void set(String key, Object value);
 
-    Object get(String key);
+    Object get(String key, Class<?> c);
 }

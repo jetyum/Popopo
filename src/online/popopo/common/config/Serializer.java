@@ -1,11 +1,13 @@
 package online.popopo.common.config;
 
+import com.google.common.io.Files;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class Serializer<V> {
     private final Config config;
@@ -18,22 +20,9 @@ public class Serializer<V> {
         try {
             if (!config.contains(k)) return;
 
-            Object o = config.get(k);
-            Class<?> t = f.getType();
-
-            if (t.isEnum() && o instanceof String) {
-                String n = ((String) o).toUpperCase();
-                Method m;
-
-                m = t.getMethod("valueOf", String.class);
-                o = m.invoke(null, n);
-            }
-
             f.setAccessible(true);
-            f.set(v, o);
-        } catch (IllegalAccessException
-                | NoSuchMethodException
-                | InvocationTargetException e) {
+            f.set(v, config.get(k, f.getType()));
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -41,30 +30,18 @@ public class Serializer<V> {
     private void extractFrom(V v, String k, Field f) {
         try {
             f.setAccessible(true);
-
-            Object o = f.get(v);
-            Class<?> t = f.getType();
-
-            if (t.isEnum()) {
-                o = t.getMethod("name").invoke(o);
-                o = ((String) o).toLowerCase();
-            }
-
-            config.set(k, o);
-        } catch (IllegalAccessException
-                | NoSuchMethodException
-                | InvocationTargetException e) {
+            config.set(k, f.get(v));
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public V deserialize(InputStream in, V target) {
+    public V read(InputStream in, V target) {
         Class type = target.getClass();
 
         config.load(in);
 
         for (Field f : type.getDeclaredFields()) {
-
             for (Annotation a : f.getAnnotations()) {
                 if (!(a instanceof Property)) {
                     continue;
@@ -79,7 +56,29 @@ public class Serializer<V> {
         return target;
     }
 
-    public void serialize(File file, V value) {
+    public V read(File file, V target) {
+        try {
+            if (!file.exists()) return target;
+
+            InputStream in;
+
+            in = new FileInputStream(file);
+
+            return read(in, target);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void write(File file, V value) {
+        try {
+            if (!file.exists()) {
+                Files.createParentDirs(file);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         Class type = value.getClass();
 
         for (Field f : type.getDeclaredFields()) {
