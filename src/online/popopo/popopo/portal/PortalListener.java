@@ -5,17 +5,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 
 public class PortalListener implements Listener {
     private final Map<String, Portal> portals;
 
-    public PortalListener(Plugin p, Map<String, Portal> m) {
+    public PortalListener(Map<String, Portal> m) {
         this.portals = m;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     private Portal getPortalFrom(Location l) {

@@ -1,14 +1,12 @@
 package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
@@ -17,10 +15,8 @@ import static online.popopo.popopo.protection.License.*;
 public class BlockListener implements Listener {
     private final Judge judge;
 
-    public BlockListener(Plugin p, Judge j) {
+    public BlockListener(Judge j) {
         this.judge = j;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     private boolean canEntityChangeBlock(Block b) {

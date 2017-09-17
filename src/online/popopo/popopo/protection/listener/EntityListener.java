@@ -1,7 +1,6 @@
 package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
@@ -16,17 +15,14 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
-import org.bukkit.plugin.Plugin;
 
 import static online.popopo.popopo.protection.License.*;
 
 public class EntityListener implements Listener {
     private final Judge judge;
 
-    public EntityListener(Plugin p, Judge j) {
+    public EntityListener(Judge j) {
         this.judge = j;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     private boolean canAttack(Entity e, Entity target) {

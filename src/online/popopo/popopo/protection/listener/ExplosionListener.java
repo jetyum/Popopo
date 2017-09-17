@@ -1,7 +1,6 @@
 package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -10,7 +9,6 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
@@ -19,10 +17,8 @@ import static online.popopo.popopo.protection.License.*;
 public class ExplosionListener implements Listener {
     private final Judge judge;
 
-    public ExplosionListener(Plugin p, Judge j) {
+    public ExplosionListener(Judge j) {
         this.judge = j;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     private boolean canEntityExplosion(Location l) {

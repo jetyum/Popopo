@@ -1,5 +1,6 @@
 package online.popopo.popopo.selection;
 
+import online.popopo.common.PluginBase;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.SubCommand;
 import online.popopo.common.message.Caster;
@@ -10,8 +11,8 @@ import org.bukkit.entity.Player;
 public class SelectCommand implements Command {
     private final AreaSelector selector;
 
-    public SelectCommand(AreaSelector s) {
-        this.selector = s;
+    public SelectCommand(PluginBase p) {
+        this.selector = p.getSelector();
     }
 
     @SubCommand(name = "enter")

@@ -1,5 +1,6 @@
 package online.popopo.popopo.protection;
 
+import online.popopo.common.PluginBase;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.NameGetter;
 import online.popopo.common.command.SubCommand;
@@ -22,8 +23,8 @@ public class ProtectCommand implements Command {
     private final Map<String, Reserve> reserves;
     private final Map<String, License> licenses;
 
-    public ProtectCommand(AreaSelector s, Judge j) {
-        this.selector = s;
+    public ProtectCommand(PluginBase p, Judge j) {
+        this.selector = p.getSelector();
         this.reserves = j.getReserves();
         this.licenses = j.getLicenses();
     }

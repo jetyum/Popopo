@@ -1,7 +1,6 @@
 package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,17 +15,14 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
-import org.bukkit.plugin.Plugin;
 
 import static online.popopo.popopo.protection.License.*;
 
 public class PlayerListener implements Listener {
     private final Judge judge;
 
-    public PlayerListener(Plugin p, Judge j) {
+    public PlayerListener(Judge j) {
         this.judge = j;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     private boolean canPlayerChangeBlock(Player p, Block b) {

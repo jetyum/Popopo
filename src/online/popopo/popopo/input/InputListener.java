@@ -1,7 +1,7 @@
 package online.popopo.popopo.input;
 
+import online.popopo.common.PluginBase;
 import online.popopo.common.message.Formatter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,14 +25,12 @@ public class InputListener implements Listener {
     private final Deque<Set<String>> buffer;
     private final Set<String> roster;
 
-    public InputListener(Plugin p, Converter c, Formatter f) {
+    public InputListener(PluginBase p, Converter c) {
         this.plugin = p;
         this.converter = c;
-        this.formatter = f;
+        this.formatter = p.getFormatter();
         this.buffer = new LinkedBlockingDeque<>();
         this.roster = new CopyOnWriteArraySet<>();
-
-        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     private Set<String> candidateOf(String token) {

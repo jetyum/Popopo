@@ -1,5 +1,6 @@
 package online.popopo.popopo.portal;
 
+import online.popopo.common.PluginBase;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.NameGetter;
 import online.popopo.common.command.SubCommand;
@@ -19,8 +20,8 @@ public class PortalCommand implements Command {
     private final AreaSelector selector;
     private final Map<String, Portal> portals;
 
-    public PortalCommand(AreaSelector s, Map<String, Portal> m) {
-        this.selector = s;
+    public PortalCommand(PluginBase p, Map<String, Portal> m) {
+        this.selector = p.getSelector();
         this.portals = m;
     }
 

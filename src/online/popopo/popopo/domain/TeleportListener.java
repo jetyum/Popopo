@@ -1,8 +1,8 @@
 package online.popopo.popopo.domain;
 
+import online.popopo.common.PluginBase;
 import online.popopo.common.message.Caster;
 import online.popopo.common.message.Formatter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +19,9 @@ public class TeleportListener implements Listener {
     private final Plugin plugin;
     private final Formatter formatter;
 
-    public TeleportListener(Plugin p, Formatter f) {
+    public TeleportListener(PluginBase p) {
         this.plugin = p;
-        this.formatter = f;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
+        this.formatter = p.getFormatter();
     }
 
     private boolean canSwitch(Domain a, Domain b) {
