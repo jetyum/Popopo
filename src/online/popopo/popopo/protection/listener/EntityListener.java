@@ -4,12 +4,16 @@ import online.popopo.popopo.protection.Judge;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.plugin.Plugin;
@@ -36,7 +40,7 @@ public class EntityListener implements Listener {
                 act = PLAYER_ATTACK_ENTITY;
             }
 
-            return judge.allows(p, target.getLocation(), act);
+            return judge.allows(p, target, act);
         } else {
             String act;
 
@@ -46,7 +50,7 @@ public class EntityListener implements Listener {
                 act = ENTITY_ATTACK_ENTITY;
             }
 
-            return judge.allows(target.getLocation(), act);
+            return judge.allows(target, act);
         }
     }
 
@@ -55,9 +59,15 @@ public class EntityListener implements Listener {
     }
 
     private boolean canVehicleChange(Vehicle v) {
-        Location l = v.getLocation();
+        return judge.allows(v, VEHICLE_CHANGE);
+    }
 
-        return judge.allows(l, VEHICLE_CHANGE);
+    private boolean canPlayerChangeHanging(Player p, Hanging h) {
+        return judge.allows(p, h, PLAYER_CHANGE_HANGING);
+    }
+
+    private boolean canHangingBreak(Hanging h) {
+        return judge.allows(h, HANGING_BREAK);
     }
 
     @EventHandler
@@ -87,5 +97,38 @@ public class EntityListener implements Listener {
         Vehicle v = e.getVehicle();
 
         e.setCancelled(!canVehicleChange(v));
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakEvent e) {
+        Hanging h = e.getEntity();
+
+        switch (e.getCause()) {
+            case ENTITY:
+                return;
+            default:
+                e.setCancelled(!canHangingBreak(h));
+        }
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakByEntityEvent e) {
+        Hanging h = e.getEntity();
+
+        if (e.getRemover() instanceof Player) {
+            Player p = (Player) e.getRemover();
+
+            e.setCancelled(!canPlayerChangeHanging(p, h));
+        } else {
+            e.setCancelled(!canHangingBreak(h));
+        }
+    }
+
+    @EventHandler
+    public void onHangingPlace(HangingPlaceEvent e) {
+        Player p = e.getPlayer();
+        Hanging h = e.getEntity();
+
+        e.setCancelled(!canPlayerChangeHanging(p, h));
     }
 }

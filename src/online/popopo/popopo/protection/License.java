@@ -21,6 +21,8 @@ public class License {
     public static final String VEHICLE_CHANGE = "vehicle_change";
     public static final String PLAYER_ENTER_VEHICLE = "player_enter_vehicle";
     public static final String PLAYER_EXIT_VEHICLE = "player_exit_vehicle";
+    public static final String PLAYER_CHANGE_HANGING = "player_hanging_change";
+    public static final String HANGING_BREAK = "hanging_break";
 
     @Property(key = "name")
     private String name;

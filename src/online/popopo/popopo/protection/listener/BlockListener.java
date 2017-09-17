@@ -4,13 +4,10 @@ import online.popopo.popopo.protection.Judge;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
@@ -26,10 +23,6 @@ public class BlockListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, p);
     }
 
-    private boolean canPlayerChangeBlock(Player p, Block b) {
-        return judge.allows(p, b, PLAYER_CHANGE_BLOCK);
-    }
-
     private boolean canEntityChangeBlock(Block b) {
         return judge.allows(b, ENTITY_CHANGE_BLOCK);
     }
@@ -42,6 +35,11 @@ public class BlockListener implements Listener {
         return judge.allows(b, TIME_CHANGE_BLOCK);
     }
 
+    private boolean canBlockFromTo(Block from, Block to) {
+        return canTimeChangeBlock(from)
+                && canTimeChangeBlock(to);
+    }
+
     private boolean canPistonMove(List<Block> b, BlockFace f) {
         for (Block b1 : b) {
             Block b2 = b1.getRelative(f);
@@ -51,43 +49,6 @@ public class BlockListener implements Listener {
         }
 
         return true;
-    }
-
-    private boolean canBlockFromTo(Block from, Block to) {
-        return canTimeChangeBlock(from)
-                && canTimeChangeBlock(to);
-    }
-
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent e) {
-        Block b = e.getBlock();
-        Player p = e.getPlayer();
-
-        e.setCancelled(!canPlayerChangeBlock(p, b));
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent e) {
-        Block b = e.getBlock();
-        Player p = e.getPlayer();
-
-        e.setCancelled(!canPlayerChangeBlock(p, b));
-    }
-
-    @EventHandler
-    public void onBucketEmpty(PlayerBucketEmptyEvent e) {
-        Block b = e.getBlockClicked();
-        Player p = e.getPlayer();
-
-        e.setCancelled(!canPlayerChangeBlock(p, b));
-    }
-
-    @EventHandler
-    public void onBucketFill(PlayerBucketFillEvent e) {
-        Block b = e.getBlockClicked();
-        Player p = e.getPlayer();
-
-        e.setCancelled(!canPlayerChangeBlock(p, b));
     }
 
     @EventHandler
@@ -126,6 +87,35 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
+    public void onBlockForm(BlockFormEvent e) {
+        Block b = e.getBlock();
+
+        e.setCancelled(!canTimeChangeBlock(b));
+    }
+
+    @EventHandler
+    public void onBlockSpread(BlockSpreadEvent e) {
+        Block b = e.getBlock();
+
+        e.setCancelled(!canTimeChangeBlock(b));
+    }
+
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent e) {
+        Block b = e.getBlock();
+
+        e.setCancelled(!canTimeChangeBlock(b));
+    }
+
+    @EventHandler
+    public void onBlockFromTo(BlockFromToEvent e) {
+        Block from = e.getBlock();
+        Block to = e.getToBlock();
+
+        e.setCancelled(!canBlockFromTo(from, to));
+    }
+
+    @EventHandler
     public void onPistonExtend(BlockPistonExtendEvent e) {
         BlockFace face = e.getDirection();
         List<Block> list = e.getBlocks();
@@ -139,13 +129,5 @@ public class BlockListener implements Listener {
         List<Block> list = e.getBlocks();
 
         e.setCancelled(!canPistonMove(list, face));
-    }
-
-    @EventHandler
-    public void onBlockFromTo(BlockFromToEvent e) {
-        Block from = e.getBlock();
-        Block to = e.getToBlock();
-
-        e.setCancelled(!canBlockFromTo(from, to));
     }
 }

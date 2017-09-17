@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -25,6 +29,10 @@ public class PlayerListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, p);
     }
 
+    private boolean canPlayerChangeBlock(Player p, Block b) {
+        return judge.allows(p, b, PLAYER_CHANGE_BLOCK);
+    }
+
     private boolean canPlayerClickBlock(Player p, Block b) {
         return judge.allows(p, b, PLAYER_CLICK_BLOCK);
     }
@@ -39,6 +47,38 @@ public class PlayerListener implements Listener {
 
     private boolean canPlayerExitVehicle(Player p, Vehicle v) {
         return judge.allows(p, v, PLAYER_EXIT_VEHICLE);
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        Block b = e.getBlock();
+        Player p = e.getPlayer();
+
+        e.setCancelled(!canPlayerChangeBlock(p, b));
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        Block b = e.getBlock();
+        Player p = e.getPlayer();
+
+        e.setCancelled(!canPlayerChangeBlock(p, b));
+    }
+
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent e) {
+        Block b = e.getBlockClicked();
+        Player p = e.getPlayer();
+
+        e.setCancelled(!canPlayerChangeBlock(p, b));
+    }
+
+    @EventHandler
+    public void onBucketFill(PlayerBucketFillEvent e) {
+        Block b = e.getBlockClicked();
+        Player p = e.getPlayer();
+
+        e.setCancelled(!canPlayerChangeBlock(p, b));
     }
 
     @EventHandler(ignoreCancelled = true)

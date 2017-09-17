@@ -34,7 +34,7 @@ public class Judge {
             if (r.getArea().contains(l)) {
                 Priority p = r.getPriority();
 
-                if (p.compareTo(priority) >= 0) {
+                if (p.compareTo(priority) <= 0) {
                     priority = p;
                     reserve = r;
                 }
