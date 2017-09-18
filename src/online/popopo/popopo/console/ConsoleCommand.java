@@ -11,10 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 
 public class ConsoleCommand implements Command, Listener {
-    private final MultiProcess processes;
+    private final ProcessHandler handler;
 
     public ConsoleCommand(PluginBase p) {
-        this.processes = new MultiProcess(p);
+        this.handler = new ProcessHandler(p);
 
         p.register(this);
     }
@@ -29,7 +29,7 @@ public class ConsoleCommand implements Command, Listener {
 
         String name = c.getTarget().getName();
 
-        if (!processes.exec(c, name, text)) {
+        if (!handler.exec(c, name, text)) {
             c.bad("$", "Already process started");
         }
     }
@@ -38,13 +38,13 @@ public class ConsoleCommand implements Command, Listener {
     public void stop(Caster c) {
         String name = c.getTarget().getName();
 
-        if (!processes.destroy(name)) {
+        if (!handler.destroy(name)) {
             c.bad("$", "Process was not found");
         }
     }
 
     @EventHandler
     public void onPluginDisable(PluginDisableEvent e) {
-        IOUtils.closeQuietly(processes);
+        IOUtils.closeQuietly(handler);
     }
 }

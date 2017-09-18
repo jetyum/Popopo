@@ -1,74 +1,34 @@
 package online.popopo.popopo.console;
 
-import online.popopo.common.message.Caster;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.List;
 
-class ProcessRunner extends BukkitRunnable {
-    private final MultiProcess object;
-    private final String user;
-    private final Caster caster;
-    private final BufferedReader msgReader;
-    private final BufferedReader errReader;
+abstract class ProcessRunner extends BukkitRunnable {
+    private final BufferedReader reader;
 
-    ProcessRunner(MultiProcess o, String user, Caster c) {
-        this.object = o;
-        this.user = user;
-        this.caster = c;
+    ProcessRunner(Process p) {
+        InputStream in = p.getInputStream();
+        Reader reader = new InputStreamReader(in);
 
-        Process p = o.getProcesses().get(user);
+        this.reader = new BufferedReader(reader);
+    }
 
-        this.msgReader
-                = new BufferedReader(
-                        new InputStreamReader(
-                                p.getInputStream()));
-        this.errReader
-                = new BufferedReader(
-                        new InputStreamReader(
-                                p.getErrorStream()));
+    private List<String> getLines() {
+        try {
+            return IOUtils.readLines(reader);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void run() {
-        try {
-            String m = null;
-
-            while (true) {
-                String t = msgReader.readLine();
-                String e = errReader.readLine();
-
-                if (e != null) {
-                    caster.bad(":", e);
-                }
-
-                if (t == null && m != null) {
-                    File d = new File(m);
-
-                    if (d.exists()) {
-                        object.getDirectories()
-                                .put(user, d);
-                    }
-
-                    break;
-                } else {
-                    if (m != null) {
-                        caster.info(":", m);
-                    }
-
-                    m = t;
-                }
-            }
-        } catch (IOException e) {
-            caster.bad("$", "Stopped");
-        } finally {
-            IOUtils.closeQuietly(msgReader);
-            IOUtils.closeQuietly(msgReader);
-            object.getProcesses().remove(user);
-        }
+    public final void run() {
+        onFinished(getLines());
+        IOUtils.closeQuietly(reader);
     }
+
+    abstract void onFinished(List<String> lines);
 }
