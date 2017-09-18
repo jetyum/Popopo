@@ -15,7 +15,7 @@ public class SelectCommand implements Command {
         this.selector = p.getSelector();
     }
 
-    @SubCommand(name = "enter")
+    @SubCommand()
     public void enter(Caster c) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");
@@ -29,7 +29,7 @@ public class SelectCommand implements Command {
         c.info("Info", "Entered into selection mode");
     }
 
-    @SubCommand(name = "exit")
+    @SubCommand(name = "cancel")
     public void exit(Caster c) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");

@@ -42,12 +42,10 @@ public class PortalCommand implements Command {
 
         if (area == null) {
             c.bad("Error", "Please select cuboid area");
-
-            return;
+        } else {
+            portals.put(name, new Portal(name, area));
+            c.good("Done", "Portal was created");
         }
-
-        portals.put(name, new Portal(name, area));
-        c.good("Done", "Portal was created");
     }
 
     @SubCommand(name = "delete")
@@ -72,34 +70,30 @@ public class PortalCommand implements Command {
     public void showList(Caster c) {
         if (portals.isEmpty()) {
             c.info("Info", "Portal doesn't exist");
+        } else {
+            c.good("Info", "Portal list");
 
-            return;
-        }
+            for (Portal p : portals.values()) {
+                String name = p.getName();
+                World w = p.getArea().getWorld();
+                String msg = "It's in " + w.getName();
 
-        c.good("Info", "Portal list");
+                if (p.hasDestination()) {
+                    String to = p.getDestination();
 
-        for (Portal p : portals.values()) {
-            String name = p.getName();
-            World w = p.getArea().getWorld();
-            String msg = "It's in " + w.getName();
+                    msg += " and be connected to " + to;
+                }
 
-            if (p.hasDestination()) {
-                String to = p.getDestination();
+                msg += ".";
 
-                msg += " and be connected to " + to;
+                c.info(name, msg);
             }
-
-            msg += ".";
-
-            c.info(name, msg);
         }
     }
 
     @NameGetter(type = Portal.class)
     public Set<String> getPortalNames() {
-        return portals
-                .values()
-                .stream()
+        return portals.values().stream()
                 .map(Portal::getName)
                 .collect(Collectors.toSet());
     }

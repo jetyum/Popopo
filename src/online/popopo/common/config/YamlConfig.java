@@ -8,6 +8,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class YamlConfig implements Config {
     private final FileConfiguration config;
@@ -58,6 +61,20 @@ public class YamlConfig implements Config {
         }
     }
 
+    private Object convertToMap(MemorySection s) {
+        Map<String, Object> m = s.getValues(false);
+
+        m.replaceAll((k, v) -> {
+            if (v instanceof MemorySection) {
+                return convertToMap((MemorySection) v);
+            } else {
+                return v;
+            }
+        });
+
+        return m;
+    }
+
     @Override
     public Object get(String key, Class<?> c) {
         try {
@@ -70,7 +87,7 @@ public class YamlConfig implements Config {
                 m = c.getMethod("valueOf", String.class);
                 o = m.invoke(null, n);
             } else if (o instanceof MemorySection) {
-                o = ((MemorySection) o).getValues(false);
+                o = convertToMap((MemorySection) o);
             }
 
             return o;

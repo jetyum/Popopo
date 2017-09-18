@@ -1,23 +1,22 @@
 package online.popopo.popopo.console;
 
+import online.popopo.common.PluginBase;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.SubCommand;
 import online.popopo.common.message.Caster;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.plugin.Plugin;
 
 public class ConsoleCommand implements Command, Listener {
     private final MultiProcess processes;
 
-    public ConsoleCommand(Plugin p) {
+    public ConsoleCommand(PluginBase p) {
         this.processes = new MultiProcess(p);
 
-        Bukkit.getPluginManager().registerEvents(this, p);
+        p.register(this);
     }
 
     @SubCommand()
