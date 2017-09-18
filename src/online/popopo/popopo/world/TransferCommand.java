@@ -29,8 +29,9 @@ public class TransferCommand implements Command {
 
         long end = System.nanoTime();
         float time = (end - start) / 1000000f;
+        String s = String.format("%.4f", time);
 
-        c.good("Done", "Teleported (" + time + "ms)");
+        c.good("Done", "Teleported (" + s + "ms)");
     }
 
     @NameGetter(type = World.class)

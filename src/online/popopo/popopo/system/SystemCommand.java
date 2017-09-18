@@ -10,24 +10,26 @@ import java.lang.management.ManagementFactory;
 public class SystemCommand implements Command {
     private String memoryToString(long m) {
         int uint = 0;
-        long memory = m;
+        double memory = m;
 
         while (memory > 1024) {
             memory /= 1024;
             uint += 1;
         }
 
+        String s = String.format("%.2f", memory);
+
         switch (uint) {
             case 0:
-                return memory + "B";
+                return s + "B";
             case 1:
-                return memory + "KB";
+                return s + "KB";
             case 2:
-                return memory + "MB";
+                return s + "MB";
             case 3:
-                return memory + "GB";
+                return s + "GB";
             case 4:
-                return memory + "TB";
+                return s + "TB";
             default:
                 return "-";
         }
