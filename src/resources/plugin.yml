@@ -1,0 +1,83 @@
+name: Popopo
+version: 1.0.0b
+description: Multiple functions on one plugin
+author: koshianpan
+
+main: online.popopo.popopo.Main
+
+commands:
+  system:
+    description: Display system utilization.
+    permission: popopo.system
+    usage: |
+      /<command> [ram|cpu]
+      Example: /<command> ram - display RAM utilization.
+      Example: /<command> cpu - display CPU utilization.
+  console:
+    description: Execute console. (Only linux)
+    permission: popopo.console
+    usage: |
+      /<command> [option]
+      Example: /<command> "command" - execute command.
+      Example: /<command> [stop] - stop runnning process.
+  transfer:
+    description: Transfer another world.
+    permission: popopo.transfer
+    usage: /<command> - Transfer another world.
+  select:
+    description: Select cuboid area.
+    permission: popopo.select
+    usage: |
+      /<command> [option]
+      Example: /<command> - Enter selection mode.
+      Example: /<command> cancel - Exit selection mode.
+  portal:
+    description: Manipulate custom portal.
+    permission: popopo.portal
+    usage: |
+      /<command> [option]
+      Example: /<command> create <name> - create portal.
+      Example: /<command> delete <name> - delete portal.
+      Example: /<command> connect <from> <to> - connect portal.
+      Example: /<command> disconnect <name> - disconnect portal.
+      Example: /<command> list - display portal list.
+  protect:
+    description: Manipulate custom reserve.
+    permission: popopo.protect
+    usage: |
+      /<command> [option]
+      Example: /<command> create <name> <license> - create reserve.
+      Example: /<command> delete <name> - delete reserve.
+      Example: /<command> join <name> <player> - join member.
+      Example: /<command> defect <name> <player> - defect member.
+      Example: /<command> priority <name> <priority> - set priority.
+      Example: /<command> list - display reserve list.
+
+permissions:
+  popopo.*:
+    description: Give access to all popopo commands
+    children:
+      popopo.system: true
+      popopo.console: true
+      popopo.world: true
+      popopo.select: true
+      popopo.portal: true
+      popopo.protect: true
+  popopo.system:
+    description: Allows you to display system utilization.
+    default: true
+  popopo.console:
+    description: Allows you to executing linux command.
+    default: false
+  popopo.transfer:
+    description: Allows you to transfer another world.
+    default: true
+  popopo.select:
+    description: Allows you to select cuboid area.
+    default: true
+  popopo.portal:
+    description: Allows you to manipulate custom portal.
+    default: true
+  popopo.protect:
+    description: Allows you to manipulate custom reserve.
+    default: true
