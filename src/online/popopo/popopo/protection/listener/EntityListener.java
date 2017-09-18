@@ -28,42 +28,42 @@ public class EntityListener implements Listener {
     private boolean canAttack(Entity e, Entity target) {
         if (e instanceof Player) {
             Player p = (Player) e;
-            String act;
+            String a;
 
             if (target instanceof Player) {
-                act = PLAYER_ATTACK_PLAYER;
+                a = ATTACK_PLAYER;
             } else {
-                act = PLAYER_ATTACK_ENTITY;
+                a = ATTACK_ENTITY;
             }
 
-            return judge.allows(p, target, act);
+            return judge.allows(p, target, a);
         } else {
-            String act;
+            String a;
 
             if (target instanceof Player) {
-                act = ENTITY_ATTACK_PLAYER;
+                a = ATTACK_PLAYER;
             } else {
-                act = ENTITY_ATTACK_ENTITY;
+                a = ATTACK_ENTITY;
             }
 
-            return judge.allows(target, act);
+            return judge.allows(target, a, OPTION_ENTITY);
         }
     }
 
-    private boolean canCreatureSpawn(Location l) {
-        return judge.allows(l, CREATURE_SPAWN);
+    private boolean canSpawnCreature(Location l) {
+        return judge.allows(l, SPAWN, OPTION_ENTITY);
     }
 
-    private boolean canVehicleChange(Vehicle v) {
-        return judge.allows(v, VEHICLE_CHANGE);
+    private boolean canChangeVehicle(Vehicle v) {
+        return judge.allows(v, CHANGE_VEHICLE, OPTION_ALL);
     }
 
-    private boolean canPlayerChangeHanging(Player p, Hanging h) {
-        return judge.allows(p, h, PLAYER_CHANGE_HANGING);
+    private boolean canChangeHanging(Player p, Hanging h) {
+        return judge.allows(p, h, CHANGE_HANGING);
     }
 
-    private boolean canHangingBreak(Hanging h) {
-        return judge.allows(h, HANGING_BREAK);
+    private boolean canBreakHanging(Hanging h) {
+        return judge.allows(h, CHANGE_HANGING, OPTION_ALL);
     }
 
     @EventHandler
@@ -78,21 +78,21 @@ public class EntityListener implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         Location l = e.getLocation();
 
-        e.setCancelled(!canCreatureSpawn(l));
+        e.setCancelled(!canSpawnCreature(l));
     }
 
     @EventHandler
     public void onVehicleDamage(VehicleDamageEvent e) {
         Vehicle v = e.getVehicle();
 
-        e.setCancelled(!canVehicleChange(v));
+        e.setCancelled(!canChangeVehicle(v));
     }
 
     @EventHandler
     public void onVehicleCreate(VehicleCreateEvent e) {
         Vehicle v = e.getVehicle();
 
-        e.setCancelled(!canVehicleChange(v));
+        e.setCancelled(!canChangeVehicle(v));
     }
 
     @EventHandler
@@ -103,7 +103,7 @@ public class EntityListener implements Listener {
             case ENTITY:
                 return;
             default:
-                e.setCancelled(!canHangingBreak(h));
+                e.setCancelled(!canBreakHanging(h));
         }
     }
 
@@ -114,9 +114,9 @@ public class EntityListener implements Listener {
         if (e.getRemover() instanceof Player) {
             Player p = (Player) e.getRemover();
 
-            e.setCancelled(!canPlayerChangeHanging(p, h));
+            e.setCancelled(!canChangeHanging(p, h));
         } else {
-            e.setCancelled(!canHangingBreak(h));
+            e.setCancelled(!canBreakHanging(h));
         }
     }
 
@@ -125,6 +125,6 @@ public class EntityListener implements Listener {
         Player p = e.getPlayer();
         Hanging h = e.getEntity();
 
-        e.setCancelled(!canPlayerChangeHanging(p, h));
+        e.setCancelled(!canChangeHanging(p, h));
     }
 }

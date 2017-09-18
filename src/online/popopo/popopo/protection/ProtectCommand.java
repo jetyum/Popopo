@@ -46,12 +46,10 @@ public class ProtectCommand implements Command {
 
         if (area == null) {
             c.bad("Error", "Please select cuboid area");
-
-            return;
+        } else {
+            reserves.put(name, new Reserve(name, area, l));
+            c.good("Done", "Reserve was added");
         }
-
-        reserves.put(name, new Reserve(name, area, l));
-        c.good("Done", "Reserve was added");
     }
 
     @SubCommand(name = "delete")
@@ -82,21 +80,20 @@ public class ProtectCommand implements Command {
     public void showList(Caster c) {
         if (reserves.isEmpty()) {
             c.info("Info", "Reserves doesn't exist");
+        } else {
+            c.good("Info", "Reserve list");
 
-            return;
-        }
+            for (Reserve r : reserves.values()) {
+                String name = r.getName();
+                World w = r.getArea().getWorld();
+                String msg
+                        = "It's in " + w.getName()
+                        + ". The protect set is "
+                        + r.getLicense()
+                        + ". (" + r.getPriority() +")";
 
-        c.good("Info", "Reserve list");
-
-        for (Reserve r : reserves.values()) {
-            String name = r.getName();
-            World w = r.getArea().getWorld();
-            String msg
-                    = "It's in " + w.getName() + ". "
-                    + "The protect set is "
-                    + r.getLicense() + ".";
-
-            c.info(name, msg);
+                c.info(name, msg);
+            }
         }
     }
 

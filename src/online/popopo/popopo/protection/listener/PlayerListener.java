@@ -25,24 +25,32 @@ public class PlayerListener implements Listener {
         this.judge = j;
     }
 
-    private boolean canPlayerChangeBlock(Player p, Block b) {
-        return judge.allows(p, b, PLAYER_CHANGE_BLOCK);
+    private boolean canChangeBlock(Player p, Block b) {
+        return judge.allows(p, b, CHANGE_BLOCK);
     }
 
-    private boolean canPlayerClickBlock(Player p, Block b) {
-        return judge.allows(p, b, PLAYER_CLICK_BLOCK);
+    private boolean canClickBlock(Player p, Block b) {
+        return judge.allows(p, b, CLICK_BLOCK);
     }
 
-    private boolean canPlayerClickEntity(Player p, Entity e) {
-        return judge.allows(p, e, PLAYER_CLICK_ENTITY);
+    private boolean canClickEntity(Player p, Entity e) {
+        return judge.allows(p, e, CLICK_ENTITY);
     }
 
-    private boolean canPlayerEnterVehicle(Player p, Vehicle v) {
-        return judge.allows(p, v, PLAYER_ENTER_VEHICLE);
+    private boolean canEnterVehicle(Player p, Vehicle v) {
+        return judge.allows(p, v, ENTER_VEHICLE);
     }
 
-    private boolean canPlayerExitVehicle(Player p, Vehicle v) {
-        return judge.allows(p, v, PLAYER_EXIT_VEHICLE);
+    private boolean canEnterVehicle(Vehicle v) {
+        return judge.allows(v, ENTER_VEHICLE, OPTION_ENTITY);
+    }
+
+    private boolean canExitVehicle(Player p, Vehicle v) {
+        return judge.allows(p, v, EXIT_VEHICLE);
+    }
+
+    private boolean canExitVehicle(Vehicle v) {
+        return judge.allows(v, EXIT_VEHICLE, OPTION_ENTITY);
     }
 
     @EventHandler
@@ -50,7 +58,7 @@ public class PlayerListener implements Listener {
         Block b = e.getBlock();
         Player p = e.getPlayer();
 
-        e.setCancelled(!canPlayerChangeBlock(p, b));
+        e.setCancelled(!canChangeBlock(p, b));
     }
 
     @EventHandler
@@ -58,7 +66,7 @@ public class PlayerListener implements Listener {
         Block b = e.getBlock();
         Player p = e.getPlayer();
 
-        e.setCancelled(!canPlayerChangeBlock(p, b));
+        e.setCancelled(!canChangeBlock(p, b));
     }
 
     @EventHandler
@@ -66,7 +74,7 @@ public class PlayerListener implements Listener {
         Block b = e.getBlockClicked();
         Player p = e.getPlayer();
 
-        e.setCancelled(!canPlayerChangeBlock(p, b));
+        e.setCancelled(!canChangeBlock(p, b));
     }
 
     @EventHandler
@@ -74,7 +82,7 @@ public class PlayerListener implements Listener {
         Block b = e.getBlockClicked();
         Player p = e.getPlayer();
 
-        e.setCancelled(!canPlayerChangeBlock(p, b));
+        e.setCancelled(!canChangeBlock(p, b));
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -85,7 +93,7 @@ public class PlayerListener implements Listener {
         switch (e.getAction()) {
             case RIGHT_CLICK_BLOCK:
             case LEFT_CLICK_BLOCK:
-                e.setCancelled(!canPlayerClickBlock(p, b));
+                e.setCancelled(!canClickBlock(p, b));
 
                 return;
             default:
@@ -95,34 +103,34 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onEntityClick(PlayerInteractEntityEvent e) {
         Player p = e.getPlayer();
-        Entity entity = e.getRightClicked();
+        Entity c = e.getRightClicked();
 
-        e.setCancelled(!canPlayerClickEntity(p, entity));
+        e.setCancelled(!canClickEntity(p, c));
     }
 
     @EventHandler
     public void onVehicleEnter(VehicleEnterEvent e) {
+        Vehicle v = e.getVehicle();
+
         if (e.getEntered() instanceof Player) {
             Player p = (Player) e.getEntered();
-            Vehicle v = e.getVehicle();
 
-            if (!canPlayerEnterVehicle(p, v)) {
-                e.setCancelled(true);
-                v.eject();
-            }
+            e.setCancelled(!canEnterVehicle(p, v));
+        } else {
+            e.setCancelled(!canEnterVehicle(v));
         }
     }
 
     @EventHandler
     public void onVehicleExit(VehicleExitEvent e) {
+        Vehicle v = e.getVehicle();
+
         if (e.getExited() instanceof Player) {
             Player p = (Player) e.getExited();
-            Vehicle v = e.getVehicle();
 
-            if (!canPlayerExitVehicle(p, v)) {
-                e.setCancelled(true);
-                v.addPassenger(p);
-            }
+            e.setCancelled(!canExitVehicle(p, v));
+        } else {
+            e.setCancelled(!canExitVehicle(v));
         }
     }
 }

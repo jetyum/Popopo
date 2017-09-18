@@ -19,88 +19,69 @@ public class BlockListener implements Listener {
         this.judge = j;
     }
 
-    private boolean canEntityChangeBlock(Block b) {
-        return judge.allows(b, ENTITY_CHANGE_BLOCK);
-    }
-
-    private boolean canBlockChangeBlock(Block b) {
-        return judge.allows(b, BLOCK_CHANGE_BLOCK);
-    }
-
-    private boolean canTimeChangeBlock(Block b) {
-        return judge.allows(b, TIME_CHANGE_BLOCK);
-    }
-
-    private boolean canBlockFromTo(Block from, Block to) {
-        return canTimeChangeBlock(from)
-                && canTimeChangeBlock(to);
-    }
-
-    private boolean canPistonMove(List<Block> b, BlockFace f) {
-        for (Block b1 : b) {
-            Block b2 = b1.getRelative(f);
-
-            if (!canBlockChangeBlock(b1)) return false;
-            if (!canBlockChangeBlock(b2)) return false;
-        }
-
-        return true;
+    private boolean canChangeBlock(Block b, String o) {
+        return judge.allows(b, CHANGE_BLOCK, o);
     }
 
     @EventHandler
     public void onBlockChange(EntityChangeBlockEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canEntityChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_ENTITY));
     }
 
     @EventHandler
     public void onBlockFade(BlockFadeEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
     }
 
     @EventHandler
     public void onBlockGrow(BlockGrowEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
     }
 
     @EventHandler
     public void onBlockPhysics(BlockPhysicsEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
     }
 
     @EventHandler
     public void onLeavesDecay(LeavesDecayEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
     }
 
     @EventHandler
     public void onBlockForm(BlockFormEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
     }
 
     @EventHandler
     public void onBlockSpread(BlockSpreadEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
     }
 
     @EventHandler
     public void onBlockBurn(BlockBurnEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canTimeChangeBlock(b));
+        e.setCancelled(!canChangeBlock(b, OPTION_TIME));
+    }
+
+    private boolean canBlockFromTo(Block from, Block to) {
+        return canChangeBlock(from, OPTION_TIME)
+                && canChangeBlock(to, OPTION_TIME);
     }
 
     @EventHandler
@@ -109,6 +90,22 @@ public class BlockListener implements Listener {
         Block to = e.getToBlock();
 
         e.setCancelled(!canBlockFromTo(from, to));
+    }
+
+    private boolean canPistonMove(List<Block> b, BlockFace f) {
+        for (Block b1 : b) {
+            Block b2 = b1.getRelative(f);
+
+            if (!canChangeBlock(b1, OPTION_BLOCK)) {
+                return false;
+            }
+
+            if (!canChangeBlock(b2, OPTION_BLOCK)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @EventHandler

@@ -22,11 +22,37 @@ public class ExplosionListener implements Listener {
     }
 
     private boolean canEntityExplosion(Location l) {
-        return judge.allows(l, ENTITY_EXPLOSION);
+        return judge.allows(l, EXPLOSION, OPTION_ENTITY);
     }
 
     private boolean canBlockExplosion(Location l) {
-        return judge.allows(l, BLOCK_EXPLOSION);
+        return judge.allows(l, EXPLOSION, OPTION_BLOCK);
+    }
+
+
+
+    @EventHandler
+    public void onExplosionPrime(ExplosionPrimeEvent e) {
+        Location l = e.getEntity().getLocation();
+
+        e.setCancelled(!canEntityExplosion(l));
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent e) {
+        Location l = e.getEntity().getLocation();
+
+        switch (e.getCause()) {
+            case ENTITY_EXPLOSION:
+                e.setCancelled(!canEntityExplosion(l));
+
+                return;
+            case BLOCK_EXPLOSION:
+                e.setCancelled(!canBlockExplosion(l));
+
+                return;
+            default:
+        }
     }
 
     private boolean canEntityBlastBlock(List<Block> list) {
@@ -50,13 +76,6 @@ public class ExplosionListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityExplosionPrime(ExplosionPrimeEvent e) {
-        Location l = e.getEntity().getLocation();
-
-        e.setCancelled(!canEntityExplosion(l));
-    }
-
-    @EventHandler
     public void onEntityExplosion(EntityExplodeEvent e) {
         List<Block> list = e.blockList();
 
@@ -73,23 +92,6 @@ public class ExplosionListener implements Listener {
             List<Block> list = e.blockList();
 
             e.setCancelled(!canBlockBlastBlock(list));
-        }
-    }
-
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent e) {
-        Location l = e.getEntity().getLocation();
-
-        switch (e.getCause()) {
-            case ENTITY_EXPLOSION:
-                e.setCancelled(!canEntityExplosion(l));
-
-                return;
-            case BLOCK_EXPLOSION:
-                e.setCancelled(!canBlockExplosion(l));
-
-                return;
-            default:
         }
     }
 }

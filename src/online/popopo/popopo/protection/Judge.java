@@ -44,43 +44,43 @@ public class Judge {
         return reserve;
     }
 
-    private boolean allows(Reserve r, String act) {
+    private boolean allows(Reserve r, String a, String o) {
         License l = licenses.get(r.getLicense());
 
-        return l != null && l.contains(act);
+        return l != null && l.allows(a, o);
     }
 
-    public boolean allows(Player p, Location l, String act) {
+    public boolean allows(Player p, Location l, String a) {
         Reserve r = getReserve(l);
         String n = p.getName();
 
         if (r == null) return true;
         if (r.getMembers().contains(n)) return true;
 
-        return allows(r, act);
+        return allows(r, a, License.OPTION_PLAYER);
     }
 
-    public boolean allows(Player p, Block b, String act) {
-        return allows(p, b.getLocation(), act);
+    public boolean allows(Player p, Block b, String a) {
+        return allows(p, b.getLocation(), a);
     }
 
-    public boolean allows(Player p, Entity e, String act) {
-        return allows(p, e.getLocation(), act);
+    public boolean allows(Player p, Entity e, String a) {
+        return allows(p, e.getLocation(), a);
     }
 
-    public boolean allows(Location l, String act) {
+    public boolean allows(Location l, String a, String o) {
         Reserve r = getReserve(l);
 
         if (r == null) return true;
 
-        return allows(r, act);
+        return allows(r, a, o);
     }
 
-    public boolean allows(Block b, String act) {
-        return allows(b.getLocation(), act);
+    public boolean allows(Block b, String a, String o) {
+        return allows(b.getLocation(), a, o);
     }
 
-    public boolean allows(Entity e, String act) {
-        return allows(e.getLocation(), act);
+    public boolean allows(Entity e, String a, String o) {
+        return allows(e.getLocation(), a, o);
     }
 }
