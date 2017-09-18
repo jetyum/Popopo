@@ -35,9 +35,7 @@ public class InputListener implements Listener {
 
     private Set<String> candidateOf(String token) {
         for (Set<String> s : buffer) {
-            if (s.contains(token)) {
-                return s;
-            }
+            if (s.contains(token)) return s;
         }
 
         return new HashSet<>();
@@ -46,36 +44,35 @@ public class InputListener implements Listener {
     @EventHandler
     public void onChatTab(PlayerChatTabCompleteEvent e) {
         Player p = e.getPlayer();
-        String token = e.getLastToken();
+        String s = e.getLastToken();
 
         if (roster.contains(p.getName())) {
             return;
-        } else if (token.length() > MAX_LENGTH) {
+        } else if (s.length() > MAX_LENGTH) {
             return;
         }
 
-        Set<String> c = candidateOf(token);
+        Collection<String> c = e.getTabCompletions();
 
-        if (c.isEmpty()) {
-            c.addAll(converter.convert(token, true));
-            e.getTabCompletions().clear();
+        c.clear();
+        c.addAll(candidateOf(s));
 
-            roster.add(p.getName());
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (buffer.size() > BUFF_SIZE) {
-                        buffer.pop();
-                    }
+        if (!c.isEmpty()) return;
 
-                    buffer.push(converter
-                            .convert(token, false));
-                    roster.remove(p.getName());
+        c.addAll(converter.convert(s, true));
+
+        roster.add(p.getName());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (buffer.size() > BUFF_SIZE) {
+                    buffer.pop();
                 }
-            }.runTaskAsynchronously(plugin);
-        }
 
-        e.getTabCompletions().addAll(c);
+                buffer.push(converter.convert(s, false));
+                roster.remove(p.getName());
+            }
+        }.runTaskAsynchronously(plugin);
     }
 
     @EventHandler

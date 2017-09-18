@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Japanese implements Converter{
+    private static final int CANDIDATE_NUM = 2;
+
     private static final Pattern pattern
             = Pattern.compile("\\p{ASCII}+$");
 
@@ -35,14 +37,18 @@ public class Japanese implements Converter{
         }
     }
 
-    public Set<String> candidateOf(String kana) {
-        Reader in = requestJsonFrom(kana);
+    public List<String> candidateOf(String kana) {
+        Reader reader = requestJsonFrom(kana);
         List<List<List<String>>> a = new ArrayList<>();
 
-        a = new Gson().fromJson(in, a.getClass());
-        IOUtils.closeQuietly(in);
+        a = new Gson().fromJson(reader, a.getClass());
+        IOUtils.closeQuietly(reader);
 
-        return new HashSet<>(a.get(0).get(1));
+        List<String> list = a.get(0).get(1);
+        boolean b = list.size() > CANDIDATE_NUM;
+        int to = b ? CANDIDATE_NUM : list.size();
+
+        return list.subList(0, to);
     }
 
     public String romaToKana(String roma) {
@@ -84,7 +90,7 @@ public class Japanese implements Converter{
                     set.add(base + c);
                 }
 
-                set.addAll(Arrays.asList(s, ""));
+                set.add("");
             }
         }
 
