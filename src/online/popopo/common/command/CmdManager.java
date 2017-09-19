@@ -1,6 +1,6 @@
 package online.popopo.common.command;
 
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
 import online.popopo.common.message.Formatter;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
@@ -28,16 +28,16 @@ public class CmdManager {
 
         executor(name, (s, cmd, alias, args) -> {
             String in = String.join(" ", args);
-            Caster caster = Caster.newFrom(formatter, s);
+            Notice n = Notice.create(formatter, s);
 
-            return h.execute(caster, in);
+            return h.execute(n, in);
         });
 
         completer(name, (s, cmd, alias, args) -> {
             String in = String.join(" ", args);
-            Caster caster = Caster.newFrom(formatter, s);
+            Notice n = Notice.create(formatter, s);
 
-            return h.complete(caster, in);
+            return h.complete(n, in);
         });
     }
 }

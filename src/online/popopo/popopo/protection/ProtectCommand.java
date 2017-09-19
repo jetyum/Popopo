@@ -5,8 +5,8 @@ import online.popopo.common.command.Command;
 import online.popopo.common.command.NameGetter;
 import online.popopo.common.command.SubCommand;
 import online.popopo.common.command.ValueGetter;
-import online.popopo.common.message.Caster;
-import online.popopo.common.message.Caster.PlayerCaster;
+import online.popopo.common.message.Notice;
+import online.popopo.common.message.UserNotice.PlayerNotice;
 import online.popopo.common.selection.AreaSelector;
 import online.popopo.common.selection.Cuboid;
 import online.popopo.popopo.protection.Reserve.Priority;
@@ -30,64 +30,64 @@ public class ProtectCommand implements Command {
     }
 
     @SubCommand(name = "create")
-    public void add(Caster c, String name) {
-        if (!(c instanceof PlayerCaster)) {
-            c.bad("Error", "Can't used except player");
+    public void add(Notice n, String name) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
 
             return;
         } else if (reserves.containsKey(name)) {
-            c.bad("Error", "Reserve already exists");
+            n.bad("Error", "Reserve already exists");
 
             return;
         }
 
-        Player p = ((PlayerCaster) c).getPlayer();
+        Player p = ((PlayerNotice) n).getPlayer();
         Cuboid s = selector.getSelectedArea(p);
 
         if (s == null) {
-            c.bad("Error", "Please select cuboid area");
+            n.bad("Error", "Please select cuboid area");
         } else {
             reserves.put(name, new Reserve(name, s));
-            c.good("Done", "Reserve was added");
+            n.good("Done", "Reserve was added");
         }
     }
 
     @SubCommand(name = "delete")
-    public void remove(Caster c, Reserve r) {
+    public void remove(Notice n, Reserve r) {
         reserves.remove(r.getName());
-        c.good("Done", "Reserve was removed");
+        n.good("Done", "Reserve was removed");
     }
 
     @SubCommand(name = "join")
-    public void join(Caster c, Reserve r, String name) {
+    public void join(Notice n, Reserve r, String name) {
         r.getMembers().add(name);
-        c.good("Done", "Member was joined");
+        n.good("Done", "Member was joined");
     }
 
     @SubCommand(name = "defect")
-    public void defect(Caster c, Reserve r, String name) {
+    public void defect(Notice n, Reserve r, String name) {
         r.getMembers().remove(name);
-        c.good("Done", "Member was defected");
+        n.good("Done", "Member was defected");
     }
 
     @SubCommand(name = "priority")
-    public void priority(Caster c, Reserve r, Priority p) {
+    public void priority(Notice n, Reserve r, Priority p) {
         r.setPriority(p);
-        c.good("Done", "Priority was updated");
+        n.good("Done", "Priority was updated");
     }
 
     @SubCommand(name = "license")
-    public void license(Caster c, Reserve r, License l) {
+    public void license(Notice n, Reserve r, License l) {
         r.setLicense(l);
-        c.good("Done", "License was updated");
+        n.good("Done", "License was updated");
     }
 
     @SubCommand(name = "list")
-    public void showList(Caster c) {
+    public void showList(Notice n) {
         if (reserves.isEmpty()) {
-            c.info("Info", "Reserves doesn't exist");
+            n.info("Info", "Reserves doesn't exist");
         } else {
-            c.good("Info", "Reserve list");
+            n.good("Info", "Reserve list");
 
             for (Reserve r : reserves.values()) {
                 String name = r.getName();
@@ -98,7 +98,7 @@ public class ProtectCommand implements Command {
                         + r.getLicense()
                         + ". (" + r.getPriority() +")";
 
-                c.info(name, msg);
+                n.info(name, msg);
             }
         }
     }
@@ -126,33 +126,33 @@ public class ProtectCommand implements Command {
     }
 
     @ValueGetter(type = Reserve.class)
-    public Reserve getReserve(Caster c, String arg) {
+    public Reserve getReserve(Notice n, String arg) {
         Reserve r = reserves.get(arg);
 
         if (r == null) {
-            c.bad("Error", "Reserve doesn't exist");
+            n.bad("Error", "Reserve doesn't exist");
         }
 
         return r;
     }
 
     @ValueGetter(type = License.class)
-    public License getLicense(Caster c, String arg) {
+    public License getLicense(Notice n, String arg) {
         License l = licenses.get(arg);
 
         if (l == null) {
-            c.bad("Error", "License doesn't exist");
+            n.bad("Error", "License doesn't exist");
         }
 
         return l;
     }
 
     @ValueGetter(type = Priority.class)
-    public Priority getPriority(Caster c, String arg) {
+    public Priority getPriority(Notice n, String arg) {
         try {
             return Priority.valueOf(arg.toUpperCase());
         } catch (IllegalArgumentException e) {
-            c.bad("Error", "Priority doesn't exist");
+            n.bad("Error", "Priority doesn't exist");
 
             return null;
         }

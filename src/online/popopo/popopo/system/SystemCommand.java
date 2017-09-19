@@ -3,7 +3,7 @@ package online.popopo.popopo.system;
 import com.sun.management.OperatingSystemMXBean;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.SubCommand;
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
 
 import java.lang.management.ManagementFactory;
 
@@ -36,7 +36,7 @@ public class SystemCommand implements Command {
     }
 
     @SubCommand(name = "cpu")
-    public void showCpu(Caster c) {
+    public void showCpu(Notice n) {
         OperatingSystemMXBean bean = (OperatingSystemMXBean)
                 ManagementFactory.getOperatingSystemMXBean();
         double rate = bean.getSystemCpuLoad() * 100;
@@ -46,11 +46,11 @@ public class SystemCommand implements Command {
         buf.append((int) rate);
         buf.append("%");
 
-        c.info("CPU", buf.toString());
+        n.info("CPU", buf.toString());
     }
 
     @SubCommand(name = "ram")
-    public void showRam(Caster c) {
+    public void showRam(Notice n) {
         long total = Runtime.getRuntime().totalMemory();
         long free = Runtime.getRuntime().freeMemory();
         long used = total - free;
@@ -65,6 +65,6 @@ public class SystemCommand implements Command {
         buf.append(memoryToString(total));
         buf.append(")");
 
-        c.info("RAM", buf.toString());
+        n.info("RAM", buf.toString());
     }
 }

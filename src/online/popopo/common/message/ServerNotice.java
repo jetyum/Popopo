@@ -2,13 +2,13 @@ package online.popopo.common.message;
 
 import org.bukkit.Bukkit;
 
-public class Broadcaster extends Castable {
-    public Broadcaster(Formatter f) {
+public class ServerNotice extends Notice {
+    ServerNotice(Formatter f) {
         super(f);
     }
 
     @Override
-    public void cast(String msg) {
+    public void send(String msg) {
         Bukkit.broadcastMessage(msg);
     }
 }

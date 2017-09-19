@@ -4,8 +4,8 @@ import online.popopo.common.command.Command;
 import online.popopo.common.command.NameGetter;
 import online.popopo.common.command.SubCommand;
 import online.popopo.common.command.ValueGetter;
-import online.popopo.common.message.Caster;
-import online.popopo.common.message.Caster.PlayerCaster;
+import online.popopo.common.message.Notice;
+import online.popopo.common.message.UserNotice.PlayerNotice;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 
 public class TransferCommand implements Command {
     @SubCommand()
-    public void transfer(Caster c, World w) {
-        if (!(c instanceof PlayerCaster)) {
-            c.bad("Error", "Can't used except player");
+    public void transfer(Notice n, World w) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
 
             return;
         }
 
-        Player p = (Player) c.getTarget();
+        Player p = ((PlayerNotice) n).getPlayer();
         long start = System.nanoTime();
 
         p.teleport(w.getSpawnLocation());
@@ -31,7 +31,7 @@ public class TransferCommand implements Command {
         float time = (end - start) / 1000000f;
         String s = String.format("%.4f", time);
 
-        c.good("Done", "Teleported (" + s + "ms)");
+        n.good("Done", "Teleported (" + s + "ms)");
     }
 
     @NameGetter(type = World.class)
@@ -44,11 +44,11 @@ public class TransferCommand implements Command {
     }
 
     @ValueGetter(type = World.class)
-    public World getWorld(Caster c, String arg) {
+    public World getWorld(Notice n, String arg) {
         World w = Bukkit.getWorld(arg);
 
         if (w == null) {
-            c.bad("Error", "World doesn't exist");
+            n.bad("Error", "World doesn't exist");
         }
 
         return w;

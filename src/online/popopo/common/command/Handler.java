@@ -1,6 +1,6 @@
 package online.popopo.common.command;
 
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -55,7 +55,7 @@ class Handler {
         return keys.toArray(new String[0]);
     }
 
-    boolean execute(Caster c, String in) {
+    boolean execute(Notice n, String in) {
         String[] args = getArgsFrom(in);
 
         for (Executor e : executors) {
@@ -63,9 +63,9 @@ class Handler {
                 continue;
             }
 
-            Object[] o = valueAssignor.get(e, c, args);
+            Object[] o = valueAssignor.get(e, n, args);
 
-            if (o != null) e.run(c, o);
+            if (o != null) e.run(n, o);
 
             return true;
         }
@@ -73,7 +73,7 @@ class Handler {
         return false;
     }
 
-    List<String> complete(Caster c, String in) {
+    List<String> complete(Notice n, String in) {
         String[] args = getArgsFrom(in);
         List<String> list = new ArrayList<>();
 

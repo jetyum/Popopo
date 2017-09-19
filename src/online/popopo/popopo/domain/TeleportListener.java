@@ -1,7 +1,7 @@
 package online.popopo.popopo.domain;
 
 import online.popopo.common.PluginBase;
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
 import online.popopo.common.message.Formatter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -61,9 +61,9 @@ public class TeleportListener implements Listener {
         if (from.equals(to) || hasFrag(p)) {
             e.setCancelled(hasFrag(p) && !getFrag(p));
         } else if (!canSwitch(from, to)) {
-            Caster c = Caster.newFrom(formatter, p);
+            Notice n = Notice.create(formatter, p);
 
-            c.bad("Error", "Can't switch domain!");
+            n.bad("Error", "Can't switch domain!");
         } else {
             new Switcher(plugin, p, from, to) {
                 @Override

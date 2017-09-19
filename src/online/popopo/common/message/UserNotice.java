@@ -6,13 +6,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class Caster extends Castable {
+public class UserNotice extends Notice {
     private final CommandSender target;
 
-    public Caster(Formatter f, CommandSender s) {
+    UserNotice(Formatter f, CommandSender s) {
         super(f);
         this.target = s;
     }
@@ -22,12 +21,12 @@ public class Caster extends Castable {
     }
 
     @Override
-    public void cast(String msg) {
+    public void send(String msg) {
         target.sendMessage(msg);
     }
 
-    public static class PlayerCaster extends Caster {
-        public PlayerCaster(Formatter f, CommandSender s) {
+    public static class PlayerNotice extends UserNotice {
+        PlayerNotice(Formatter f, CommandSender s) {
             super(f, s);
         }
 
@@ -35,7 +34,7 @@ public class Caster extends Castable {
             return (Player) getTarget();
         }
 
-        public void castBar(String msg) {
+        public void toast(String msg) {
             String m = getFormatter().text(msg);
             BaseComponent s = new TextComponent(m);
             ChatMessageType t = ChatMessageType.ACTION_BAR;
@@ -44,8 +43,8 @@ public class Caster extends Castable {
         }
     }
 
-    public static class BlockCaster extends Caster {
-        public BlockCaster(Formatter f, CommandSender s) {
+    public static class BlockNotice extends UserNotice {
+        BlockNotice(Formatter f, CommandSender s) {
             super(f, s);
         }
 
@@ -58,21 +57,9 @@ public class Caster extends Castable {
         }
     }
 
-    public static class ConsoleCaster extends Caster {
-        public ConsoleCaster(Formatter f, CommandSender s) {
+    public static class ConsoleNotice extends UserNotice {
+        ConsoleNotice(Formatter f, CommandSender s) {
             super(f, s);
-        }
-    }
-
-    public static Caster newFrom(Formatter f, CommandSender s) {
-        if (s instanceof Player) {
-            return new PlayerCaster(f, s);
-        } else if (s instanceof BlockCommandSender) {
-            return new BlockCaster(f, s);
-        } else if (s instanceof ConsoleCommandSender) {
-            return new ConsoleCaster(f, s);
-        } else {
-            return new Caster(f, s);
         }
     }
 }

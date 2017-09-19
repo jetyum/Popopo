@@ -1,6 +1,6 @@
 package online.popopo.common.command;
 
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -67,9 +67,9 @@ class Executor {
                 || (in + " ").startsWith(fullname + " ");
     }
 
-    void run(Caster c, Object[] o) {
+    void run(Notice n, Object[] o) {
         try {
-            Object[] args = new Object[] {c};
+            Object[] args = new Object[] {n};
 
             args = ArrayUtils.addAll(args, o);
             method.invoke(command, args);

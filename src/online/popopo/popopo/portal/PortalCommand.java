@@ -5,8 +5,8 @@ import online.popopo.common.command.Command;
 import online.popopo.common.command.NameGetter;
 import online.popopo.common.command.SubCommand;
 import online.popopo.common.command.ValueGetter;
-import online.popopo.common.message.Caster;
-import online.popopo.common.message.Caster.PlayerCaster;
+import online.popopo.common.message.Notice;
+import online.popopo.common.message.UserNotice.PlayerNotice;
 import online.popopo.common.selection.AreaSelector;
 import online.popopo.common.selection.Cuboid;
 import org.bukkit.World;
@@ -26,52 +26,52 @@ public class PortalCommand implements Command {
     }
 
     @SubCommand(name = "create")
-    public void create(Caster c, String name) {
-        if (!(c instanceof PlayerCaster)) {
-            c.bad("Error", "Can't used except player");
+    public void create(Notice n, String name) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
 
             return;
         } else if (portals.containsKey(name)) {
-            c.bad("Error", "Portal already exists");
+            n.bad("Error", "Portal already exists");
 
             return;
         }
 
-        Player p = ((PlayerCaster) c).getPlayer();
-        Cuboid area = selector.getSelectedArea(p);
+        Player p = ((PlayerNotice) n).getPlayer();
+        Cuboid s = selector.getSelectedArea(p);
 
-        if (area == null) {
-            c.bad("Error", "Please select cuboid area");
+        if (s == null) {
+            n.bad("Error", "Please select cuboid area");
         } else {
-            portals.put(name, new Portal(name, area));
-            c.good("Done", "Portal was created");
+            portals.put(name, new Portal(name, s));
+            n.good("Done", "Portal was created");
         }
     }
 
     @SubCommand(name = "delete")
-    public void delete(Caster c, Portal p) {
+    public void delete(Notice n, Portal p) {
         portals.remove(p.getName());
-        c.good("Done", "Portal was deleted");
+        n.good("Done", "Portal was deleted");
     }
 
     @SubCommand(name = "connect")
-    public void connect(Caster c, Portal from, Portal to) {
+    public void connect(Notice n, Portal from, Portal to) {
         from.setDestination(to.getName());
-        c.good("Done", "Portal was connected");
+        n.good("Done", "Portal was connected");
     }
 
     @SubCommand(name = "disconnect")
-    public void disconnect(Caster c, Portal p) {
+    public void disconnect(Notice n, Portal p) {
         p.clearDestination();
-        c.good("Done", "Portal was disconnected");
+        n.good("Done", "Portal was disconnected");
     }
 
     @SubCommand(name = "list")
-    public void showList(Caster c) {
+    public void showList(Notice n) {
         if (portals.isEmpty()) {
-            c.info("Info", "Portal doesn't exist");
+            n.info("Info", "Portal doesn't exist");
         } else {
-            c.good("Info", "Portal list");
+            n.good("Info", "Portal list");
 
             for (Portal p : portals.values()) {
                 String name = p.getName();
@@ -86,7 +86,7 @@ public class PortalCommand implements Command {
 
                 msg += ".";
 
-                c.info(name, msg);
+                n.info(name, msg);
             }
         }
     }
@@ -99,11 +99,11 @@ public class PortalCommand implements Command {
     }
 
     @ValueGetter(type = Portal.class)
-    public Portal getPortal(Caster c, String arg) {
+    public Portal getPortal(Notice n, String arg) {
         Portal p = portals.get(arg);
 
         if (p == null) {
-            c.bad("Error", "Portal doesn't exist");
+            n.bad("Error", "Portal doesn't exist");
         }
 
         return p;

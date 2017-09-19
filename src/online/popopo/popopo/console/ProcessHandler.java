@@ -1,6 +1,6 @@
 package online.popopo.popopo.console;
 
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
@@ -45,14 +45,14 @@ class ProcessHandler implements Closeable {
         }
     }
 
-    boolean exec(Caster c, String user, String cmd) {
+    boolean exec(Notice n, String user, String cmd) {
         if (processes.containsKey(user)) {
             return false;
         }
 
         Process p = start(user, cmd);
 
-        c.good("$", cmd);
+        n.good("$", cmd);
         processes.put(user, p);
         new ProcessRunner(p) {
             @Override
@@ -60,12 +60,12 @@ class ProcessHandler implements Closeable {
                 processes.remove(user);
 
                 if (lines.isEmpty()) {
-                    c.info("$", "Nothing to display");
+                    n.info("$", "Nothing to display");
                 } else {
                     setDir(lines, user);
 
                     for (String s : lines) {
-                        c.info(":", s);
+                        n.info(":", s);
                     }
                 }
             }

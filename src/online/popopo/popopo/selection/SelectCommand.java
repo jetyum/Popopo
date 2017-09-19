@@ -3,8 +3,8 @@ package online.popopo.popopo.selection;
 import online.popopo.common.PluginBase;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.SubCommand;
-import online.popopo.common.message.Caster;
-import online.popopo.common.message.Caster.PlayerCaster;
+import online.popopo.common.message.Notice;
+import online.popopo.common.message.UserNotice.PlayerNotice;
 import online.popopo.common.selection.AreaSelector;
 import org.bukkit.entity.Player;
 
@@ -16,30 +16,30 @@ public class SelectCommand implements Command {
     }
 
     @SubCommand()
-    public void enter(Caster c) {
-        if (!(c instanceof PlayerCaster)) {
-            c.bad("Error", "Can't used except player");
+    public void enter(Notice n) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
 
             return;
         }
 
-        Player p = (Player) c.getTarget();
+        Player p = ((PlayerNotice) n).getPlayer();
 
         selector.enableSelectionMode(p);
-        c.info("Info", "Entered into selection mode");
+        n.info("Info", "Entered into selection mode");
     }
 
     @SubCommand(name = "cancel")
-    public void exit(Caster c) {
-        if (!(c instanceof PlayerCaster)) {
-            c.bad("Error", "Can't used except player");
+    public void exit(Notice n) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
 
             return;
         }
 
-        Player p = (Player) c.getTarget();
+        Player p = ((PlayerNotice) n).getPlayer();
 
         selector.disableSelectionMode(p);
-        c.info("Info", "Exited from selection mode");
+        n.info("Info", "Exited from selection mode");
     }
 }

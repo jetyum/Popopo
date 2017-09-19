@@ -3,9 +3,11 @@ package online.popopo.popopo.console;
 import online.popopo.common.PluginBase;
 import online.popopo.common.command.Command;
 import online.popopo.common.command.SubCommand;
-import online.popopo.common.message.Caster;
+import online.popopo.common.message.Notice;
+import online.popopo.common.message.UserNotice.PlayerNotice;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -20,26 +22,38 @@ public class ConsoleCommand implements Command, Listener {
     }
 
     @SubCommand()
-    public void exec(Caster c, String text) {
-        if (!SystemUtils.IS_OS_LINUX) {
-            c.bad("$", "Can not used except linux");
+    public void exec(Notice n, String text) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
+
+            return;
+        } if (!SystemUtils.IS_OS_LINUX) {
+            n.bad("$", "Can not used except linux");
 
             return;
         }
 
-        String name = c.getTarget().getName();
+        Player p = ((PlayerNotice) n).getPlayer();
+        String name = p.getName();
 
-        if (!handler.exec(c, name, text)) {
-            c.bad("$", "Already process started");
+        if (!handler.exec(n, name, text)) {
+            n.bad("$", "Already process started");
         }
     }
 
     @SubCommand(name = "stop")
-    public void stop(Caster c) {
-        String name = c.getTarget().getName();
+    public void stop(Notice n) {
+        if (!(n instanceof PlayerNotice)) {
+            n.bad("Error", "Can't used except player");
+
+            return;
+        }
+
+        Player p = ((PlayerNotice) n).getPlayer();
+        String name = p.getName();
 
         if (!handler.destroy(name)) {
-            c.bad("$", "Process was not found");
+            n.bad("$", "Process was not found");
         }
     }
 
