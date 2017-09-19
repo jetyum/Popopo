@@ -8,6 +8,8 @@ import org.bukkit.util.Vector;
 import java.io.Serializable;
 
 public class Cuboid implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String world;
     private final int x1, y1, z1;
     private final int x2, y2, z2;

@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Reserve implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String name;
     private final Cuboid area;
 

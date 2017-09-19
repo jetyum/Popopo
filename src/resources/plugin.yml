@@ -23,14 +23,14 @@ commands:
   transfer:
     description: Transfer another world.
     permission: popopo.transfer
-    usage: /<command> - Transfer another world.
+    usage: /<command> - transfer another world.
   select:
     description: Select cuboid area.
     permission: popopo.select
     usage: |
       /<command> [option]
-      Example: /<command> - Enter selection mode.
-      Example: /<command> cancel - Exit selection mode.
+      Example: /<command> - enter selection mode.
+      Example: /<command> cancel - exit selection mode.
   portal:
     description: Manipulate custom portal.
     permission: popopo.portal
@@ -46,11 +46,12 @@ commands:
     permission: popopo.protect
     usage: |
       /<command> [option]
-      Example: /<command> create <name> <license> - create reserve.
+      Example: /<command> create <name> - create reserve.
       Example: /<command> delete <name> - delete reserve.
       Example: /<command> join <name> <player> - join member.
       Example: /<command> defect <name> <player> - defect member.
       Example: /<command> priority <name> <priority> - set priority.
+      Example: /<command> license <name> <license> - set license.
       Example: /<command> list - display reserve list.
 
 permissions:

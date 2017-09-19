@@ -1,6 +1,7 @@
 package online.popopo.common.selection;
 
-import online.popopo.common.message.Caster.PlayerCaster;
+import online.popopo.common.message.Notice;
+import online.popopo.common.message.UserNotice.PlayerNotice;
 import online.popopo.common.message.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -78,7 +79,7 @@ public class AreaSelector {
                 return;
             }
 
-            PlayerCaster c = new PlayerCaster(formatter, p);
+            PlayerNotice n = Notice.create(formatter, p);
             Location l = e.getClickedBlock().getLocation();
             MetadataValue m;
 
@@ -88,12 +89,12 @@ public class AreaSelector {
 
             if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
                 v[0] = l;
-                c.castBar("selected start point");
+                n.toast("selected start point");
             }
 
             if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 v[1] = l;
-                c.castBar("selected end point");
+                n.toast("selected end point");
             }
 
             if (v[0] != null && v[1] != null) {
