@@ -1,5 +1,6 @@
 package online.popopo.popopo.portal;
 
+import online.popopo.common.message.Guideable;
 import online.popopo.common.selection.Cuboid;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,8 +8,10 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Portal implements Serializable {
+public class Portal implements Serializable, Guideable {
     private static final long serialVersionUID = 1L;
 
     private final String name;
@@ -71,5 +74,21 @@ public class Portal implements Serializable {
         l.setY(block.getY());
 
         return l;
+    }
+
+    @Override
+    public String getLoreTitle() {
+        return "Information of Portal";
+    }
+
+    @Override
+    public List<String> getLore() {
+        List<String> list = new ArrayList<>();
+
+        list.add("world : " + area.getWorld().getName());
+        list.add("size : " + area.getVolume());
+        list.add("destination : " + destination);
+
+        return list;
     }
 }

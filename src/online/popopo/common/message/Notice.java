@@ -47,6 +47,16 @@ public abstract class Notice {
         send(getTheme().getWarning(), prefix, msg);
     }
 
+    public void guide(String name, Guideable g) {
+        String t = g.getLoreTitle();
+
+        send(getTheme().getHighlight(), name, t);
+
+        for (String l : g.getLore()) {
+            send(formatter.text("  " + l));
+        }
+    }
+
     public abstract void send(String msg);
 
     public static ServerNotice create(Formatter f) {

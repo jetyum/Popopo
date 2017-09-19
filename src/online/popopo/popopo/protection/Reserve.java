@@ -1,12 +1,15 @@
 package online.popopo.popopo.protection;
 
+import online.popopo.common.message.Guideable;
 import online.popopo.common.selection.Cuboid;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Reserve implements Serializable {
+public class Reserve implements Serializable, Guideable {
     private static final long serialVersionUID = 1L;
 
     private final String name;
@@ -47,6 +50,29 @@ public class Reserve implements Serializable {
 
     public Set<String> getMembers() {
         return members;
+    }
+
+    @Override
+    public String getLoreTitle() {
+        return "Information of Reserve";
+    }
+
+    @Override
+    public List<String> getLore() {
+        List<String> list = new ArrayList<>();
+
+        list.add("world : " + area.getWorld().getName());
+        list.add("size : " + area.getVolume());
+        list.add("license : " + license);
+        list.add("member :");
+
+        for (String s : members) {
+            list.add("  " + s);
+        }
+
+        list.add("priority : " + priority);
+
+        return list;
     }
 
     public enum Priority {

@@ -10,7 +10,6 @@ import online.popopo.common.message.UserNotice.PlayerNotice;
 import online.popopo.common.selection.AreaSelector;
 import online.popopo.common.selection.Cuboid;
 import online.popopo.popopo.protection.Reserve.Priority;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -58,6 +57,12 @@ public class ProtectCommand implements Command {
         n.good("Done", "Reserve was removed");
     }
 
+    @SubCommand(name = "license")
+    public void license(Notice n, Reserve r, License l) {
+        r.setLicense(l);
+        n.good("Done", "License was updated");
+    }
+
     @SubCommand(name = "join")
     public void join(Notice n, Reserve r, String name) {
         r.getMembers().add(name);
@@ -76,30 +81,13 @@ public class ProtectCommand implements Command {
         n.good("Done", "Priority was updated");
     }
 
-    @SubCommand(name = "license")
-    public void license(Notice n, Reserve r, License l) {
-        r.setLicense(l);
-        n.good("Done", "License was updated");
-    }
-
     @SubCommand(name = "list")
-    public void showList(Notice n) {
+    public void list(Notice n) {
         if (reserves.isEmpty()) {
-            n.info("Info", "Reserves doesn't exist");
+            n.info("Info", "Reserve doesn't exist");
         } else {
-            n.good("Info", "Reserve list");
-
-            for (Reserve r : reserves.values()) {
-                String name = r.getName();
-                World w = r.getArea().getWorld();
-                String msg
-                        = "It's in " + w.getName()
-                        + ". The protect set is "
-                        + r.getLicense()
-                        + ". (" + r.getPriority() +")";
-
-                n.info(name, msg);
-            }
+            n.info("Info", "Display a list of reserves");
+            reserves.forEach(n::guide);
         }
     }
 

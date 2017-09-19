@@ -9,7 +9,6 @@ import online.popopo.common.message.Notice;
 import online.popopo.common.message.UserNotice.PlayerNotice;
 import online.popopo.common.selection.AreaSelector;
 import online.popopo.common.selection.Cuboid;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -67,27 +66,12 @@ public class PortalCommand implements Command {
     }
 
     @SubCommand(name = "list")
-    public void showList(Notice n) {
+    public void list(Notice n) {
         if (portals.isEmpty()) {
             n.info("Info", "Portal doesn't exist");
         } else {
-            n.good("Info", "Portal list");
-
-            for (Portal p : portals.values()) {
-                String name = p.getName();
-                World w = p.getArea().getWorld();
-                String msg = "It's in " + w.getName();
-
-                if (p.hasDestination()) {
-                    String to = p.getDestination();
-
-                    msg += " and be connected to " + to;
-                }
-
-                msg += ".";
-
-                n.info(name, msg);
-            }
+            n.info("Info", "Display a list of portals");
+            portals.forEach(n::guide);
         }
     }
 
