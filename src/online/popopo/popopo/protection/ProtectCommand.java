@@ -30,7 +30,7 @@ public class ProtectCommand implements Command {
     }
 
     @SubCommand(name = "create")
-    public void add(Caster c, String name, License l) {
+    public void add(Caster c, String name) {
         if (!(c instanceof PlayerCaster)) {
             c.bad("Error", "Can't used except player");
 
@@ -41,13 +41,13 @@ public class ProtectCommand implements Command {
             return;
         }
 
-        Player player = ((PlayerCaster) c).getPlayer();
-        Cuboid area = selector.getSelectedArea(player);
+        Player p = ((PlayerCaster) c).getPlayer();
+        Cuboid s = selector.getSelectedArea(p);
 
-        if (area == null) {
+        if (s == null) {
             c.bad("Error", "Please select cuboid area");
         } else {
-            reserves.put(name, new Reserve(name, area, l));
+            reserves.put(name, new Reserve(name, s));
             c.good("Done", "Reserve was added");
         }
     }
@@ -74,6 +74,12 @@ public class ProtectCommand implements Command {
     public void priority(Caster c, Reserve r, Priority p) {
         r.setPriority(p);
         c.good("Done", "Priority was updated");
+    }
+
+    @SubCommand(name = "license")
+    public void license(Caster c, Reserve r, License l) {
+        r.setLicense(l);
+        c.good("Done", "License was updated");
     }
 
     @SubCommand(name = "list")

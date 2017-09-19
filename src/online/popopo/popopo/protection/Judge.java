@@ -45,12 +45,16 @@ public class Judge {
     }
 
     private boolean allows(Reserve r, String a, String o) {
-        License l = licenses.get(r.getLicense());
+        String n = r.getLicense();
 
-        return l != null && l.allows(a, o);
+        if (n == null) return true;
+
+        License l = licenses.get(n);
+
+        return l == null || l.allows(a, o);
     }
 
-    public boolean allows(Player p, Location l, String a) {
+    private boolean allows(Player p, Location l, String a) {
         Reserve r = getReserve(l);
         String n = p.getName();
 

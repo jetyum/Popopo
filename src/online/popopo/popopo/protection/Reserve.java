@@ -9,15 +9,14 @@ import java.util.Set;
 public class Reserve implements Serializable {
     private final String name;
     private final Cuboid area;
-    private final String license;
 
+    private String license = null;
     private Priority priority = Priority.NORMAL;
     private Set<String> members = new HashSet<>();
 
-    public Reserve(String name, Cuboid c, License l) {
+    public Reserve(String name, Cuboid c) {
         this.name = name;
         this.area = c;
-        this.license = l.getName();
     }
 
     public String getName() {
@@ -30,6 +29,10 @@ public class Reserve implements Serializable {
 
     public String getLicense() {
         return license;
+    }
+
+    public void setLicense(License l) {
+        license = l.getName();
     }
 
     public Priority getPriority() {
