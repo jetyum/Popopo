@@ -23,6 +23,10 @@ public class BlockListener implements Listener {
         return judge.allows(b, CHANGE_BLOCK, o);
     }
 
+    private boolean canIgniteBlock(Block b) {
+        return judge.allows(b, IGNITE_BLOCK, OPTION_ALL);
+    }
+
     @EventHandler
     public void onBlockChange(EntityChangeBlockEvent e) {
         Block b = e.getBlock();
@@ -122,5 +126,12 @@ public class BlockListener implements Listener {
         List<Block> list = e.getBlocks();
 
         e.setCancelled(!canPistonMove(list, face));
+    }
+
+    @EventHandler
+    public void onBlockIgnite(BlockIgniteEvent e) {
+        Block b = e.getBlock();
+
+        e.setCancelled(!canIgniteBlock(b));
     }
 }

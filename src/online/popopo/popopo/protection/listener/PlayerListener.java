@@ -41,16 +41,8 @@ public class PlayerListener implements Listener {
         return judge.allows(p, v, ENTER_VEHICLE);
     }
 
-    private boolean canEnterVehicle(Vehicle v) {
-        return judge.allows(v, ENTER_VEHICLE, OPTION_ENTITY);
-    }
-
     private boolean canExitVehicle(Player p, Vehicle v) {
         return judge.allows(p, v, EXIT_VEHICLE);
-    }
-
-    private boolean canExitVehicle(Vehicle v) {
-        return judge.allows(v, EXIT_VEHICLE, OPTION_ENTITY);
     }
 
     @EventHandler
@@ -110,27 +102,21 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onVehicleEnter(VehicleEnterEvent e) {
-        Vehicle v = e.getVehicle();
-
         if (e.getEntered() instanceof Player) {
+            Vehicle v = e.getVehicle();
             Player p = (Player) e.getEntered();
 
             e.setCancelled(!canEnterVehicle(p, v));
-        } else {
-            e.setCancelled(!canEnterVehicle(v));
         }
     }
 
     @EventHandler
     public void onVehicleExit(VehicleExitEvent e) {
-        Vehicle v = e.getVehicle();
-
         if (e.getExited() instanceof Player) {
+            Vehicle v = e.getVehicle();
             Player p = (Player) e.getExited();
 
             e.setCancelled(!canExitVehicle(p, v));
-        } else {
-            e.setCancelled(!canExitVehicle(v));
         }
     }
 }

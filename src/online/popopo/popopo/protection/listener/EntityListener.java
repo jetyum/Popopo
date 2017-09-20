@@ -9,12 +9,15 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import static online.popopo.popopo.protection.License.*;
 
@@ -64,6 +67,18 @@ public class EntityListener implements Listener {
 
     private boolean canBreakHanging(Hanging h) {
         return judge.allows(h, CHANGE_HANGING, OPTION_ALL);
+    }
+
+    private boolean canEnterVehicle(Vehicle v) {
+        return judge.allows(v, ENTER_VEHICLE, OPTION_ENTITY);
+    }
+
+    private boolean canExitVehicle(Vehicle v) {
+        return judge.allows(v, EXIT_VEHICLE, OPTION_ENTITY);
+    }
+
+    private boolean canIgniteEntity(Entity e) {
+        return judge.allows(e, IGNITE_ENTITY, OPTION_ALL);
     }
 
     @EventHandler
@@ -126,5 +141,30 @@ public class EntityListener implements Listener {
         Hanging h = e.getEntity();
 
         e.setCancelled(!canChangeHanging(p, h));
+    }
+
+    @EventHandler
+    public void onVehicleEnter(VehicleEnterEvent e) {
+        if (!(e.getEntered() instanceof Player)) {
+            Vehicle v = e.getVehicle();
+
+            e.setCancelled(!canEnterVehicle(v));
+        }
+    }
+
+    @EventHandler
+    public void onVehicleExit(VehicleExitEvent e) {
+        if (!(e.getExited() instanceof Player)) {
+            Vehicle v = e.getVehicle();
+
+            e.setCancelled(!canExitVehicle(v));
+        }
+    }
+
+    @EventHandler
+    public void onEntityCombust(EntityCombustEvent e) {
+        Entity entity = e.getEntity();
+
+        e.setCancelled(!canIgniteEntity(entity));
     }
 }

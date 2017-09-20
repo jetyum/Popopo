@@ -22,6 +22,8 @@ public class License {
     public static final String ENTER_VEHICLE = "enter_vehicle";
     public static final String EXIT_VEHICLE = "exit_vehicle";
     public static final String CHANGE_HANGING = "change_hanging";
+    public static final String IGNITE_BLOCK = "ignite_block";
+    public static final String IGNITE_ENTITY = "ignite_entity";
 
     @Property(key = "name")
     private String name;
