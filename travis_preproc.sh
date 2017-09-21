@@ -1,9 +1,8 @@
 #!/bin/bash
 
-CURRENT_DIR=`pwd`
-BUILD_DIR="$CURRENT_DIR/spigot-buildtools"
+BUILD_DIR=`pwd`"/spigot-buildtools"
 
-echo "Current directory is $CURRENT_DIR"
+echo "[Preprocess] Start preprocess"
 
 if [ ! -e "$BUILD_DIR" ]; then
     mkdir "$BUILD_DIR"
@@ -13,23 +12,33 @@ cd "$BUILD_DIR"
 
 BUILDTOOLS="BuildTools.jar"
 
-if [ ! -e "$BUILDTOOLS" ]; then
-    echo "Download $BUILDTOOLS"
+echo "[Preprocess] Prepare $BUILDTOOLS"
 
-    wget "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/$BUILDTOOLS"
+if [ ! -e "$BUILDTOOLS" ]; then
+    URL="https://hub.spigotmc.org"
+    PREFIX="$URL/jenkins/job"
+    ROOT="BuildTools/lastStableBuild"
+    SUFFIX="artifact/target/$BUILDTOOLS"
+
+    wget "$PREFIX/$ROOT/$SUFFIX"
 fi
 
-echo "Execute $BUILDTOOLS"
+echo "[Preprocess] Execute $BUILDTOOLS"
 
 chmod +x "$BUILDTOOLS"
-java -jar "$BUILDTOOLS"
+# java -jar "$BUILDTOOLS"
 
-cd "$CURRENT_DIR"
+LATEST_JAR=$(ls -lt spigot-*.jar \
+    | head -n 1 \
+    | grep -o spigot-*.jar)
 
-LIB_DIR="$CURRENT_DIR/lib"
+echo "[Preprocess] Install $LATEST_JAR"
 
-if [ ! -e "$LIB_DIR" ]; then
-    mkdir "$LIB_DIR"
-fi
+mvn install:install-file \
+    -Dfile="$LATEST_JAR" \
+    -DgroupId=org.spigotmc \
+    -DartifactId=spigot \
+    -Dversion=1.12.2-R0.1-SNAPSHOT \
+    -Dpackaging=jar
 
-mvn install:install-file -Dfile="$BUILD_DIR"/spigot-*.jar -DgroupId=org.spigotmc -DartifactId=spigot -Dversion=1.12.2-R0.1-SNAPSHOT -Dpackaging=jar
+echo "[Preprocess] Finish preprocess"
