@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_DIR=`pwd`"/spigot-buildtools"
+BUILD_DIR=$(pwd)"/spigot-buildtools"
 
 echo "[Preprocess] Start preprocess"
 

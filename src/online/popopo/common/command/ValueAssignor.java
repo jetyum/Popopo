@@ -2,7 +2,6 @@ package online.popopo.common.command;
 
 import online.popopo.common.message.Notice;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -20,8 +19,7 @@ class ValueAssignor extends HashMap<Class, Method> {
             } else {
                 return arg;
             }
-        } catch (InvocationTargetException
-                | IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }

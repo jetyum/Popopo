@@ -6,11 +6,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class YamlConfig implements Config {
     private final FileConfiguration config;
@@ -54,9 +51,7 @@ public class YamlConfig implements Config {
             }
 
             config.set(key, value);
-        } catch (IllegalAccessException
-                | NoSuchMethodException
-                | InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }
@@ -91,9 +86,7 @@ public class YamlConfig implements Config {
             }
 
             return o;
-        } catch (IllegalAccessException
-                | NoSuchMethodException
-                | InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }

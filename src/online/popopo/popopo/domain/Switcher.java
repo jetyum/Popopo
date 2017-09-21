@@ -85,7 +85,7 @@ abstract class Switcher {
         }
     }
 
-    abstract void preProcess();
+    public abstract void preProcess();
 
-    abstract void postProcess();
+    public abstract void postProcess();
 }

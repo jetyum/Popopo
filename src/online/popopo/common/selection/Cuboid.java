@@ -78,27 +78,13 @@ public class Cuboid implements Serializable {
 
     public boolean contains(Location l) {
         World w = l.getWorld();
-
-        if (!w.getName().equals(world)) {
-            return false;
-        }
-
         int x = l.getBlockX();
         int y = l.getBlockY();
         int z = l.getBlockZ();
 
-        if ((x - x1) * (x - x2) > 0) {
-            return false;
-        }
-
-        if ((y - y1) * (y - y2) > 0) {
-            return false;
-        }
-
-        if ((z - z1) * (z - z2) > 0) {
-            return false;
-        }
-
-        return true;
+        return w.getName().equals(world)
+                && (x - x1) * (x - x2) <= 0
+                && (y - y1) * (y - y2) <= 0
+                && (z - z1) * (z - z2) <= 0;
     }
 }

@@ -18,8 +18,7 @@ public class ProcessKiller extends BukkitRunnable {
 
             this.process = p;
             this.pid = f.getInt(p);
-        } catch (IllegalAccessException
-                | NoSuchFieldException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }

@@ -3,7 +3,6 @@ package online.popopo.common.command;
 import online.popopo.common.message.Notice;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 class Executor {
@@ -73,8 +72,7 @@ class Executor {
 
             args = ArrayUtils.addAll(args, o);
             method.invoke(command, args);
-        } catch (InvocationTargetException
-                | IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }

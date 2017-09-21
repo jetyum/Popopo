@@ -1,6 +1,5 @@
 package online.popopo.common.command;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,8 +24,7 @@ class NameAssignor extends HashMap<Class, Method> {
             } else {
                 return set;
             }
-        } catch (InvocationTargetException
-                | IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }
