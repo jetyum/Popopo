@@ -26,7 +26,7 @@ fi
 echo "[Preprocess] Execute $BUILDTOOLS"
 
 chmod +x "$BUILDTOOLS"
-# java -jar "$BUILDTOOLS"
+java -jar "$BUILDTOOLS"
 
 LATEST_JAR=$(ls -lt spigot-*.jar \
     | head -n 1 \
