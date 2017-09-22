@@ -1,84 +1,101 @@
 package online.popopo.popopo.domain;
 
-import online.popopo.common.PluginBase;
-import online.popopo.common.message.Notice;
-import online.popopo.common.message.Formatter;
+import net.minecraft.server.v1_12_R1.*;
+import online.popopo.popopo.domain.Switcher.SwitchState;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
+
+import static net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME;
 
 public class TeleportListener implements Listener {
-    private static final String METADATA_KEY = "domain_switch";
-
     private final Plugin plugin;
-    private final Formatter formatter;
+    private final Switcher switcher;
 
-    public TeleportListener(PluginBase p) {
+    public TeleportListener(Plugin p) {
         this.plugin = p;
-        this.formatter = p.getFormatter();
+        this.switcher = new Switcher(p);
     }
 
     private boolean canSwitch(Domain a, Domain b) {
         return a.available() && b.available();
     }
 
-    private void removeFrag(Player p) {
-        p.removeMetadata(METADATA_KEY, plugin);
+    private void trySwitch(PlayerTeleportEvent e) {
+        Player p = e.getPlayer();
+        Domain from = new Domain(e.getFrom());
+        Domain to = new Domain(e.getTo());
+
+        if (from.equals(to)) return;
+
+        if (canSwitch(from, to)) {
+            switcher.switchTo(p, from, to,
+                    () -> updateTabList(p, to),
+                    () -> p.teleport(e.getTo()));
+            e.setCancelled(true);
+        } else {
+            plugin.getLogger().warning("Can't switching!");
+        }
     }
 
-    private boolean hasFrag(Player p) {
-        return p.hasMetadata(METADATA_KEY);
+    private void setListName(Player target, Player p,
+                             String listName) {
+        EntityPlayer ep = ((CraftPlayer) p).getHandle();
+        EntityPlayer t = ((CraftPlayer) target).getHandle();
+        IChatBaseComponent c = ep.listName;
+        Packet packet;
+
+        ep.listName = new ChatComponentText(listName);
+        packet = new PacketPlayOutPlayerInfo(
+                UPDATE_DISPLAY_NAME, ep);
+        t.playerConnection.sendPacket(packet);
+        ep.listName = c;
     }
 
-    private void setFrag(Player p, boolean bool) {
-        MetadataValue v;
+    private void updateTabList(Player p, Domain d) {
+        for (Player e : Bukkit.getOnlinePlayers()) {
+            if (e.equals(p)) continue;
 
-        if (hasFrag(p)) removeFrag(p);
-        v = new FixedMetadataValue(plugin, bool);
-        p.setMetadata(METADATA_KEY, v);
+            ChatColor c = ChatColor.WHITE;
+
+            if (!new Domain(e.getWorld()).equals(d)) {
+                c = ChatColor.GRAY;
+            }
+
+            setListName(e, p, c + p.getName());
+            setListName(p, e, c + e.getName());
+        }
     }
 
-    private boolean getFrag(Player p) {
-        MetadataValue v;
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        BukkitScheduler s = Bukkit.getScheduler();
 
-        v = p.getMetadata(METADATA_KEY).get(0);
+        s.runTaskAsynchronously(plugin, () -> {
+            Player p = e.getPlayer();
 
-        return v.asBoolean();
+            updateTabList(p, new Domain(p.getWorld()));
+        });
     }
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
-        Domain from = new Domain(e.getFrom());
-        Domain to = new Domain(e.getTo());
+        SwitchState state = switcher.getState(p);
 
-        if (from.equals(to) || hasFrag(p)) {
-            e.setCancelled(hasFrag(p) && !getFrag(p));
-        } else if (!canSwitch(from, to)) {
-            Notice n = Notice.create(formatter, p);
-
-            n.bad("Error", "Can't switch domain!");
-        } else {
-            new Switcher(plugin, p, from, to) {
-                @Override
-                public void preProcess() {
-                    setFrag(p, false);
-                }
-
-                @Override
-                public void postProcess() {
-                    setFrag(p, true);
-                    p.teleport(e.getTo());
-                    removeFrag(p);
-                }
-            }.switchDomain();
+        if (state == SwitchState.SWITCHING) {
             e.setCancelled(true);
+        } else if (state == SwitchState.NONE) {
+            trySwitch(e);
         }
     }
 

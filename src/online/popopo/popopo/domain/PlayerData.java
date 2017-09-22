@@ -7,17 +7,23 @@ import online.popopo.common.nbt.NBTWriter;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 
 import java.io.*;
 import java.util.Map;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class PlayerData {
     private final File dat;
 
-    public PlayerData(File dat) {
-        this.dat = dat;
+    public PlayerData(Player p, Domain d) {
+        File dir = d.getMainWorld().getWorldFolder();
+        UUID uid = p.getUniqueId();
+        String path = "playerdata/" + uid + ".dat";
+
+        dat = new File(dir, path);
     }
 
     public NBT readData() throws IOException {

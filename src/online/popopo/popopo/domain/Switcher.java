@@ -1,46 +1,37 @@
 package online.popopo.popopo.domain;
 
 import online.popopo.common.nbt.NBT;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.*;
 import java.util.Map;
 import java.util.UUID;
 
-abstract class Switcher {
+class Switcher {
+    private static final String METADATA_KEY = "domain_switch";
+
     private final Plugin plugin;
-    private final Player player;
-    private final Domain from;
-    private final Domain to;
-    private final PlayerData data;
 
-    Switcher(Plugin plugin, Player p,
-                    Domain from, Domain to) {
-        Domain main = Domain.getMain();
-
+    Switcher(Plugin plugin) {
         this.plugin = plugin;
-        this.player = p;
-        this.from = from;
-        this.to = to;
-        this.data = main.getPlayerData(p);
     }
 
-    private void resetPotionEffect(PotionEffect e) {
-        player.removePotionEffect(e.getType());
+    private void resetPotionEffects(Player p) {
+        p.getActivePotionEffects().forEach(e -> {
+            p.removePotionEffect(e.getType());
+        });
     }
 
-    private void resetPotionEffects() {
-        player.getActivePotionEffects()
-                .forEach(this::resetPotionEffect);
-    }
-
-    private void fixPlayerData() throws IOException {
+    private void fixPlayerData(Player p, PlayerData data)
+            throws IOException {
         NBT t = data.readData();
         Map<String, NBT> m = t.getCompound();
-        UUID uuid = player.getWorld().getUID();
+        UUID uuid = p.getWorld().getUID();
         long most = uuid.getMostSignificantBits();
         long least = uuid.getLeastSignificantBits();
 
@@ -51,41 +42,59 @@ abstract class Switcher {
         data.writeData(t);
     }
 
-    void switchDomain() {
-        preProcess();
-        new SwitchingTask()
-                .runTaskAsynchronously(plugin);
+    private void setState(Player p, SwitchState s) {
+        MetadataValue v;
+
+        if (!p.hasMetadata(METADATA_KEY)) {
+            p.removeMetadata(METADATA_KEY, plugin);
+        }
+
+        v = new FixedMetadataValue(plugin, s);
+        p.setMetadata(METADATA_KEY, v);
     }
 
-    class SwitchingTask extends BukkitRunnable {
-        @Override
-        public void run() {
-            PlayerData fromData, toData;
+    SwitchState getState(Player p) {
+        if (!p.hasMetadata(METADATA_KEY)) {
+            return SwitchState.NONE;
+        } else {
+            MetadataValue v;
 
-            fromData = from.getPlayerData(player);
-            toData = to.getPlayerData(player);
-            player.saveData();
-            resetPotionEffects();
+            v = p.getMetadata(METADATA_KEY).get(0);
 
-            try {
-                fromData.swapData(data);
-                toData.swapData(data);
-                fixPlayerData();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.loadData();
-                    postProcess();
-                }
-            }.runTask(plugin);
+            return (SwitchState) v.value();
         }
     }
 
-    public abstract void preProcess();
+    boolean switchTo(Player p, Domain from, Domain to,
+                     Runnable pre, Runnable post) {
+        BukkitScheduler s = Bukkit.getScheduler();
 
-    public abstract void postProcess();
+        setState(p, SwitchState.SWITCHING);
+        s.runTaskAsynchronously(plugin, () -> {
+            Domain main = Domain.getMain();
+            PlayerData data = new PlayerData(p, main);
+
+            try {
+                pre.run();
+                p.saveData();
+                resetPotionEffects(p);
+                new PlayerData(p, from).swapData(data);
+                new PlayerData(p, to).swapData(data);
+                fixPlayerData(p, data);
+
+                s.runTask(plugin, () -> {
+                    p.loadData();
+                    setState(p, SwitchState.SWITCHED);
+                    post.run();
+                    setState(p, SwitchState.NONE);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return true;
+    }
+
+    enum SwitchState {SWITCHING, SWITCHED, NONE}
 }

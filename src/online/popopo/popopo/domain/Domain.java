@@ -3,9 +3,6 @@ package online.popopo.popopo.domain;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import java.io.*;
 
 public class Domain {
     private final String name;
@@ -32,21 +29,6 @@ public class Domain {
 
     public World getMainWorld() {
         return Bukkit.getWorld(name);
-    }
-
-    public PlayerData getPlayerData(Player p) {
-        World w = getMainWorld();
-        File dir = w.getWorldFolder();
-        StringBuilder s = new StringBuilder();
-
-        s.append(dir.getPath());
-        s.append("/playerdata/");
-        s.append(p.getUniqueId());
-        s.append(".dat");
-
-        File dat = new File(s.toString());
-
-        return new PlayerData(dat);
     }
 
     public Location getSpawnLocation() {
