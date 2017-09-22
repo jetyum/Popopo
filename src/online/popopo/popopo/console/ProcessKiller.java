@@ -35,7 +35,7 @@ public class ProcessKiller extends BukkitRunnable {
             process.destroy();
         } catch (InterruptedException
                 | IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

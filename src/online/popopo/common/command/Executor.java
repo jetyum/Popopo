@@ -73,7 +73,7 @@ class Executor {
             args = ArrayUtils.addAll(args, o);
             method.invoke(command, args);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

@@ -23,7 +23,7 @@ public class Serializer<V> {
             f.setAccessible(true);
             f.set(v, config.get(k, f.getType()));
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -32,7 +32,7 @@ public class Serializer<V> {
             f.setAccessible(true);
             config.set(k, f.get(v));
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -76,7 +76,7 @@ public class Serializer<V> {
                 Files.createParentDirs(file);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         Class type = value.getClass();

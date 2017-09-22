@@ -22,7 +22,7 @@ public class YamlConfig implements Config {
             config.load(new InputStreamReader(in));
         } catch (InvalidConfigurationException
                 | IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -31,7 +31,7 @@ public class YamlConfig implements Config {
         try {
             config.save(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -52,7 +52,7 @@ public class YamlConfig implements Config {
 
             config.set(key, value);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

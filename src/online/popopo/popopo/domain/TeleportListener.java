@@ -1,7 +1,7 @@
 package online.popopo.popopo.domain;
 
 import net.minecraft.server.v1_12_R1.*;
-import online.popopo.popopo.domain.Switcher.SwitchState;
+import online.popopo.popopo.domain.Switcher.SwitcherState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import static net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME;
+import static net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.*;
 
 public class TeleportListener implements Listener {
     private final Plugin plugin;
@@ -90,11 +90,11 @@ public class TeleportListener implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
-        SwitchState state = switcher.getState(p);
+        SwitcherState state = switcher.getState(p);
 
-        if (state == SwitchState.SWITCHING) {
+        if (state == SwitcherState.SWITCHING) {
             e.setCancelled(true);
-        } else if (state == SwitchState.NONE) {
+        } else if (state == SwitcherState.NONE) {
             trySwitch(e);
         }
     }

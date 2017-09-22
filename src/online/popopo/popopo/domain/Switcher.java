@@ -42,7 +42,7 @@ class Switcher {
         data.writeData(t);
     }
 
-    private void setState(Player p, SwitchState s) {
+    private void setState(Player p, SwitcherState s) {
         MetadataValue v;
 
         if (!p.hasMetadata(METADATA_KEY)) {
@@ -53,15 +53,15 @@ class Switcher {
         p.setMetadata(METADATA_KEY, v);
     }
 
-    SwitchState getState(Player p) {
+    SwitcherState getState(Player p) {
         if (!p.hasMetadata(METADATA_KEY)) {
-            return SwitchState.NONE;
+            return SwitcherState.NONE;
         } else {
             MetadataValue v;
 
             v = p.getMetadata(METADATA_KEY).get(0);
 
-            return (SwitchState) v.value();
+            return (SwitcherState) v.value();
         }
     }
 
@@ -69,7 +69,7 @@ class Switcher {
                      Runnable pre, Runnable post) {
         BukkitScheduler s = Bukkit.getScheduler();
 
-        setState(p, SwitchState.SWITCHING);
+        setState(p, SwitcherState.SWITCHING);
         s.runTaskAsynchronously(plugin, () -> {
             Domain main = Domain.getMain();
             PlayerData data = new PlayerData(p, main);
@@ -84,9 +84,9 @@ class Switcher {
 
                 s.runTask(plugin, () -> {
                     p.loadData();
-                    setState(p, SwitchState.SWITCHED);
+                    setState(p, SwitcherState.SWITCHED);
                     post.run();
-                    setState(p, SwitchState.NONE);
+                    setState(p, SwitcherState.NONE);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -96,5 +96,5 @@ class Switcher {
         return true;
     }
 
-    enum SwitchState {SWITCHING, SWITCHED, NONE}
+    enum SwitcherState {SWITCHING, SWITCHED, NONE}
 }

@@ -28,7 +28,7 @@ public class GzipConfig implements Config {
             objIn.close();
         } catch (ClassNotFoundException
                 | IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -46,7 +46,7 @@ public class GzipConfig implements Config {
             objOut.writeObject(config);
             objOut.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
