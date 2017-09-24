@@ -6,16 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Formatter {
-    private static final String BOLD_KEY = "**";
-    private static final String STRIKETHROUGH_KEY = "~~";
-    private static final String HIGHLIGHT_KEY = "==";
-    private static final String UNDERLINE_KEY = "++";
-    private static final String ITALIC_KEY = "*";
-    private static final String ESCAPE_CHAR = "\\";
+    private static final String PREFIX = "&";
+    private static final String ESCAPE = "\\";
 
     private static final Pattern pattern
-            = Pattern.compile("(\\\\?)" +
-            "(\\*\\*|\\*|~~|==|\\+\\+)(.+?)\\1\\2");
+            = Pattern.compile("(\\\\?)&(.)(.+?)((?<!\\\\)&\\\\\\2|$)");
 
     private final Theme theme;
 
@@ -27,60 +22,50 @@ public class Formatter {
         return theme;
     }
 
-    private ChatColor getStyleFrom(String key) {
-        switch (key) {
-            case BOLD_KEY:
-                return ChatColor.BOLD;
-            case STRIKETHROUGH_KEY:
-                return ChatColor.STRIKETHROUGH;
-            case HIGHLIGHT_KEY:
-                return theme.getHighlight();
-            case UNDERLINE_KEY:
-                return ChatColor.UNDERLINE;
-            case ITALIC_KEY:
-                return ChatColor.ITALIC;
-            default:
-                return null;
-        }
-    }
-
-    public String format(String msg, String style) {
-        Matcher m = pattern.matcher(msg);
-        String ret = style + msg;
+    private String format(String s, String f, ChatColor c) {
+        Matcher m = pattern.matcher(s);
+        String ret = c + f + s;
 
         while (m.find()) {
             String src = m.group(0);
             String esc = m.group(1);
-            String key = m.group(2);
+            String code = m.group(2);
             String text = m.group(3);
+            ChatColor style = ChatColor.getByChar(code);
             String dst;
 
-            if (esc.equals(ESCAPE_CHAR)) {
-                dst = src.replace(esc + key, key);
+            if (style != null && !esc.equals(ESCAPE)) {
+                if (style.isColor()) {
+                    dst = format(text, f, style);
+                } else {
+                    dst = format(text, f + style, c);
+                }
             } else {
-                ChatColor c = getStyleFrom(key);
-
-                dst = format(text, style + c);
+                dst = src.replace(text, format(text, f, c));
             }
 
-            dst += ChatColor.RESET + style;
-            ret = ret.replace(src, dst);
+            ret = ret.replace(src, dst + c + f);
         }
 
         return ret;
     }
 
+    public String format(String s, ChatColor c) {
+        return format(s, "", c)
+                .replace(ESCAPE + PREFIX, PREFIX);
+    }
+
     public String text(String text) {
-        return format(text, theme.getText().toString());
+        return format(text, theme.getText());
     }
 
     public String standard(String chat) {
-        return format(chat, "");
+        return format(chat, ChatColor.RESET);
     }
 
     public String prefix(String prefix, ChatColor c) {
         String s = "[" + prefix + "]" + ChatColor.RESET;
 
-        return format(s, c.toString());
+        return format(s, c);
     }
 }
