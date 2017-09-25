@@ -1,7 +1,6 @@
 package online.popopo.popopo.domain;
 
 import net.minecraft.server.v1_12_R1.*;
-import online.popopo.popopo.domain.Switcher.SwitcherState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -90,11 +89,11 @@ public class TeleportListener implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
         Player p = e.getPlayer();
-        SwitcherState state = switcher.getState(p);
+        int state = switcher.getState(p);
 
-        if (state == SwitcherState.SWITCHING) {
+        if (state == Switcher.SWITCHING) {
             e.setCancelled(true);
-        } else if (state == SwitcherState.NONE) {
+        } else if (state == Switcher.NONE) {
             trySwitch(e);
         }
     }

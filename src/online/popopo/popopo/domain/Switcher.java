@@ -15,6 +15,10 @@ import java.util.UUID;
 class Switcher {
     private static final String METADATA_KEY = "domain_switch";
 
+    static final int NONE = 0;
+    static final int SWITCHING = 1;
+    static final int SWITCHED = 2;
+
     private final Plugin plugin;
 
     Switcher(Plugin plugin) {
@@ -42,26 +46,26 @@ class Switcher {
         data.writeData(t);
     }
 
-    private void setState(Player p, SwitcherState s) {
+    private void setState(Player p, int state) {
         MetadataValue v;
 
         if (!p.hasMetadata(METADATA_KEY)) {
             p.removeMetadata(METADATA_KEY, plugin);
         }
 
-        v = new FixedMetadataValue(plugin, s);
+        v = new FixedMetadataValue(plugin, state);
         p.setMetadata(METADATA_KEY, v);
     }
 
-    SwitcherState getState(Player p) {
+    int getState(Player p) {
         if (!p.hasMetadata(METADATA_KEY)) {
-            return SwitcherState.NONE;
+            return NONE;
         } else {
             MetadataValue v;
 
             v = p.getMetadata(METADATA_KEY).get(0);
 
-            return (SwitcherState) v.value();
+            return v.asInt();
         }
     }
 
@@ -69,7 +73,7 @@ class Switcher {
                      Runnable pre, Runnable post) {
         BukkitScheduler s = Bukkit.getScheduler();
 
-        setState(p, SwitcherState.SWITCHING);
+        setState(p, SWITCHING);
         s.runTaskAsynchronously(plugin, () -> {
             Domain main = Domain.getMain();
             PlayerData data = new PlayerData(p, main);
@@ -84,9 +88,9 @@ class Switcher {
 
                 s.runTask(plugin, () -> {
                     p.loadData();
-                    setState(p, SwitcherState.SWITCHED);
+                    setState(p, SWITCHED);
                     post.run();
-                    setState(p, SwitcherState.NONE);
+                    setState(p, NONE);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -95,6 +99,4 @@ class Switcher {
 
         return true;
     }
-
-    enum SwitcherState {SWITCHING, SWITCHED, NONE}
 }
