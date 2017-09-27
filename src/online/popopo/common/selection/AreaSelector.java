@@ -6,6 +6,7 @@ import online.popopo.common.message.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +17,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
 
 public class AreaSelector {
     private static final String METADATA_KEY = "area_selection";
@@ -52,22 +55,25 @@ public class AreaSelector {
     }
 
     public Cuboid getSelectedArea(Player p) {
-        if (!p.hasMetadata(METADATA_KEY)) {
-            return null;
+        if (p.hasMetadata(METADATA_KEY)) {
+            List<MetadataValue> list;
+
+            list = p.getMetadata(METADATA_KEY);
+            disableSelectionMode(p);
+
+            if (!list.isEmpty()) {
+                MetadataValue m = list.get(0);
+                Location[] v = (Location[]) m.value();
+
+                if (v[0] != null && v[1] != null) {
+                    World w = v[0].getWorld();
+
+                    return new Cuboid(w, v[0], v[1]);
+                }
+            }
         }
 
-        MetadataValue m;
-
-        m = p.getMetadata(METADATA_KEY).get(0);
-        disableSelectionMode(p);
-
-        Location[] v = (Location[]) m.value();
-
-        if (v[0] == null || v[1] == null) {
-            return null;
-        }
-
-        return new Cuboid(v[0].getWorld(), v[0], v[1]);
+        return null;
     }
 
     private class SelectionListener implements Listener {

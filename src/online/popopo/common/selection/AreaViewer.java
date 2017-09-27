@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AreaViewer {
@@ -54,11 +55,16 @@ public class AreaViewer {
 
     public void hideArea(Player p) {
         if (p.hasMetadata(METADATA_KEY)) {
-            MetadataValue m;
+            List<MetadataValue> list;
 
-            m = p.getMetadata(METADATA_KEY).get(0);
-            ((BukkitTask) m.value()).cancel();
+            list = p.getMetadata(METADATA_KEY);
             p.removeMetadata(METADATA_KEY, plugin);
+
+            if (!list.isEmpty()) {
+                MetadataValue m = list.get(0);
+
+                ((BukkitTask) m.value()).cancel();
+            }
         }
     }
 

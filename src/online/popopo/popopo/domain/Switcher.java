@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,26 +48,28 @@ class Switcher {
     }
 
     private void setState(Player p, int state) {
-        MetadataValue v;
-
         if (!p.hasMetadata(METADATA_KEY)) {
             p.removeMetadata(METADATA_KEY, plugin);
         }
+
+        MetadataValue v;
 
         v = new FixedMetadataValue(plugin, state);
         p.setMetadata(METADATA_KEY, v);
     }
 
     int getState(Player p) {
-        if (!p.hasMetadata(METADATA_KEY)) {
-            return NONE;
-        } else {
-            MetadataValue v;
+        if (p.hasMetadata(METADATA_KEY)) {
+            List<MetadataValue> list;
 
-            v = p.getMetadata(METADATA_KEY).get(0);
+            list = p.getMetadata(METADATA_KEY);
 
-            return v.asInt();
+            if (!list.isEmpty()) {
+                return list.get(0).asInt();
+            }
         }
+
+        return NONE;
     }
 
     boolean switchTo(Player p, Domain from, Domain to,
