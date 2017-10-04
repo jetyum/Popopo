@@ -1,11 +1,11 @@
 package online.popopo.popopo.world;
 
-import online.popopo.common.command.Command;
-import online.popopo.common.command.NameGetter;
-import online.popopo.common.command.SubCommand;
-import online.popopo.common.command.ValueGetter;
-import online.popopo.common.message.Notice;
-import online.popopo.common.message.UserNotice.PlayerNotice;
+import online.popopo.api.command.Command;
+import online.popopo.api.command.NameGetter;
+import online.popopo.api.command.SubCommand;
+import online.popopo.api.command.ValueGetter;
+import online.popopo.api.message.Notice;
+import online.popopo.api.message.UserNotice.PlayerNotice;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

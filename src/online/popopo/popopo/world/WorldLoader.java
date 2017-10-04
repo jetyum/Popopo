@@ -1,6 +1,6 @@
 package online.popopo.popopo.world;
 
-import online.popopo.common.PluginBase;
+import online.popopo.api.MainBase;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.*;
 
 public class WorldLoader {
-    public void load(PluginBase p, Map<String, WorldInfo> m) {
+    public void load(MainBase p, Map<String, WorldInfo> m) {
         Set<World> lobbys = new HashSet<>();
 
         for (WorldInfo i : m.values()) {

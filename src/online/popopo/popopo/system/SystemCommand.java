@@ -1,9 +1,9 @@
 package online.popopo.popopo.system;
 
 import com.sun.management.OperatingSystemMXBean;
-import online.popopo.common.command.Command;
-import online.popopo.common.command.SubCommand;
-import online.popopo.common.message.Notice;
+import online.popopo.api.command.Command;
+import online.popopo.api.command.SubCommand;
+import online.popopo.api.message.Notice;
 
 import java.lang.management.ManagementFactory;
 

@@ -1,14 +1,14 @@
 package online.popopo.popopo.portal;
 
-import online.popopo.common.PluginBase;
-import online.popopo.common.command.Command;
-import online.popopo.common.command.NameGetter;
-import online.popopo.common.command.SubCommand;
-import online.popopo.common.command.ValueGetter;
-import online.popopo.common.message.Notice;
-import online.popopo.common.message.UserNotice.PlayerNotice;
-import online.popopo.common.selection.AreaSelector;
-import online.popopo.common.selection.Cuboid;
+import online.popopo.api.MainBase;
+import online.popopo.api.command.Command;
+import online.popopo.api.command.NameGetter;
+import online.popopo.api.command.SubCommand;
+import online.popopo.api.command.ValueGetter;
+import online.popopo.api.message.Notice;
+import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.selection.AreaSelector;
+import online.popopo.api.selection.Cuboid;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -19,7 +19,7 @@ public class PortalCommand implements Command {
     private final AreaSelector selector;
     private final Map<String, Portal> portals;
 
-    public PortalCommand(PluginBase p, Map<String, Portal> m) {
+    public PortalCommand(MainBase p, Map<String, Portal> m) {
         this.selector = p.getSelector();
         this.portals = m;
     }

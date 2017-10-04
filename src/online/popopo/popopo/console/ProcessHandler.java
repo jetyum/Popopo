@@ -1,6 +1,6 @@
 package online.popopo.popopo.console;
 
-import online.popopo.common.message.Notice;
+import online.popopo.api.message.Notice;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;

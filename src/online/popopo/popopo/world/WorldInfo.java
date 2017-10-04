@@ -1,6 +1,6 @@
 package online.popopo.popopo.world;
 
-import online.popopo.common.config.Property;
+import online.popopo.api.config.Property;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;

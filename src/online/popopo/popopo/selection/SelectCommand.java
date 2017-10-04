@@ -1,17 +1,17 @@
 package online.popopo.popopo.selection;
 
-import online.popopo.common.PluginBase;
-import online.popopo.common.command.Command;
-import online.popopo.common.command.SubCommand;
-import online.popopo.common.message.Notice;
-import online.popopo.common.message.UserNotice.PlayerNotice;
-import online.popopo.common.selection.AreaSelector;
+import online.popopo.api.MainBase;
+import online.popopo.api.command.Command;
+import online.popopo.api.command.SubCommand;
+import online.popopo.api.message.Notice;
+import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.selection.AreaSelector;
 import org.bukkit.entity.Player;
 
 public class SelectCommand implements Command {
     private final AreaSelector selector;
 
-    public SelectCommand(PluginBase p) {
+    public SelectCommand(MainBase p) {
         this.selector = p.getSelector();
     }
 

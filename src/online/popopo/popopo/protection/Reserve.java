@@ -1,7 +1,7 @@
 package online.popopo.popopo.protection;
 
-import online.popopo.common.message.Guideable;
-import online.popopo.common.selection.Cuboid;
+import online.popopo.api.message.Guideable;
+import online.popopo.api.selection.Cuboid;
 
 import java.io.Serializable;
 import java.util.ArrayList;

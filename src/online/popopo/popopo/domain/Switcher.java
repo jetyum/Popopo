@@ -1,6 +1,6 @@
 package online.popopo.popopo.domain;
 
-import online.popopo.common.nbt.NBT;
+import online.popopo.api.nbt.NBT;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;

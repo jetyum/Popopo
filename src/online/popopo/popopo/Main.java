@@ -1,7 +1,7 @@
 package online.popopo.popopo;
 
-import online.popopo.common.PluginBase;
-import online.popopo.common.config.Property;
+import online.popopo.api.MainBase;
+import online.popopo.api.config.Property;
 import online.popopo.popopo.input.InputListener;
 import online.popopo.popopo.console.ConsoleCommand;
 import online.popopo.popopo.portal.Portal;
@@ -23,7 +23,7 @@ import online.popopo.popopo.world.WorldLoader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Main extends PluginBase {
+public class Main extends MainBase {
     @Property(key = "portals")
     private Map<String, Portal> portals = new HashMap<>();
     @Property(key = "reserves")

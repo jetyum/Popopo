@@ -1,9 +1,9 @@
 package online.popopo.popopo.domain;
 
 import com.google.common.io.Files;
-import online.popopo.common.nbt.NBT;
-import online.popopo.common.nbt.NBTReader;
-import online.popopo.common.nbt.NBTWriter;
+import online.popopo.api.nbt.NBT;
+import online.popopo.api.nbt.NBTReader;
+import online.popopo.api.nbt.NBTWriter;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
