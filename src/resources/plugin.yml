@@ -66,19 +66,19 @@ permissions:
       popopo.protect: true
   popopo.system:
     description: Allows you to display system utilization.
-    default: true
+    default: op
   popopo.console:
     description: Allows you to executing linux command.
-    default: false
+    default: op
   popopo.transfer:
     description: Allows you to transfer another world.
-    default: true
+    default: op
   popopo.select:
     description: Allows you to select cuboid area.
-    default: true
+    default: op
   popopo.portal:
     description: Allows you to manipulate custom portal.
-    default: true
+    default: op
   popopo.protect:
     description: Allows you to manipulate custom reserve.
-    default: true
+    default: op
