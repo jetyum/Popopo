@@ -32,19 +32,27 @@ class Switcher {
         });
     }
 
+    private void setNBT(NBT d, int t, String k, Object v) {
+        Map<String, NBT> m = d.getCompound();
+
+        if (m.containsKey(k)) {
+            m.get(k).setValue(v);
+        } else {
+            m.put(k, new NBT(t, k, v));
+        }
+    }
+
     private void fixPlayerData(Player p, PlayerData data)
             throws IOException {
-        NBT t = data.readData();
-        Map<String, NBT> m = t.getCompound();
+        NBT d = data.readData();
         UUID uuid = p.getWorld().getUID();
         long most = uuid.getMostSignificantBits();
         long least = uuid.getLeastSignificantBits();
 
-        m.get("WorldUUIDMost").setValue(most);
-        m.get("WorldUUIDLeast").setValue(least);
-        m.get("PortalCooldown").setValue(900);
-        t.setValue(m);
-        data.writeData(t);
+        setNBT(d, NBT.LONG, "WorldUUIDMost", most);
+        setNBT(d, NBT.LONG, "WorldUUIDLeast", least);
+        setNBT(d, NBT.INT, "PortalCooldown", 900);
+        data.writeData(d);
     }
 
     private void setState(Player p, int state) {
