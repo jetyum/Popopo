@@ -84,7 +84,7 @@ public class AreaViewer {
                     p.spawnParticle(particle, l, 0);
                 }
             }
-        }.runTaskTimer(plugin, 0, 10);
+        }.runTaskTimerAsynchronously(plugin, 0, 10);
 
         hideArea(p);
         m = new FixedMetadataValue(plugin, task);
