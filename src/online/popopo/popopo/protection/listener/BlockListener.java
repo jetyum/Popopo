@@ -27,6 +27,23 @@ public class BlockListener implements Listener {
         return judge.allows(b, IGNITE_BLOCK, OPTION_ALL);
     }
 
+    private boolean canPlaceFireBlock(Block b) {
+        Block b1 = b.getRelative(BlockFace.UP);
+        Block b2 = b.getRelative(BlockFace.DOWN);
+        Block b3 = b.getRelative(BlockFace.SOUTH);
+        Block b4 = b.getRelative(BlockFace.WEST);
+        Block b5 = b.getRelative(BlockFace.NORTH);
+        Block b6 = b.getRelative(BlockFace.EAST);
+
+        return canIgniteBlock(b)
+                && canIgniteBlock(b1)
+                && canIgniteBlock(b2)
+                && canIgniteBlock(b3)
+                && canIgniteBlock(b4)
+                && canIgniteBlock(b5)
+                && canIgniteBlock(b6);
+    }
+
     @EventHandler
     public void onBlockChange(EntityChangeBlockEvent e) {
         Block b = e.getBlock();
@@ -132,6 +149,6 @@ public class BlockListener implements Listener {
     public void onBlockIgnite(BlockIgniteEvent e) {
         Block b = e.getBlock();
 
-        e.setCancelled(!canIgniteBlock(b));
+        e.setCancelled(!canPlaceFireBlock(b));
     }
 }
