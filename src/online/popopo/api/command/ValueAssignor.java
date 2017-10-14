@@ -1,6 +1,7 @@
 package online.popopo.api.command;
 
 import online.popopo.api.message.Notice;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -28,9 +29,16 @@ class ValueAssignor extends HashMap<Class, Method> {
         Object[] o = new Object[e.argsSize()];
 
         for (int i = 0; i < o.length; i++) {
-            String s = a[i + e.nameSize()];
+            int pos = i + e.nameSize();
+            Class type = e.argType(i);
+            boolean isArray = type.equals(String[].class);
+            boolean isFinal = i == o.length - 1;
 
-            o[i] = run(e.argType(i), n, s);
+            if (isArray && isFinal) {
+                o[i] = ArrayUtils.subarray(a, pos, a.length);
+            } else {
+                o[i] = run(type, n, a[pos]);
+            }
 
             if (o[i] == null) {
                 return null;
