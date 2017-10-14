@@ -1,6 +1,7 @@
 package online.popopo.popopo.world;
 
 import online.popopo.api.config.Property;
+import org.bukkit.Difficulty;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
@@ -26,6 +27,12 @@ public class WorldInfo {
 
     @Property(key = "lobby_world")
     private boolean lobby = false;
+
+    @Property(key = "difficulty")
+    private Difficulty difficulty = Difficulty.EASY;
+
+    @Property(key = "pvp")
+    private boolean pvp = true;
 
     public WorldCreator worldCreator() {
         WorldCreator c = WorldCreator.name(name);
@@ -55,5 +62,13 @@ public class WorldInfo {
 
     public boolean isLobbyWorld() {
         return lobby;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public boolean getPVP() {
+        return pvp;
     }
 }

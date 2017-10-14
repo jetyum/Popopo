@@ -18,6 +18,9 @@ public class WorldLoader {
             WorldCreator c = i.worldCreator();
             World w = c.createWorld();
 
+            w.setDifficulty(i.getDifficulty());
+            w.setPVP(i.getPVP());
+
             if (i.isLobbyWorld()) lobbys.add(w);
         }
 
