@@ -48,9 +48,12 @@ class Handler {
 
     private String[] getArgsFrom(String in) {
         List<String> keys = new ArrayList<>();
-        Matcher m = pattern.matcher(in);
 
-        while (m.find()) keys.add(m.group(3));
+        if (in != null) {
+            Matcher m = pattern.matcher(in);
+
+            while (m.find()) keys.add(m.group(3));
+        }
 
         return keys.toArray(new String[0]);
     }

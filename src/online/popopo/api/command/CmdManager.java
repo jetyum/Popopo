@@ -2,6 +2,7 @@ package online.popopo.api.command;
 
 import online.popopo.api.message.Notice;
 import online.popopo.api.message.Formatter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,14 +28,16 @@ public class CmdManager {
         Handler h = new Handler(c);
 
         executor(name, (s, cmd, alias, args) -> {
-            String in = String.join(" ", args);
+            boolean b = args.length != 0;
+            String in = b ? String.join(" ", args) : null;
             Notice n = Notice.create(formatter, s);
 
             return h.execute(n, in);
         });
 
         completer(name, (s, cmd, alias, args) -> {
-            String in = String.join(" ", args);
+            boolean b = args.length != 0;
+            String in = b ? String.join(" ", args) : null;
             Notice n = Notice.create(formatter, s);
 
             return h.complete(n, in);
