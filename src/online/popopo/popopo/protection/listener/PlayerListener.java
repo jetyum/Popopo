@@ -2,6 +2,7 @@ package online.popopo.popopo.protection.listener;
 
 import online.popopo.popopo.protection.Judge;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -63,7 +64,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent e) {
-        Block b = e.getBlockClicked();
+        BlockFace f = e.getBlockFace();
+        Block b = e.getBlockClicked().getRelative(f);
         Player p = e.getPlayer();
 
         e.setCancelled(!canChangeBlock(p, b));
