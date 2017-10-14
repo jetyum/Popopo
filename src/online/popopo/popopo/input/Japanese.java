@@ -45,6 +45,9 @@ public class Japanese implements Converter{
         IOUtils.closeQuietly(reader);
 
         List<String> list = a.get(0).get(1);
+
+        list.removeIf(s -> s.contains(" "));
+
         boolean b = list.size() > CANDIDATE_NUM;
         int to = b ? CANDIDATE_NUM : list.size();
 
