@@ -2,6 +2,7 @@ package online.popopo.popopo.voting;
 
 import online.popopo.api.message.Guideable;
 import online.popopo.api.message.Notice;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -75,16 +76,15 @@ public class Vote {
 
         @Override
         public String getLoreTitle() {
-            return name;
+            int amount = Bukkit.getOnlinePlayers().size();
+            int rate = count * 100 / amount;
+
+            return name + " (" + rate + "%)";
         }
 
         @Override
         public List<String> getLore() {
-            List<String> list = new ArrayList<>();
-
-            list.add(count + " player");
-
-            return list;
+            return new ArrayList<>();
         }
 
         @Override

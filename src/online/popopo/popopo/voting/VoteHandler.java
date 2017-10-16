@@ -21,6 +21,20 @@ public class VoteHandler {
         this.ballots = new HashMap<>();
     }
 
+    public Ballot getBallot(Player p) {
+        return ballots.get(p);
+    }
+
+    public boolean isFinished() {
+        for (Ballot b : ballots.values()) {
+            if (b.getState() != Ballot.FINISHED) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public void start() {
         Formatter f = plugin.getFormatter();
 
@@ -42,19 +56,5 @@ public class VoteHandler {
 
         n.good("Done", "Voting was finished!");
         vote.showResult(n);
-    }
-
-    public Ballot getBallot(Player p) {
-        return ballots.get(p);
-    }
-
-    public boolean isFinished() {
-        for (Ballot b : ballots.values()) {
-            if (b.getState() != Ballot.FINISHED) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
