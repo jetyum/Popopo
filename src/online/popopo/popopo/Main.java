@@ -16,6 +16,7 @@ import online.popopo.popopo.selection.SelectCommand;
 import online.popopo.popopo.system.SystemCommand;
 import online.popopo.popopo.input.Japanese;
 import online.popopo.popopo.domain.TeleportListener;
+import online.popopo.popopo.voting.VoteCommand;
 import online.popopo.popopo.world.TransferCommand;
 import online.popopo.popopo.world.WorldInfo;
 import online.popopo.popopo.world.WorldLoader;
@@ -65,6 +66,7 @@ public class Main extends MainBase {
         register("transfer", new TransferCommand());
         register("portal", new PortalCommand(this, portals));
         register("protect", new ProtectCommand(this, judge));
+        register("vote", new VoteCommand(this));
     }
 
     @Override
