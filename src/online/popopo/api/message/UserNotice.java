@@ -41,6 +41,18 @@ public class UserNotice extends Notice {
 
             getPlayer().spigot().sendMessage(t, s);
         }
+
+        public void title(String m1, String m2,
+                          int in, int stay, int out) {
+            if (m1 != null) m1 = getFormatter().text(m1);
+            if (m2 != null) m2 = getFormatter().text(m2);
+
+            getPlayer().sendTitle(m1, m2, in, stay, out);
+        }
+
+        public void title(String title, String sub) {
+            title(title, sub, 5, 40, 10);
+        }
     }
 
     public static class BlockNotice extends UserNotice {

@@ -22,7 +22,7 @@ public class ConsoleCommand implements Command, Listener {
     }
 
     @SubCommand()
-    public void exec(Notice n, String text) {
+    public void exec(Notice n, String... args) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
 
@@ -33,6 +33,7 @@ public class ConsoleCommand implements Command, Listener {
             return;
         }
 
+        String text = String.join(" ", args);
         Player p = ((PlayerNotice) n).getPlayer();
         String name = p.getName();
 
