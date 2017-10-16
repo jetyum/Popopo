@@ -38,7 +38,7 @@ public class Vote {
         String name = choices.get(i).getName();
         String s = "\"" + name + "\"";
 
-        n.good("Done", s + " was finished");
+        n.good("Done", "Voted to " + s);
         choices.get(i).count++;
     }
 
@@ -48,7 +48,7 @@ public class Vote {
         int last = -1;
 
         choices.sort(Choice::compareTo);
-        n.good("Done", "Voted to " + s);
+        n.info("Info", "Result voting of " + s);
 
         for (Choice c : choices) {
             if (c.count != last) rank++;

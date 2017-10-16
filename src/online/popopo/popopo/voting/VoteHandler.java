@@ -34,13 +34,14 @@ public class VoteHandler {
     }
 
     public void stop() {
-        Formatter f = plugin.getFormatter();
+        Notice n = Notice.create(plugin.getFormatter());
 
         for (Ballot b : ballots.values()) {
             b.close(false);
         }
 
-        vote.showResult(Notice.create(f));
+        n.good("Done", "Voting was finished!");
+        vote.showResult(n);
     }
 
     public Ballot getBallot(Player p) {

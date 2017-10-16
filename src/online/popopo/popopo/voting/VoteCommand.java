@@ -29,7 +29,7 @@ public class VoteCommand implements Command {
     }
 
     @SubCommand
-    public void start(Notice n, String t, String... c) {
+    public void start(Notice n, String t, String... i) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
 
@@ -41,7 +41,7 @@ public class VoteCommand implements Command {
         }
 
         Player p = ((PlayerNotice) n).getPlayer();
-        Vote v = new Vote(p, t, c);
+        Vote v = new Vote(p, t, i);
         BukkitScheduler s = Bukkit.getScheduler();
 
         n.info("Info", "Start voting at now");
