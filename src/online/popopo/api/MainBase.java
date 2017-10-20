@@ -2,7 +2,7 @@ package online.popopo.api;
 
 import online.popopo.api.command.Command;
 import online.popopo.api.command.CmdManager;
-import online.popopo.api.config.ConfigIO;
+import online.popopo.api.io.ConfigIO;
 import online.popopo.api.message.Formatter;
 import online.popopo.api.message.Theme;
 import online.popopo.api.selection.AreaSelector;

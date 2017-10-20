@@ -1,6 +1,6 @@
 package online.popopo.popopo.protection;
 
-import online.popopo.api.config.Property;
+import online.popopo.api.io.Property;
 
 import java.util.Map;
 

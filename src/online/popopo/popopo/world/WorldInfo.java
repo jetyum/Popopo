@@ -1,6 +1,6 @@
 package online.popopo.popopo.world;
 
-import online.popopo.api.config.Property;
+import online.popopo.api.io.Property;
 import org.bukkit.Difficulty;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;

@@ -1,5 +1,6 @@
-package online.popopo.api.config;
+package online.popopo.api.io.yaml;
 
+import online.popopo.api.io.Config;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class YamlConfig implements Config {
@@ -56,18 +59,24 @@ public class YamlConfig implements Config {
         }
     }
 
-    private Object convertToMap(MemorySection s) {
-        Map<String, Object> m = s.getValues(false);
+    private Object convert(Object o) {
+        if (o instanceof MemorySection) {
+            MemorySection s = (MemorySection) o;
+            Map<String, Object> m = s.getValues(false);
 
-        m.replaceAll((k, v) -> {
-            if (v instanceof MemorySection) {
-                return convertToMap((MemorySection) v);
-            } else {
-                return v;
-            }
-        });
+            m.replaceAll((k, v) -> convert(v));
 
-        return m;
+            return m;
+        } else if (o instanceof List) {
+            List<?> l = (List<?>) o;
+            List<Object> copy = new ArrayList<>();
+
+            l.forEach(v -> copy.add(convert(v)));
+
+            return copy;
+        } else {
+            return o;
+        }
     }
 
     @Override
@@ -81,11 +90,9 @@ public class YamlConfig implements Config {
 
                 m = c.getMethod("valueOf", String.class);
                 o = m.invoke(null, n);
-            } else if (o instanceof MemorySection) {
-                o = convertToMap((MemorySection) o);
             }
 
-            return o;
+            return convert(o);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }

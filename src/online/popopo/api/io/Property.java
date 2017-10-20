@@ -1,4 +1,4 @@
-package online.popopo.api.config;
+package online.popopo.api.io;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

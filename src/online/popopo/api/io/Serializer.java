@@ -1,4 +1,4 @@
-package online.popopo.api.config;
+package online.popopo.api.io;
 
 import com.google.common.io.Files;
 

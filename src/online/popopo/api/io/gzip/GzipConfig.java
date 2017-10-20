@@ -1,4 +1,6 @@
-package online.popopo.api.config;
+package online.popopo.api.io.gzip;
+
+import online.popopo.api.io.Config;
 
 import java.io.*;
 import java.util.HashMap;

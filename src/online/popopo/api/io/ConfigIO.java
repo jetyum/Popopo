@@ -1,5 +1,7 @@
-package online.popopo.api.config;
+package online.popopo.api.io;
 
+import online.popopo.api.io.gzip.GzipConfig;
+import online.popopo.api.io.yaml.YamlConfig;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;

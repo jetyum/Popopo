@@ -1,6 +1,6 @@
 package online.popopo.api.message;
 
-import online.popopo.api.config.Property;
+import online.popopo.api.io.Property;
 import org.bukkit.ChatColor;
 
 public class Theme {

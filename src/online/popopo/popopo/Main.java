@@ -1,7 +1,7 @@
 package online.popopo.popopo;
 
 import online.popopo.api.MainBase;
-import online.popopo.api.config.Property;
+import online.popopo.api.io.Property;
 import online.popopo.popopo.input.InputListener;
 import online.popopo.popopo.console.ConsoleCommand;
 import online.popopo.popopo.portal.Portal;

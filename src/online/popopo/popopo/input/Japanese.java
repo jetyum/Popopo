@@ -1,7 +1,7 @@
 package online.popopo.popopo.input;
 
 import com.google.gson.Gson;
-import online.popopo.api.config.Property;
+import online.popopo.api.io.Property;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
