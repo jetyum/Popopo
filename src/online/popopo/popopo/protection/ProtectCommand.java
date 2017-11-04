@@ -17,7 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ProtectCommand implements Command {
+@Command(name = "protect")
+public class ProtectCommand {
     private final AreaSelector selector;
     private final Map<String, Reserve> reserves;
     private final Map<String, License> licenses;

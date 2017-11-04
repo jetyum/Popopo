@@ -12,7 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 
-public class ConsoleCommand implements Command, Listener {
+@Command(name = "console")
+public class ConsoleCommand implements Listener {
     private final ProcessHandler handler;
 
     public ConsoleCommand(MainBase p) {

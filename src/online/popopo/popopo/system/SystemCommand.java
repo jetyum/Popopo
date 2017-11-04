@@ -7,7 +7,8 @@ import online.popopo.api.message.Notice;
 
 import java.lang.management.ManagementFactory;
 
-public class SystemCommand implements Command {
+@Command(name = "system")
+public class SystemCommand {
     private String memoryToString(long m) {
         int uint = 0;
         double memory = m;

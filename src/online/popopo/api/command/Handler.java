@@ -18,16 +18,16 @@ class Handler {
     private final NameAssignor nameAssignor;
     private final ValueAssignor valueAssignor;
 
-    Handler(Command c) {
+    Handler(Object o) {
         this.executors = new ArrayList<>();
-        this.nameAssignor = new NameAssignor(c);
-        this.valueAssignor = new ValueAssignor(c);
+        this.nameAssignor = new NameAssignor(o);
+        this.valueAssignor = new ValueAssignor(o);
 
-        for (Method m : c.getClass().getMethods()) {
+        for (Method m : o.getClass().getMethods()) {
             for (Annotation a : m.getAnnotations()) {
                 if (a instanceof SubCommand) {
                     String[] k = ((SubCommand) a).name();
-                    Executor v = new Executor(c, m, k);
+                    Executor v = new Executor(o, m, k);
 
                     this.executors.add(v);
                 } else if (a instanceof NameGetter) {

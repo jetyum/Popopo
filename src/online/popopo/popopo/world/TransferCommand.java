@@ -13,7 +13,8 @@ import org.bukkit.entity.Player;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TransferCommand implements Command {
+@Command(name = "transfer")
+public class TransferCommand {
     @SubCommand()
     public void transfer(Notice n, World w) {
         if (!(n instanceof PlayerNotice)) {

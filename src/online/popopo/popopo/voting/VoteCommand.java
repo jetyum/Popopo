@@ -13,7 +13,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
-public class VoteCommand implements Command {
+@Command(name = "vote")
+public class VoteCommand {
     private static final int PERIOD = 2400;
 
     private final MainBase plugin;

@@ -7,10 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 class NameAssignor extends HashMap<Class, Method> {
-    private final Command command;
+    private final Object instance;
 
-    NameAssignor(Command c) {
-        this.command = c;
+    NameAssignor(Object o) {
+        this.instance = o;
     }
 
     private Collection<String> run(Class t) {
@@ -18,7 +18,7 @@ class NameAssignor extends HashMap<Class, Method> {
             Set<String> set = new HashSet<>();
 
             if (containsKey(t)) {
-                Object o = get(t).invoke(command);
+                Object o = get(t).invoke(instance);
 
                 return set.getClass().cast(o);
             } else {

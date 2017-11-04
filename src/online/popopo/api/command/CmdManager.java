@@ -6,6 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.annotation.Annotation;
+
 public class CmdManager {
     private final JavaPlugin plugin;
     private final Formatter formatter;
@@ -23,8 +25,11 @@ public class CmdManager {
         plugin.getCommand(name).setTabCompleter(c);
     }
 
-    public void register(String name, Command c) {
-        Handler h = new Handler(c);
+    public void register(Object o) {
+        Class t = o.getClass();
+        Annotation a = t.getAnnotation(Command.class);
+        String name = ((Command) a).name();
+        Handler h = new Handler(o);
 
         executor(name, (s, cmd, alias, args) -> {
             boolean b = args.length != 0;

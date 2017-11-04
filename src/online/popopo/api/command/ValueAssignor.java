@@ -7,16 +7,16 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 class ValueAssignor extends HashMap<Class, Method> {
-    private final Command command;
+    private final Object instance;
 
-    ValueAssignor(Command c) {
-        this.command = c;
+    ValueAssignor(Object o) {
+        this.instance = o;
     }
 
     private Object run(Class t, Notice n, String arg) {
         try {
             if (containsKey(t)) {
-                return get(t).invoke(command, n, arg);
+                return get(t).invoke(instance, n, arg);
             } else {
                 return arg;
             }

@@ -43,8 +43,8 @@ public abstract class MainBase extends JavaPlugin {
         io.read(path, theme);
     }
 
-    public void register(String name, Command c) {
-        command.register(name, c);
+    public void register(Object o) {
+        command.register(o);
     }
 
     public void register(Listener l) {

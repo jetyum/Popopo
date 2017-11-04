@@ -8,7 +8,8 @@ import online.popopo.api.message.UserNotice.PlayerNotice;
 import online.popopo.api.selection.AreaSelector;
 import org.bukkit.entity.Player;
 
-public class SelectCommand implements Command {
+@Command(name = "select")
+public class SelectCommand {
     private final AreaSelector selector;
 
     public SelectCommand(MainBase p) {

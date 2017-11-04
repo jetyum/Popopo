@@ -6,15 +6,15 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.lang.reflect.Method;
 
 class Executor {
-    private final Command command;
+    private final Object instance;
     private final Method method;
     private final String[] name;
     private final String fullname;
     private final Class[] argTypes;
     private final int size;
 
-    Executor(Command c, Method m, String[] name) {
-        this.command = c;
+    Executor(Object o, Method m, String[] name) {
+        this.instance = o;
         this.method = m;
         this.name = name;
         this.fullname = String.join(" ", name);
@@ -71,7 +71,7 @@ class Executor {
             Object[] args = new Object[] {n};
 
             args = ArrayUtils.addAll(args, o);
-            method.invoke(command, args);
+            method.invoke(instance, args);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }

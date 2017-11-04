@@ -60,13 +60,14 @@ public class Main extends MainBase {
         register(new EntityListener(judge));
         register(new ExplosionListener(judge));
         register(new PlayerListener(judge));
-        register("select", new SelectCommand(this));
-        register("system", new SystemCommand());
-        register("console", new ConsoleCommand(this));
-        register("transfer", new TransferCommand());
-        register("portal", new PortalCommand(this, portals));
-        register("protect", new ProtectCommand(this, judge));
-        register("vote", new VoteCommand(this));
+
+        register(new SelectCommand(this));
+        register(new SystemCommand());
+        register(new ConsoleCommand(this));
+        register(new TransferCommand());
+        register(new PortalCommand(this, portals));
+        register(new ProtectCommand(this, judge));
+        register(new VoteCommand(this));
     }
 
     @Override

@@ -15,7 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PortalCommand implements Command {
+@Command(name = "portal")
+public class PortalCommand {
     private final AreaSelector selector;
     private final Map<String, Portal> portals;
 
