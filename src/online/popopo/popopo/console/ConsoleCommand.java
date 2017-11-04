@@ -19,7 +19,7 @@ public class ConsoleCommand implements Listener {
     public ConsoleCommand(MainBase p) {
         this.handler = new ProcessHandler(p);
 
-        p.register(this);
+        p.registerListener(this);
     }
 
     @SubCommand()

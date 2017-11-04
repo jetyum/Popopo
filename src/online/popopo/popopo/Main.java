@@ -53,21 +53,21 @@ public class Main extends MainBase {
 
         Judge judge = new Judge(reserves, licenses);
 
-        register(new InputListener(this, jpn));
-        register(new TeleportListener(this));
-        register(new PortalListener(portals));
-        register(new BlockListener(judge));
-        register(new EntityListener(judge));
-        register(new ExplosionListener(judge));
-        register(new PlayerListener(judge));
+        registerListener(new InputListener(this, jpn));
+        registerListener(new TeleportListener(this));
+        registerListener(new PortalListener(portals));
+        registerListener(new BlockListener(judge));
+        registerListener(new EntityListener(judge));
+        registerListener(new ExplosionListener(judge));
+        registerListener(new PlayerListener(judge));
 
-        register(new SelectCommand(this));
-        register(new SystemCommand());
-        register(new ConsoleCommand(this));
-        register(new TransferCommand());
-        register(new PortalCommand(this, portals));
-        register(new ProtectCommand(this, judge));
-        register(new VoteCommand(this));
+        registerCommand(new SelectCommand(this));
+        registerCommand(new SystemCommand());
+        registerCommand(new ConsoleCommand(this));
+        registerCommand(new TransferCommand());
+        registerCommand(new PortalCommand(this, portals));
+        registerCommand(new ProtectCommand(this, judge));
+        registerCommand(new VoteCommand(this));
     }
 
     @Override

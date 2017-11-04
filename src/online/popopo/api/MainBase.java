@@ -1,6 +1,5 @@
 package online.popopo.api;
 
-import online.popopo.api.command.Command;
 import online.popopo.api.command.CmdManager;
 import online.popopo.api.io.ConfigIO;
 import online.popopo.api.message.Formatter;
@@ -43,11 +42,11 @@ public abstract class MainBase extends JavaPlugin {
         io.read(path, theme);
     }
 
-    public void register(Object o) {
-        command.register(o);
+    public void registerListener(Listener l) {
+        Bukkit.getPluginManager().registerEvents(l, this);
     }
 
-    public void register(Listener l) {
-        Bukkit.getPluginManager().registerEvents(l, this);
+    public void registerCommand(Object o) {
+        command.register(o);
     }
 }

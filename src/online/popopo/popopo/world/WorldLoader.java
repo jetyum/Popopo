@@ -25,7 +25,7 @@ public class WorldLoader {
         }
 
         if (!lobbys.isEmpty()) {
-            p.register(new LobbyListener(lobbys));
+            p.registerListener(new LobbyListener(lobbys));
         }
     }
 
