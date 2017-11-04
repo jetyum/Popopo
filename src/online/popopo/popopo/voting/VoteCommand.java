@@ -12,10 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 @Command(name = "vote")
-public class VoteCommand {
-    private static final int PERIOD = 2400;
+public class VoteCommand implements Listener {
+    private static final int PERIOD = 240;
 
     private final MainBase plugin;
 
@@ -24,9 +25,7 @@ public class VoteCommand {
     public VoteCommand(MainBase p) {
         this.plugin = p;
 
-        Listener l = new VoteListener();
-
-        Bukkit.getPluginManager().registerEvents(l, p);
+        p.registerListener(this);
     }
 
     @SubCommand
@@ -43,12 +42,16 @@ public class VoteCommand {
 
         Player p = ((PlayerNotice) n).getPlayer();
         Vote v = new Vote(p, t, i);
+        VoteHandler h = new VoteHandler(plugin, v);
         BukkitScheduler s = Bukkit.getScheduler();
 
         n.info("Info", "Start voting at now");
-        handler = new VoteHandler(plugin, v);
-        handler.start();
-        s.runTaskLater(plugin, this::stop, PERIOD);
+        h.start();
+        handler = h;
+
+        s.runTaskLater(plugin, () -> {
+            if (h.equals(handler)) stop();
+        }, PERIOD);
     }
 
     public void stop() {
@@ -58,37 +61,35 @@ public class VoteCommand {
         }
     }
 
-    class VoteListener implements Listener {
-        @EventHandler
-        public void onClick(PlayerInteractEvent e) {
-            if (handler == null) return;
+    @EventHandler
+    public void onClick(PlayerInteractEvent e) {
+        if (handler == null) return;
 
-            Ballot b = handler.getBallot(e.getPlayer());
+        Ballot b = handler.getBallot(e.getPlayer());
 
-            if (b == null) return;
+        if (b == null) return;
 
-            b.close(true);
+        b.close(true);
 
-            if (handler.isFinished()) {
-                stop();
-            }
+        if (handler.isFinished()) {
+            stop();
         }
+    }
 
-        @EventHandler
-        public void onScroll(PlayerItemHeldEvent e) {
-            if (handler == null) return;
+    @EventHandler
+    public void onScroll(PlayerItemHeldEvent e) {
+        if (handler == null) return;
 
-            Ballot b = handler.getBallot(e.getPlayer());
+        Ballot b = handler.getBallot(e.getPlayer());
 
-            if (b == null) return;
+        if (b == null) return;
 
-            int d = e.getNewSlot() - e.getPreviousSlot();
+        int d = e.getNewSlot() - e.getPreviousSlot();
 
-            if ((d > 0 && d != 8) || d == -8) {
-                b.incrementIndex();
-            } else {
-                b.decrementIndex();
-            }
+        if ((d > 0 && d != 8) || d == -8) {
+            b.incrementIndex();
+        } else {
+            b.decrementIndex();
         }
     }
 }
