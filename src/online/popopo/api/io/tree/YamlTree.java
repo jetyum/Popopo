@@ -1,4 +1,4 @@
-package online.popopo.api.io;
+package online.popopo.api.io.tree;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemorySection;
@@ -12,26 +12,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Config extends Tree {
-    private final File dataFolder;
+public class YamlTree extends Tree {
     private final FileConfiguration config;
 
-    public Config(File dataFolder) {
+    public YamlTree() {
         super(null);
-        this.dataFolder = dataFolder;
         this.config = new YamlConfiguration();
     }
 
-    public void load(String path) throws IOException {
+    public void load(File f) throws IOException {
         try {
-            config.load(new File(dataFolder, path));
+            config.load(f);
         } catch (InvalidConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public void save(String path) throws IOException {
-        config.save(new File(dataFolder, path));
+    public void save(File f) throws IOException {
+        config.save(f);
     }
 
     @Override

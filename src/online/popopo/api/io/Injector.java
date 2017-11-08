@@ -1,22 +1,21 @@
 package online.popopo.api.io;
 
-import java.lang.annotation.Annotation;
+import online.popopo.api.io.tree.Tree;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Injector {
-    private String getKeyIfHas(Field f) {
-        for (Annotation a : f.getAnnotations()) {
-            if (a instanceof Property) {
-                return ((Property) a).key();
-            }
+    private static String getKeyIfHas(Field f) {
+        if (f.isAnnotationPresent(Inject.class)) {
+            return f.getAnnotation(Inject.class).key();
+        } else {
+            return null;
         }
-
-        return null;
     }
 
-    public <T> void inject(Tree from, T to) {
+    public static <T> void inject(Tree from, T to) {
         Class t = to.getClass();
 
         for (Field f : t.getDeclaredFields()) {
@@ -36,7 +35,7 @@ public class Injector {
         }
     }
 
-    public <T> void inject(T from, Tree to) {
+    public static <T> void inject(T from, Tree to) {
         Class t = from.getClass();
 
         for (Field f : t.getDeclaredFields()) {
@@ -56,7 +55,8 @@ public class Injector {
         }
     }
 
-    private <T> T newInstance(Class<T> t, String name) {
+    private static <T> T newInstance(Class<T> t,
+                                     String name) {
         try {
             T v = t.newInstance();
 
@@ -76,8 +76,9 @@ public class Injector {
         }
     }
 
-    public <T> void inject(Tree from, Map<String, T> to,
-                           Class<T> t) {
+    public static <T> void inject(Tree from,
+                                  Map<String, T> to,
+                                  Class<T> t) {
         for (String k : from.keys()) {
             T v = newInstance(t, k);
 
@@ -86,7 +87,8 @@ public class Injector {
         }
     }
 
-    public <T> void inject(Map<String, T> from, Tree to) {
+    public static <T> void inject(Map<String, T> from,
+                                  Tree to) {
         for (String k : from.keySet()) {
             Map<String, Object> v = new HashMap<>();
 

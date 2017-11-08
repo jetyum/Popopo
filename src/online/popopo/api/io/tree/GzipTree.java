@@ -1,6 +1,4 @@
-package online.popopo.api.io;
-
-import com.google.common.io.Files;
+package online.popopo.api.io.tree;
 
 import java.io.*;
 import java.util.HashMap;
@@ -9,14 +7,11 @@ import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class Data extends Tree {
-    private final File dataFolder;
-
+public class GzipTree extends Tree {
     private Map<String, Object> data;
 
-    public Data(File dataFolder) {
+    public GzipTree() {
         super(null);
-        this.dataFolder = dataFolder;
         this.data = new HashMap<>();
     }
 
@@ -38,12 +33,6 @@ public class Data extends Tree {
         objIn.close();
     }
 
-    public void load(String path) throws IOException {
-        File f = new File(dataFolder, path);
-
-        load(new FileInputStream(f));
-    }
-
     public void save(OutputStream out) throws IOException {
         GZIPOutputStream zipOut;
         ObjectOutputStream objOut;
@@ -53,13 +42,6 @@ public class Data extends Tree {
 
         objOut.writeObject(data);
         objOut.close();
-    }
-
-    public void save(String path) throws IOException {
-        File f = new File(dataFolder, path);
-
-        Files.createParentDirs(f);
-        save(new FileOutputStream(f));
     }
 
     @Override
