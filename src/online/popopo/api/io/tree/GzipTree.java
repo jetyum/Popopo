@@ -1,5 +1,7 @@
 package online.popopo.api.io.tree;
 
+import org.apache.commons.lang3.Validate;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +48,8 @@ public class GzipTree extends Tree {
 
     @Override
     public void set(String key, Object v) {
+        Validate.notEmpty(key);
+
         Class<?> t = v.getClass();
 
         if (t.isEnum()) {
@@ -57,6 +61,8 @@ public class GzipTree extends Tree {
 
     @Override
     public <T> Object get(String key, Class<T> t) {
+        if (key.isEmpty()) return data;
+
         Object o = data.get(key);
 
         if (t.isEnum() && o instanceof String) {

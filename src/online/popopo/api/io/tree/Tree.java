@@ -1,5 +1,7 @@
 package online.popopo.api.io.tree;
 
+import org.apache.commons.lang3.Validate;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +41,7 @@ public abstract class Tree {
     }
 
     public boolean contains(String key) {
-        return keys().contains(key);
+        return keys().contains(key) || key.isEmpty();
     }
 
     public class MapTree extends Tree {
@@ -52,6 +54,8 @@ public abstract class Tree {
 
         @Override
         public void set(String key, Object v) {
+            Validate.notEmpty(key);
+
             Class<?> t = v.getClass();
 
             if (t.isEnum()) {
@@ -63,6 +67,8 @@ public abstract class Tree {
 
         @Override
         public <T> Object get(String key, Class<T> t) {
+            if (key.isEmpty()) return map;
+
             Object o = map.get(key);
 
             if (t.isEnum() && o instanceof String) {
