@@ -104,6 +104,8 @@ public class TeleportListener implements Listener {
         Domain from = new Domain(p.getWorld());
         Domain to = new Domain(e.getRespawnLocation());
 
+        if (from.equals(to)) return;
+
         if (canSwitch(from, to)) {
             Location l = from.getSpawnLocation();
 
