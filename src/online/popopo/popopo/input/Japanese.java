@@ -1,7 +1,7 @@
 package online.popopo.popopo.input;
 
 import com.google.gson.Gson;
-import online.popopo.api.io.Property;
+import online.popopo.api.io.Inject;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -11,16 +11,16 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Japanese implements Converter{
+public class Japanese implements Converter {
     private static final int CANDIDATE_NUM = 2;
 
     private static final Pattern pattern
             = Pattern.compile("\\p{ASCII}+$");
 
-    @Property(key = "table")
+    @Inject(key = "table")
     private Map<String, String[]> table;
 
-    @Property(key = "url")
+    @Inject(key = "url")
     private String url;
 
     private Reader requestJsonFrom(String kana) {

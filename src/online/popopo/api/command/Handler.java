@@ -1,6 +1,6 @@
 package online.popopo.api.command;
 
-import online.popopo.api.message.Notice;
+import online.popopo.api.notice.Notice;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

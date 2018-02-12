@@ -1,12 +1,11 @@
 package online.popopo.popopo.protection;
 
-import online.popopo.api.MainBase;
 import online.popopo.api.command.Command;
 import online.popopo.api.command.NameGetter;
 import online.popopo.api.command.SubCommand;
 import online.popopo.api.command.ValueGetter;
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import online.popopo.api.selection.AreaSelector;
 import online.popopo.api.selection.Cuboid;
 import online.popopo.popopo.protection.Reserve.Priority;
@@ -23,8 +22,8 @@ public class ProtectCommand {
     private final Map<String, Reserve> reserves;
     private final Map<String, License> licenses;
 
-    public ProtectCommand(MainBase p, Judge j) {
-        this.selector = p.getSelector();
+    public ProtectCommand(AreaSelector s, Judge j) {
+        this.selector = s;
         this.reserves = j.getReserves();
         this.licenses = j.getLicenses();
     }

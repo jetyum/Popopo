@@ -1,4 +1,4 @@
-package online.popopo.api.message;
+package online.popopo.api.notice;
 
 import online.popopo.api.io.Inject;
 import org.bukkit.ChatColor;

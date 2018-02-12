@@ -3,7 +3,7 @@ package online.popopo.popopo.system;
 import com.sun.management.OperatingSystemMXBean;
 import online.popopo.api.command.Command;
 import online.popopo.api.command.SubCommand;
-import online.popopo.api.message.Notice;
+import online.popopo.api.notice.Notice;
 
 import java.lang.management.ManagementFactory;
 

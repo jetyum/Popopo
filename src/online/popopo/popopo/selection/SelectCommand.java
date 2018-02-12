@@ -1,10 +1,9 @@
 package online.popopo.popopo.selection;
 
-import online.popopo.api.MainBase;
 import online.popopo.api.command.Command;
 import online.popopo.api.command.SubCommand;
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import online.popopo.api.selection.AreaSelector;
 import org.bukkit.entity.Player;
 
@@ -12,8 +11,8 @@ import org.bukkit.entity.Player;
 public class SelectCommand {
     private final AreaSelector selector;
 
-    public SelectCommand(MainBase p) {
-        this.selector = p.getSelector();
+    public SelectCommand(AreaSelector s) {
+        this.selector = s;
     }
 
     @SubCommand()

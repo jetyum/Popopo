@@ -1,6 +1,7 @@
 package online.popopo.popopo.protection;
 
-import online.popopo.api.io.Property;
+import online.popopo.api.io.Name;
+import online.popopo.api.io.Inject;
 
 import java.util.Map;
 
@@ -25,10 +26,10 @@ public class License {
     public static final String IGNITE_BLOCK = "ignite_block";
     public static final String IGNITE_ENTITY = "ignite_entity";
 
-    @Property(key = "name")
+    @Name
     private String name;
 
-    @Property()
+    @Inject()
     private Map<String, Map<String, Boolean>> config;
 
     public String getName() {

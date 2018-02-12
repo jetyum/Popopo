@@ -1,7 +1,7 @@
 package online.popopo.popopo.voting;
 
-import online.popopo.api.message.Guideable;
-import online.popopo.api.message.Notice;
+import online.popopo.api.notice.Guideable;
+import online.popopo.api.notice.Notice;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

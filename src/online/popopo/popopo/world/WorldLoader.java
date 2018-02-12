@@ -1,17 +1,19 @@
 package online.popopo.popopo.world;
 
-import online.popopo.api.MainBase;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
 public class WorldLoader {
-    public void load(MainBase p, Map<String, WorldInfo> m) {
+    public static void load(Plugin p,
+                            Map<String, WorldInfo> m) {
         Set<World> lobbys = new HashSet<>();
 
         for (WorldInfo i : m.values()) {
@@ -25,11 +27,13 @@ public class WorldLoader {
         }
 
         if (!lobbys.isEmpty()) {
-            p.registerListener(new LobbyListener(lobbys));
+            Listener l = new LobbyListener(lobbys);
+
+            Bukkit.getPluginManager().registerEvents(l, p);
         }
     }
 
-    private class LobbyListener implements Listener {
+    private static class LobbyListener implements Listener {
         private final Set<World> lobbys;
 
         private LobbyListener(Set<World> lobbys) {

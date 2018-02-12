@@ -1,6 +1,6 @@
 package online.popopo.popopo.portal;
 
-import online.popopo.api.message.Guideable;
+import online.popopo.api.notice.Guideable;
 import online.popopo.api.selection.Cuboid;
 import org.bukkit.Location;
 import org.bukkit.World;

@@ -1,4 +1,4 @@
-package online.popopo.api.message;
+package online.popopo.api.notice;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;

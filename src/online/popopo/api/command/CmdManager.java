@@ -1,7 +1,7 @@
 package online.popopo.api.command;
 
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.Formatter;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.Formatter;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;

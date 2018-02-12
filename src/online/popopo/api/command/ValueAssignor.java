@@ -1,6 +1,6 @@
 package online.popopo.api.command;
 
-import online.popopo.api.message.Notice;
+import online.popopo.api.notice.Notice;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.lang.reflect.Method;

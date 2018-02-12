@@ -1,37 +1,38 @@
 package online.popopo.popopo.world;
 
-import online.popopo.api.io.Property;
+import online.popopo.api.io.Name;
+import online.popopo.api.io.Inject;
 import org.bukkit.Difficulty;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
 public class WorldInfo {
-    @Property(key = "name")
+    @Name
     private String name;
 
-    @Property(key = "environment")
+    @Inject(key = "environment")
     private Environment environment = null;
 
-    @Property(key = "seed")
+    @Inject(key = "seed")
     private Long seed = null;
 
-    @Property(key = "structures")
+    @Inject(key = "structures")
     private Boolean structures = null;
 
-    @Property(key = "world_preset")
+    @Inject(key = "world_preset")
     private String preset = null;
 
-    @Property(key = "world_type")
+    @Inject(key = "world_type")
     private WorldType type = null;
 
-    @Property(key = "lobby_world")
+    @Inject(key = "lobby_world")
     private boolean lobby = false;
 
-    @Property(key = "difficulty")
+    @Inject(key = "difficulty")
     private Difficulty difficulty = Difficulty.EASY;
 
-    @Property(key = "pvp")
+    @Inject(key = "pvp")
     private boolean pvp = true;
 
     public WorldCreator worldCreator() {

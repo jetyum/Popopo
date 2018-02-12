@@ -1,8 +1,8 @@
-package online.popopo.api.message;
+package online.popopo.api.notice;
 
-import online.popopo.api.message.UserNotice.BlockNotice;
-import online.popopo.api.message.UserNotice.ConsoleNotice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.UserNotice.BlockNotice;
+import online.popopo.api.notice.UserNotice.ConsoleNotice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import org.bukkit.ChatColor;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;

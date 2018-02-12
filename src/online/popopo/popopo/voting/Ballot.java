@@ -1,7 +1,7 @@
 package online.popopo.popopo.voting;
 
-import online.popopo.api.message.Formatter;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Formatter;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import online.popopo.popopo.voting.Vote.Choice;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;

@@ -1,6 +1,6 @@
 package online.popopo.popopo.protection;
 
-import online.popopo.api.message.Guideable;
+import online.popopo.api.notice.Guideable;
 import online.popopo.api.selection.Cuboid;
 
 import java.io.Serializable;

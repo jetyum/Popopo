@@ -1,23 +1,25 @@
 package online.popopo.popopo.voting;
 
-import online.popopo.api.MainBase;
-import online.popopo.api.message.Formatter;
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Formatter;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class VoteHandler {
-    private final MainBase plugin;
+    private final Plugin plugin;
     private final Vote vote;
+    private final Formatter formatter;
     private final Map<Player, Ballot> ballots;
 
-    public VoteHandler(MainBase p, Vote v) {
+    public VoteHandler(Plugin p, Vote v, Formatter f) {
         this.plugin = p;
         this.vote = v;
+        this.formatter = f;
         this.ballots = new HashMap<>();
     }
 
@@ -36,10 +38,8 @@ public class VoteHandler {
     }
 
     public void start() {
-        Formatter f = plugin.getFormatter();
-
         for (Player p : Bukkit.getOnlinePlayers()) {
-            PlayerNotice n = Notice.create(f, p);
+            PlayerNotice n = Notice.create(formatter, p);
             Ballot b = new Ballot(plugin, n, vote);
 
             b.open();
@@ -48,7 +48,7 @@ public class VoteHandler {
     }
 
     public void stop() {
-        Notice n = Notice.create(plugin.getFormatter());
+        Notice n = Notice.create(formatter);
 
         for (Ballot b : ballots.values()) {
             b.close(false);

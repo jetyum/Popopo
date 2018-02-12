@@ -1,31 +1,33 @@
 package online.popopo.popopo.voting;
 
-import online.popopo.api.MainBase;
 import online.popopo.api.command.Command;
 import online.popopo.api.command.SubCommand;
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Formatter;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 @Command(name = "vote")
 public class VoteCommand implements Listener {
-    private static final int PERIOD = 240;
+    private static final int PERIOD = 2400;
 
-    private final MainBase plugin;
+    private final Plugin plugin;
+    private final Formatter formatter;
 
     private VoteHandler handler = null;
 
-    public VoteCommand(MainBase p) {
+    public VoteCommand(Plugin p, Formatter f) {
         this.plugin = p;
+        this.formatter = f;
 
-        p.registerListener(this);
+        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     @SubCommand
@@ -42,7 +44,7 @@ public class VoteCommand implements Listener {
 
         Player p = ((PlayerNotice) n).getPlayer();
         Vote v = new Vote(p, t, i);
-        VoteHandler h = new VoteHandler(plugin, v);
+        VoteHandler h = new VoteHandler(plugin, v, formatter);
         BukkitScheduler s = Bukkit.getScheduler();
 
         n.info("Info", "Start voting at now");

@@ -1,8 +1,8 @@
 package online.popopo.api.selection;
 
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
-import online.popopo.api.message.Formatter;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;

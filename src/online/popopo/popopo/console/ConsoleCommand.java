@@ -1,25 +1,26 @@
 package online.popopo.popopo.console;
 
-import online.popopo.api.MainBase;
 import online.popopo.api.command.Command;
 import online.popopo.api.command.SubCommand;
-import online.popopo.api.message.Notice;
-import online.popopo.api.message.UserNotice.PlayerNotice;
+import online.popopo.api.notice.Notice;
+import online.popopo.api.notice.UserNotice.PlayerNotice;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.plugin.Plugin;
 
 @Command(name = "console")
 public class ConsoleCommand implements Listener {
     private final ProcessHandler handler;
 
-    public ConsoleCommand(MainBase p) {
+    public ConsoleCommand(Plugin p) {
         this.handler = new ProcessHandler(p);
 
-        p.registerListener(this);
+        Bukkit.getPluginManager().registerEvents(this, p);
     }
 
     @SubCommand()
