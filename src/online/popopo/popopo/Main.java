@@ -10,8 +10,8 @@ import online.popopo.api.notice.Theme;
 import online.popopo.api.selection.AreaSelector;
 import online.popopo.popopo.input.InputListener;
 import online.popopo.popopo.console.ConsoleCommand;
-import online.popopo.popopo.news.NewsListener;
-import online.popopo.popopo.news.ServerNews;
+import online.popopo.popopo.notice.NoticeListener;
+import online.popopo.popopo.notice.ServerNotice;
 import online.popopo.popopo.portal.Portal;
 import online.popopo.popopo.portal.PortalCommand;
 import online.popopo.popopo.portal.PortalListener;
@@ -48,7 +48,7 @@ public class Main extends JavaPlugin {
     private CmdManager command;
     private AreaSelector selector;
     private Japanese jpn = new Japanese();
-    private ServerNews news = new ServerNews();
+    private ServerNotice notice = new ServerNotice();
     private Map<String, WorldInfo> worlds = new HashMap<>();
     private Map<String, License> licenses = new HashMap<>();
 
@@ -82,11 +82,11 @@ public class Main extends JavaPlugin {
         }
 
         try {
-            Config c = new Config(this, "news.yml");
+            Config c = new Config(this, "notice.yml");
             c.load();
-            Injector.inject(c, news);
+            Injector.inject(c, notice);
         } catch (IOException e) {
-            getLogger().info("Server news wasn't loaded");
+            getLogger().info("Server notice wasn't loaded");
         }
 
         try {
@@ -142,7 +142,7 @@ public class Main extends JavaPlugin {
                 new EntityListener(judge),
                 new ExplosionListener(judge),
                 new PlayerListener(judge),
-                new NewsListener(this, news, formatter)
+                new NoticeListener(this, notice, formatter)
         );
 
         registerCommands(
