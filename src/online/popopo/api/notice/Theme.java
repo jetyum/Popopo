@@ -1,25 +1,25 @@
 package online.popopo.api.message;
 
-import online.popopo.api.io.Property;
+import online.popopo.api.io.Inject;
 import org.bukkit.ChatColor;
 
 public class Theme {
-    @Property(key = "text")
+    @Inject(key = "text")
     private ChatColor text = ChatColor.WHITE;
 
-    @Property(key = "highlight")
+    @Inject(key = "highlight")
     private ChatColor highlight = ChatColor.WHITE;
 
-    @Property(key = "info")
+    @Inject(key = "info")
     private ChatColor info = ChatColor.WHITE;
 
-    @Property(key = "good")
+    @Inject(key = "good")
     private ChatColor good = ChatColor.WHITE;
 
-    @Property(key = "bad")
+    @Inject(key = "bad")
     private ChatColor bad = ChatColor.WHITE;
 
-    @Property(key = "warning")
+    @Inject(key = "warning")
     private ChatColor warning = ChatColor.WHITE;
 
     public ChatColor getText() {

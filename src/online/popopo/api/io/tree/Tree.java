@@ -19,6 +19,8 @@ public abstract class Tree {
 
     public abstract Set<String> keys();
 
+    public abstract boolean contains(String key);
+
     public Tree parent() {
         return parent;
     }
@@ -38,10 +40,6 @@ public abstract class Tree {
 
     public boolean isEmpty() {
         return keys().isEmpty();
-    }
-
-    public boolean contains(String key) {
-        return keys().contains(key) || key.isEmpty();
     }
 
     public class MapTree extends Tree {
@@ -83,6 +81,11 @@ public abstract class Tree {
         @Override
         public Set<String> keys() {
             return map.keySet();
+        }
+
+        @Override
+        public boolean contains(String key) {
+            return map.containsKey(key) || key.isEmpty();
         }
     }
 }

@@ -78,4 +78,9 @@ public class GzipTree extends Tree {
     public Set<String> keys() {
         return data.keySet();
     }
+
+    @Override
+    public boolean contains(String key) {
+        return data.containsKey(key) || key.isEmpty();
+    }
 }

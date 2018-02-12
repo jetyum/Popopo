@@ -80,4 +80,9 @@ public class YamlTree extends Tree {
     public Set<String> keys() {
         return config.getKeys(false);
     }
+
+    @Override
+    public boolean contains(String key) {
+        return config.contains(key);
+    }
 }
