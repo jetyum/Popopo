@@ -1,12 +1,12 @@
-package online.popopo.api.function.command;
+package online.popopo.api.wrapper.command;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SubCommand {
-    String[] name() default {};
+public @interface Command {
+    String name();
 }

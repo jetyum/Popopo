@@ -1,13 +1,13 @@
 package online.popopo.popopo;
 
 import online.popopo.api.function.FunctionManager;
-import online.popopo.api.function.command.CommandManager;
+import online.popopo.api.wrapper.command.CommandManager;
 import online.popopo.api.io.*;
 import online.popopo.api.io.tree.Config;
 import online.popopo.api.notice.Formatter;
 import online.popopo.api.notice.Theme;
 import online.popopo.api.selection.AreaSelector;
-import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.wrapper.listener.ListenerManager;
 import online.popopo.popopo.console.ConsoleFunc;
 import online.popopo.popopo.domain.DomainFunc;
 import online.popopo.popopo.input.InputFunc;
@@ -40,16 +40,16 @@ public class Main extends JavaPlugin {
 
         manager.register(
                 new ConsoleFunc(),
-                new WorldFunc(),
-                new VoteFunc(),
-                new TransferFunc(),
-                new SystemFunc(),
-                new SelectFunc(),
-                new ProtectFunc(),
-                new PortalFunc(),
-                new NoticeFunc(),
+                new DomainFunc(),
                 new InputFunc(),
-                new DomainFunc()
+                new NoticeFunc(),
+                new PortalFunc(),
+                new ProtectFunc(),
+                new SelectFunc(),
+                new SystemFunc(),
+                new TransferFunc(),
+                new VoteFunc(),
+                new WorldFunc()
         );
         manager.registerVariable(
                 this,

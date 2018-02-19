@@ -3,7 +3,7 @@ package online.popopo.popopo.domain;
 import net.minecraft.server.v1_12_R1.*;
 import online.popopo.api.function.Function;
 import online.popopo.api.function.Variable;
-import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.wrapper.listener.ListenerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

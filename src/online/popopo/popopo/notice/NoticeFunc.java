@@ -1,7 +1,7 @@
 package online.popopo.popopo.notice;
 
 import online.popopo.api.function.Variable;
-import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.wrapper.listener.ListenerManager;
 import online.popopo.api.io.Injector;
 import online.popopo.api.io.tree.Config;
 import online.popopo.api.notice.Formatter;

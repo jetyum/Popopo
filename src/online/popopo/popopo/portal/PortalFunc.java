@@ -1,8 +1,8 @@
 package online.popopo.popopo.portal;
 
 import online.popopo.api.function.Variable;
-import online.popopo.api.function.command.*;
-import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.wrapper.command.*;
+import online.popopo.api.wrapper.listener.ListenerManager;
 import online.popopo.api.io.Inject;
 import online.popopo.api.io.Injector;
 import online.popopo.api.io.tree.Data;

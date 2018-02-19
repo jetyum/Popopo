@@ -1,7 +1,7 @@
 package online.popopo.popopo.transfer;
 
 import online.popopo.api.function.Variable;
-import online.popopo.api.function.command.*;
+import online.popopo.api.wrapper.command.*;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
 import online.popopo.api.function.Function;

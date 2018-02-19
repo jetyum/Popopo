@@ -1,4 +1,4 @@
-package online.popopo.api.function.command;
+package online.popopo.api.wrapper.command;
 
 import online.popopo.api.notice.Notice;
 

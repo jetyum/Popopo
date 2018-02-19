@@ -1,10 +1,10 @@
 package online.popopo.popopo.console;
 
 import online.popopo.api.function.Variable;
-import online.popopo.api.function.command.Command;
-import online.popopo.api.function.command.CommandManager;
-import online.popopo.api.function.command.SubCommand;
-import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.wrapper.command.Command;
+import online.popopo.api.wrapper.command.CommandManager;
+import online.popopo.api.wrapper.command.SubCommand;
+import online.popopo.api.wrapper.listener.ListenerManager;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
 import online.popopo.api.function.Function;

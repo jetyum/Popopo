@@ -1,4 +1,4 @@
-package online.popopo.api.function.listener;
+package online.popopo.api.wrapper.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;

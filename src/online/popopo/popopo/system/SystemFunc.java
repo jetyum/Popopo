@@ -2,9 +2,9 @@ package online.popopo.popopo.system;
 
 import com.sun.management.OperatingSystemMXBean;
 import online.popopo.api.function.Variable;
-import online.popopo.api.function.command.Command;
-import online.popopo.api.function.command.CommandManager;
-import online.popopo.api.function.command.SubCommand;
+import online.popopo.api.wrapper.command.Command;
+import online.popopo.api.wrapper.command.CommandManager;
+import online.popopo.api.wrapper.command.SubCommand;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.function.Function;
 
