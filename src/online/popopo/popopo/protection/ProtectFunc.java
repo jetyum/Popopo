@@ -1,31 +1,94 @@
 package online.popopo.popopo.protection;
 
-import online.popopo.api.command.Command;
-import online.popopo.api.command.NameGetter;
-import online.popopo.api.command.SubCommand;
-import online.popopo.api.command.ValueGetter;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.*;
+import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.io.Inject;
+import online.popopo.api.io.Injector;
+import online.popopo.api.io.tree.Config;
+import online.popopo.api.io.tree.Data;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.function.Function;
 import online.popopo.api.selection.AreaSelector;
 import online.popopo.api.selection.Cuboid;
 import online.popopo.popopo.protection.Reserve.Priority;
+import online.popopo.popopo.protection.listener.BlockListener;
+import online.popopo.popopo.protection.listener.EntityListener;
+import online.popopo.popopo.protection.listener.ExplosionListener;
+import online.popopo.popopo.protection.listener.PlayerListener;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(name = "protect")
-public class ProtectCommand {
-    private final AreaSelector selector;
+public class ProtectFunc extends Function {
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private ListenerManager listenerManager;
+    @Variable
+    private CommandManager commandManager;
+    @Variable
+    private AreaSelector selector;
+
+    @Inject(key = "reserves")
     private final Map<String, Reserve> reserves;
+
     private final Map<String, License> licenses;
 
-    public ProtectCommand(AreaSelector s, Judge j) {
-        this.selector = s;
-        this.reserves = j.getReserves();
-        this.licenses = j.getLicenses();
+    public ProtectFunc() {
+        this.reserves = new HashMap<>();
+        this.licenses = new HashMap<>();
+    }
+
+    @Override
+    public void load() {
+        try {
+            Data d = new Data(plugin, ".data/reserve.gz");
+            d.load();
+            Injector.inject(d, this);
+        } catch (IOException e) {
+            plugin.getLogger().info("Reserve wasn't loaded");
+        }
+
+        try {
+            Config c = new Config(plugin, "license.yml");
+            c.load();
+            Injector.inject(c, licenses, License.class);
+        } catch (IOException e) {
+            plugin.getLogger().info("License wasn't loaded");
+        }
+    }
+
+    @Override
+    public void enable() {
+        Judge judge = new Judge(reserves, licenses);
+
+        listenerManager.register(
+                new BlockListener(judge),
+                new EntityListener(judge),
+                new ExplosionListener(judge),
+                new PlayerListener(judge)
+        );
+        commandManager.register(this);
+    }
+
+    @Override
+    public void disable() {
+        try {
+            Data d = new Data(plugin, ".data/reserve.gz");
+            Injector.inject(this, d);
+            d.save();
+        } catch (IOException e) {
+            plugin.getLogger().info("Reserve wasn't saved");
+        }
     }
 
     @SubCommand(name = "create")

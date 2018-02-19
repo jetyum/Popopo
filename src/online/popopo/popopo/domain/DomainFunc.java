@@ -1,6 +1,9 @@
 package online.popopo.popopo.domain;
 
 import net.minecraft.server.v1_12_R1.*;
+import online.popopo.api.function.Function;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.listener.ListenerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -16,13 +19,19 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import static net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction.*;
 
-public class TeleportListener implements Listener {
-    private final Plugin plugin;
-    private final Switcher switcher;
+public class DomainFunc extends Function implements Listener {
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private ListenerManager listenerManager;
 
-    public TeleportListener(Plugin p) {
-        this.plugin = p;
-        this.switcher = new Switcher(p);
+    private Switcher switcher;
+
+    @Override
+    public void enable() {
+        switcher = new Switcher(plugin);
+
+        listenerManager.register(this);
     }
 
     private boolean canSwitch(Domain a, Domain b) {

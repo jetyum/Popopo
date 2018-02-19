@@ -1,4 +1,4 @@
-package online.popopo.api.command;
+package online.popopo.api.function.command;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

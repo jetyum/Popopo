@@ -1,6 +1,11 @@
 package online.popopo.popopo.input;
 
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.io.Injector;
+import online.popopo.api.io.tree.Resource;
 import online.popopo.api.notice.Formatter;
+import online.popopo.api.function.Function;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,26 +15,46 @@ import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class InputListener implements Listener {
+public class InputFunc extends Function implements Listener {
     private static final long MAX_LENGTH = 50;
     private static final long BUFF_SIZE = 10;
 
-    private final Plugin plugin;
-    private final Converter converter;
-    private final Formatter formatter;
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private Formatter formatter;
+    @Variable
+    private ListenerManager listenerManager;
+
+    private final Japanese japanese;
     private final Deque<Set<String>> buffer;
     private final Set<String> roster;
 
-    public InputListener(Plugin p, Converter c, Formatter f) {
-        this.plugin = p;
-        this.converter = c;
-        this.formatter = f;
+    public InputFunc() {
+        this.japanese = new Japanese();
         this.buffer = new LinkedBlockingDeque<>();
         this.roster = new CopyOnWriteArraySet<>();
+    }
+
+    @Override
+    public void load() {
+        try {
+            Resource r = new Resource(plugin, "kana.gz");
+            r.load();
+            Injector.inject(r, japanese);
+        } catch (IOException e) {
+            plugin.getLogger().info("Language wasn't loaded");
+        }
+    }
+
+    @Override
+    public void enable() {
+        listenerManager.register(this);
     }
 
     private Set<String> candidateOf(String token) {
@@ -58,7 +83,7 @@ public class InputListener implements Listener {
 
         if (!c.isEmpty()) return;
 
-        c.addAll(converter.convert(s, true));
+        c.addAll(japanese.convert(s, true));
 
         roster.add(p.getName());
         new BukkitRunnable() {
@@ -68,7 +93,7 @@ public class InputListener implements Listener {
                     buffer.pop();
                 }
 
-                buffer.push(converter.convert(s, false));
+                buffer.push(japanese.convert(s, false));
                 roster.remove(p.getName());
             }
         }.runTaskAsynchronously(plugin);

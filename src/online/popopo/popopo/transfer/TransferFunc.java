@@ -1,11 +1,10 @@
-package online.popopo.popopo.world;
+package online.popopo.popopo.transfer;
 
-import online.popopo.api.command.Command;
-import online.popopo.api.command.NameGetter;
-import online.popopo.api.command.SubCommand;
-import online.popopo.api.command.ValueGetter;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.*;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,7 +13,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(name = "transfer")
-public class TransferCommand {
+public class TransferFunc extends Function {
+    @Variable
+    private CommandManager commandManager;
+
+    @Override
+    public void enable() {
+        commandManager.register(this);
+    }
+
     @SubCommand()
     public void transfer(Notice n, World w) {
         if (!(n instanceof PlayerNotice)) {

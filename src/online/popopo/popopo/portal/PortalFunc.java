@@ -1,27 +1,69 @@
 package online.popopo.popopo.portal;
 
-import online.popopo.api.command.Command;
-import online.popopo.api.command.NameGetter;
-import online.popopo.api.command.SubCommand;
-import online.popopo.api.command.ValueGetter;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.*;
+import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.io.Inject;
+import online.popopo.api.io.Injector;
+import online.popopo.api.io.tree.Data;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.function.Function;
 import online.popopo.api.selection.AreaSelector;
 import online.popopo.api.selection.Cuboid;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(name = "portal")
-public class PortalCommand {
-    private final AreaSelector selector;
+public class PortalFunc extends Function {
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private ListenerManager listenerManager;
+    @Variable
+    private CommandManager commandManager;
+    @Variable
+    private AreaSelector selector;
+
+    @Inject(key = "portals")
     private final Map<String, Portal> portals;
 
-    public PortalCommand(AreaSelector s, Map<String, Portal> m) {
-        this.selector = s;
-        this.portals = m;
+    public PortalFunc() {
+        this.portals = new HashMap<>();
+    }
+
+    @Override
+    public void load() {
+        try {
+            Data d = new Data(plugin, ".data/portal.gz");
+            d.load();
+            Injector.inject(d, this);
+        } catch (IOException e) {
+            plugin.getLogger().info("Portal wasn't loaded");
+        }
+    }
+
+    @Override
+    public void enable() {
+        listenerManager.register(new PortalListener(portals));
+        commandManager.register(this);
+    }
+
+    @Override
+    public void disable() {
+        try {
+            Data d = new Data(plugin, ".data/portal.gz");
+            Injector.inject(this, d);
+            d.save();
+        } catch (IOException e) {
+            plugin.getLogger().info("Portal wasn't saved");
+        }
     }
 
     @SubCommand(name = "create")

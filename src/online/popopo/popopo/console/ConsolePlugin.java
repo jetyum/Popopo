@@ -1,12 +1,15 @@
 package online.popopo.popopo.console;
 
-import online.popopo.api.command.Command;
-import online.popopo.api.command.SubCommand;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.Command;
+import online.popopo.api.function.command.CommandManager;
+import online.popopo.api.function.command.SubCommand;
+import online.popopo.api.function.listener.ListenerManager;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.function.Function;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,13 +17,22 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 
 @Command(name = "console")
-public class ConsoleCommand implements Listener {
-    private final ProcessHandler handler;
+public class ConsolePlugin extends Function implements Listener {
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private ListenerManager listenerManager;
+    @Variable
+    private CommandManager commandManager;
 
-    public ConsoleCommand(Plugin p) {
-        this.handler = new ProcessHandler(p);
+    private ProcessHandler handler;
 
-        Bukkit.getPluginManager().registerEvents(this, p);
+    @Override
+    public void enable() {
+        handler = new ProcessHandler(plugin);
+
+        listenerManager.register(this);
+        commandManager.register(this);
     }
 
     @SubCommand()
@@ -60,8 +72,8 @@ public class ConsoleCommand implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPluginDisable(PluginDisableEvent e) {
+    @Override
+    public void disable() {
         IOUtils.closeQuietly(handler);
     }
 }

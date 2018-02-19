@@ -1,18 +1,25 @@
 package online.popopo.popopo.selection;
 
-import online.popopo.api.command.Command;
-import online.popopo.api.command.SubCommand;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.Command;
+import online.popopo.api.function.command.CommandManager;
+import online.popopo.api.function.command.SubCommand;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.function.Function;
 import online.popopo.api.selection.AreaSelector;
 import org.bukkit.entity.Player;
 
 @Command(name = "select")
-public class SelectCommand {
-    private final AreaSelector selector;
+public class SelectFunc extends Function {
+    @Variable
+    private CommandManager commandManager;
+    @Variable
+    private AreaSelector selector;
 
-    public SelectCommand(AreaSelector s) {
-        this.selector = s;
+    @Override
+    public void enable() {
+        commandManager.register(this);
     }
 
     @SubCommand()

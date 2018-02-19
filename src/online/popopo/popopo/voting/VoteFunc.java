@@ -1,10 +1,14 @@
 package online.popopo.popopo.voting;
 
-import online.popopo.api.command.Command;
-import online.popopo.api.command.SubCommand;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.Command;
+import online.popopo.api.function.command.CommandManager;
+import online.popopo.api.function.command.SubCommand;
+import online.popopo.api.function.listener.ListenerManager;
 import online.popopo.api.notice.Formatter;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
+import online.popopo.api.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,19 +19,24 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 @Command(name = "vote")
-public class VoteCommand implements Listener {
+public class VoteFunc extends Function implements Listener {
     private static final int PERIOD = 2400;
 
-    private final Plugin plugin;
-    private final Formatter formatter;
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private Formatter formatter;
+    @Variable
+    private ListenerManager listenerManager;
+    @Variable
+    private CommandManager commandManager;
 
     private VoteHandler handler = null;
 
-    public VoteCommand(Plugin p, Formatter f) {
-        this.plugin = p;
-        this.formatter = f;
-
-        Bukkit.getPluginManager().registerEvents(this, p);
+    @Override
+    public void enable() {
+        listenerManager.register(this);
+        commandManager.register(this);
     }
 
     @SubCommand
@@ -73,9 +82,7 @@ public class VoteCommand implements Listener {
 
         b.close(true);
 
-        if (handler.isFinished()) {
-            stop();
-        }
+        if (handler.isFinished()) stop();
     }
 
     @EventHandler
@@ -93,5 +100,10 @@ public class VoteCommand implements Listener {
         } else {
             b.decrementIndex();
         }
+    }
+
+    @Override
+    public void disable() {
+        stop();
     }
 }

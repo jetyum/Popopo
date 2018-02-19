@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Japanese implements Converter {
+public class Japanese {
     private static final int CANDIDATE_NUM = 2;
 
     private static final Pattern pattern
@@ -37,7 +37,7 @@ public class Japanese implements Converter {
         }
     }
 
-    public List<String> candidateOf(String kana) {
+    private List<String> candidateOf(String kana) {
         Reader reader = requestJsonFrom(kana);
         List<List<List<String>>> a = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class Japanese implements Converter {
         return list.subList(0, to);
     }
 
-    public String romaToKana(String roma) {
+    private String romaToKana(String roma) {
         StringBuilder buf = new StringBuilder();
         StringBuilder ret = new StringBuilder();
 
@@ -77,7 +77,6 @@ public class Japanese implements Converter {
         return ret.append(buf).toString();
     }
 
-    @Override
     public Set<String> convert(String s, boolean single) {
         Matcher m = pattern.matcher(s);
         Set<String> set = new HashSet<>();

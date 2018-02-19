@@ -9,6 +9,8 @@ public class ServerNotice extends Notice {
 
     @Override
     public void send(String msg) {
-        Bukkit.broadcastMessage(msg);
+        Bukkit.getOnlinePlayers().forEach((p) -> {
+            p.sendMessage(msg);
+        });
     }
 }

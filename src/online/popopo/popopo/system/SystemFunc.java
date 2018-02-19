@@ -1,14 +1,25 @@
 package online.popopo.popopo.system;
 
 import com.sun.management.OperatingSystemMXBean;
-import online.popopo.api.command.Command;
-import online.popopo.api.command.SubCommand;
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.command.Command;
+import online.popopo.api.function.command.CommandManager;
+import online.popopo.api.function.command.SubCommand;
 import online.popopo.api.notice.Notice;
+import online.popopo.api.function.Function;
 
 import java.lang.management.ManagementFactory;
 
 @Command(name = "system")
-public class SystemCommand {
+public class SystemFunc extends Function {
+    @Variable
+    private CommandManager commandManager;
+
+    @Override
+    public void enable() {
+        commandManager.register(this);
+    }
+
     private String memoryToString(long m) {
         int uint = 0;
         double memory = m;

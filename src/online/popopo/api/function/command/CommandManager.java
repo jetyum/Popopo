@@ -1,4 +1,4 @@
-package online.popopo.api.command;
+package online.popopo.api.function.command;
 
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.Formatter;
@@ -8,11 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.annotation.Annotation;
 
-public class CmdManager {
+public class CommandManager {
     private final JavaPlugin plugin;
     private final Formatter formatter;
 
-    public CmdManager(JavaPlugin p, Formatter f) {
+    public CommandManager(JavaPlugin p, Formatter f) {
         this.plugin = p;
         this.formatter = f;
     }
@@ -46,5 +46,9 @@ public class CmdManager {
 
             return h.complete(n, in);
         });
+    }
+
+    public void register(Object... o) {
+        for (Object object : o) register(object);
     }
 }

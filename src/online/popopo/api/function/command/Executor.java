@@ -1,4 +1,4 @@
-package online.popopo.api.command;
+package online.popopo.api.function.command;
 
 import online.popopo.api.notice.Notice;
 import org.apache.commons.lang3.ArrayUtils;

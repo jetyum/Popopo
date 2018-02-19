@@ -1,8 +1,13 @@
 package online.popopo.popopo.notice;
 
+import online.popopo.api.function.Variable;
+import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.api.io.Injector;
+import online.popopo.api.io.tree.Config;
 import online.popopo.api.notice.Formatter;
 import online.popopo.api.notice.Guideable;
 import online.popopo.api.notice.Notice;
+import online.popopo.api.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,29 +16,49 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class NoticeListener implements Listener, Runnable {
-    private final Plugin plugin;
+public class NoticeFunc extends Function implements Listener, Runnable {
+    @Variable
+    private Plugin plugin;
+    @Variable
+    private Formatter formatter;
+    @Variable
+    private ListenerManager listenerManager;
+
     private final ServerNotice news;
-    private final Formatter formatter;
     private final Random random;
 
-    public NoticeListener(Plugin p, ServerNotice n, Formatter f) {
-        this.plugin = p;
-        this.news = n;
-        this.formatter = f;
+    public NoticeFunc() {
+        this.news = new ServerNotice();
         this.random = new Random();
+    }
 
-        if (n.getInfoArticles() != null) {
-            BukkitScheduler s = Bukkit.getScheduler();
-            int t = n.getInfoPeriod();
-
-            s.runTaskTimerAsynchronously(p, this, t, t);
+    @Override
+    public void load() {
+        try {
+            Config c = new Config(plugin, "notice.yml");
+            c.load();
+            Injector.inject(c, news);
+        } catch (IOException e) {
+            plugin.getLogger().info("Server notice wasn't loaded");
         }
+
+        if (news.getInfoArticles() != null) {
+            BukkitScheduler s = Bukkit.getScheduler();
+            int t = news.getInfoPeriod();
+
+            s.runTaskTimerAsynchronously(plugin, this, t, t);
+        }
+    }
+
+    @Override
+    public void enable() {
+        listenerManager.register(this);
     }
 
     public void showArticle(Notice n, String prefix,
