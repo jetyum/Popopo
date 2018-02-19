@@ -29,26 +29,17 @@ public class EntityListener implements Listener {
     }
 
     private boolean canAttack(Entity e, Entity target) {
-        if (e instanceof Player) {
-            Player p = (Player) e;
-            String a;
+        String a;
 
-            if (target instanceof Player) {
-                a = ATTACK_PLAYER;
-            } else {
-                a = ATTACK_ENTITY;
-            }
-
-            return judge.allows(p, target, a);
+        if (target instanceof Player) {
+            a = ATTACK_PLAYER;
         } else {
-            String a;
+            a = ATTACK_ENTITY;
+        }
 
-            if (target instanceof Player) {
-                a = ATTACK_PLAYER;
-            } else {
-                a = ATTACK_ENTITY;
-            }
-
+        if (e instanceof Player) {
+            return judge.allows((Player) e, target, a);
+        } else {
             return judge.allows(target, a, OPTION_ENTITY);
         }
     }

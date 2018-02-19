@@ -40,11 +40,7 @@ public class Domain {
     public boolean available() {
         World w = getMainWorld();
 
-        if (w == null) {
-            return false;
-        }
-
-        return w.getWorldFolder().exists();
+        return w != null && w.getWorldFolder().exists();
     }
 
     @Override

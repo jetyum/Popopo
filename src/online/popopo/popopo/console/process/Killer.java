@@ -1,15 +1,15 @@
-package online.popopo.popopo.console;
+package online.popopo.popopo.console.process;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-public class ProcessKiller extends BukkitRunnable {
+public class Killer extends BukkitRunnable {
     private final Process process;
     private final int pid;
 
-    public ProcessKiller(Process p) {
+    public Killer(Process p) {
         try {
             Class t = p.getClass();
             Field f = t.getDeclaredField("pid");

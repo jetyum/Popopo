@@ -1,4 +1,4 @@
-package online.popopo.popopo.console;
+package online.popopo.popopo.console.process;
 
 import org.apache.commons.io.IOUtils;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -6,10 +6,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.*;
 import java.util.List;
 
-abstract class ProcessRunner extends BukkitRunnable {
+public abstract class Runner extends BukkitRunnable {
     private final BufferedReader reader;
 
-    ProcessRunner(Process p) {
+    public Runner(Process p) {
         InputStream in = p.getInputStream();
         Reader reader = new InputStreamReader(in);
 
@@ -30,5 +30,5 @@ abstract class ProcessRunner extends BukkitRunnable {
         IOUtils.closeQuietly(reader);
     }
 
-    abstract void onFinished(List<String> lines);
+    public abstract void onFinished(List<String> lines);
 }

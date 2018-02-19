@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-class Switcher {
+public class Switcher {
     private static final String METADATA_KEY = "domain_switch";
 
     static final int NONE = 0;
@@ -22,7 +22,7 @@ class Switcher {
 
     private final Plugin plugin;
 
-    Switcher(Plugin plugin) {
+    public Switcher(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -66,7 +66,7 @@ class Switcher {
         p.setMetadata(METADATA_KEY, v);
     }
 
-    int getState(Player p) {
+    public int getState(Player p) {
         if (p.hasMetadata(METADATA_KEY)) {
             List<MetadataValue> list;
 
@@ -80,8 +80,9 @@ class Switcher {
         return NONE;
     }
 
-    boolean switchTo(Player p, Domain from, Domain to,
-                     Runnable pre, Runnable post) {
+    public boolean switchTo(Player p,
+                            Domain from, Domain to,
+                            Runnable pre, Runnable post) {
         BukkitScheduler s = Bukkit.getScheduler();
 
         setState(p, SWITCHING);

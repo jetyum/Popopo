@@ -8,12 +8,11 @@ import online.popopo.api.function.listener.ListenerManager;
 import online.popopo.api.notice.Notice;
 import online.popopo.api.notice.UserNotice.PlayerNotice;
 import online.popopo.api.function.Function;
+import online.popopo.popopo.console.process.Handler;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 
 @Command(name = "console")
@@ -25,11 +24,11 @@ public class ConsoleFunc extends Function implements Listener {
     @Variable
     private CommandManager commandManager;
 
-    private ProcessHandler handler;
+    private Handler handler;
 
     @Override
     public void enable() {
-        handler = new ProcessHandler(plugin);
+        handler = new Handler(plugin);
 
         listenerManager.register(this);
         commandManager.register(this);

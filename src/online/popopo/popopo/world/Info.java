@@ -7,7 +7,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
-public class WorldInfo {
+public class Info {
     @Name
     private String name;
 

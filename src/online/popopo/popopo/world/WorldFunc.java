@@ -22,7 +22,7 @@ public class WorldFunc extends Function implements Listener {
     @Variable
     private ListenerManager listenerManager;
 
-    private final Map<String, WorldInfo> worlds;
+    private final Map<String, Info> worlds;
     private final Set<World> lobbys;
 
     public WorldFunc() {
@@ -35,7 +35,7 @@ public class WorldFunc extends Function implements Listener {
         try {
             Config c = new Config(plugin, "world.yml");
             c.load();
-            Injector.inject(c, worlds, WorldInfo.class);
+            Injector.inject(c, worlds, Info.class);
         } catch (IOException e) {
             plugin.getLogger().info("World wasn't loaded");
         }
@@ -43,7 +43,7 @@ public class WorldFunc extends Function implements Listener {
 
     @Override
     public void enable() {
-        for (WorldInfo i : worlds.values()) {
+        for (Info i : worlds.values()) {
             WorldCreator c = i.worldCreator();
             World w = c.createWorld();
 

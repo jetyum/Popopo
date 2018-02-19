@@ -1,4 +1,4 @@
-package online.popopo.popopo.console;
+package online.popopo.popopo.console.process;
 
 import online.popopo.api.notice.Notice;
 import org.bukkit.plugin.Plugin;
@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-class ProcessHandler implements Closeable {
+public class Handler implements Closeable {
     private final Plugin plugin;
     private final Map<String, Process> processes;
     private final Map<String, File> directories;
 
-    ProcessHandler(Plugin plugin) {
+    public Handler(Plugin plugin) {
         this.plugin = plugin;
         this.processes = new ConcurrentHashMap<>();
         this.directories = new ConcurrentHashMap<>();
@@ -45,7 +45,7 @@ class ProcessHandler implements Closeable {
         }
     }
 
-    boolean exec(Notice n, String user, String cmd) {
+    public boolean exec(Notice n, String user, String cmd) {
         if (processes.containsKey(user)) {
             return false;
         }
@@ -54,9 +54,9 @@ class ProcessHandler implements Closeable {
 
         n.good("$", cmd);
         processes.put(user, p);
-        new ProcessRunner(p) {
+        new Runner(p) {
             @Override
-            void onFinished(List<String> lines) {
+            public void onFinished(List<String> lines) {
                 processes.remove(user);
 
                 if (lines.isEmpty()) {
@@ -74,9 +74,9 @@ class ProcessHandler implements Closeable {
         return true;
     }
 
-    boolean destroy(String user) {
+    public boolean destroy(String user) {
         if (processes.containsKey(user)) {
-            new ProcessKiller(processes.get(user))
+            new Killer(processes.get(user))
                     .runTaskAsynchronously(plugin);
 
             return true;
