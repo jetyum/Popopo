@@ -48,12 +48,12 @@ public class NoticeFunc extends Function implements Listener, Runnable {
             plugin.getLogger().info("Server notice wasn't loaded");
         }
 
-        if (news.getInfoArticles() != null) {
-            BukkitScheduler s = Bukkit.getScheduler();
-            int t = news.getInfoPeriod();
+        if (news.getInfoArticles() == null) return;
 
-            s.runTaskTimerAsynchronously(plugin, this, t, t);
-        }
+        BukkitScheduler s = Bukkit.getScheduler();
+        int t = news.getInfoPeriod();
+
+        s.runTaskTimerAsynchronously(plugin, this, t, t);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class NoticeFunc extends Function implements Listener, Runnable {
         listenerManager.register(this);
     }
 
-    public void showArticle(Notice n, String prefix,
-                            Map<String, String> article) {
+    private void show(Notice n, String prefix,
+                      Map<String, String> article) {
         if (!article.containsKey("title")) {
             n.bad("Error", "There wasn't title");
 
@@ -101,7 +101,7 @@ public class NoticeFunc extends Function implements Listener, Runnable {
             }
 
             for (int i = 0; i < size; i++) {
-                showArticle(n, "News", a.get(i));
+                show(n, "News", a.get(i));
             }
         });
     }
@@ -112,6 +112,6 @@ public class NoticeFunc extends Function implements Listener, Runnable {
         List<Map<String, String>> a = news.getInfoArticles();
         int i = random.nextInt(a.size());
 
-        showArticle(n, "Info", a.get(i));
+        show(n, "Info", a.get(i));
     }
 }

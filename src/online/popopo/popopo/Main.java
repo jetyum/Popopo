@@ -8,6 +8,7 @@ import online.popopo.api.notice.Formatter;
 import online.popopo.api.notice.Theme;
 import online.popopo.api.selection.AreaSelector;
 import online.popopo.api.function.listener.ListenerManager;
+import online.popopo.popopo.console.ConsoleFunc;
 import online.popopo.popopo.domain.DomainFunc;
 import online.popopo.popopo.input.InputFunc;
 import online.popopo.popopo.notice.NoticeFunc;
@@ -38,6 +39,7 @@ public class Main extends JavaPlugin {
         }
 
         manager.register(
+                new ConsoleFunc(),
                 new WorldFunc(),
                 new VoteFunc(),
                 new TransferFunc(),

@@ -70,22 +70,18 @@ public class PortalFunc extends Function {
     public void create(Notice n, String name) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
-
-            return;
         } else if (portals.containsKey(name)) {
             n.bad("Error", "Portal already exists");
-
-            return;
-        }
-
-        Player p = ((PlayerNotice) n).getPlayer();
-        Cuboid s = selector.getSelectedArea(p);
-
-        if (s == null) {
-            n.bad("Error", "Please select cuboid area");
         } else {
-            portals.put(name, new Portal(name, s));
-            n.good("Done", "Portal was created");
+            Player p = ((PlayerNotice) n).getPlayer();
+            Cuboid s = selector.getSelectedArea(p);
+
+            if (s == null) {
+                n.bad("Error", "Please select cuboid area");
+            } else {
+                portals.put(name, new Portal(name, s));
+                n.good("Done", "Portal was created");
+            }
         }
     }
 

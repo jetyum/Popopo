@@ -10,13 +10,13 @@ import org.bukkit.plugin.Plugin;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VoteHandler {
+public class Handler {
     private final Plugin plugin;
     private final Vote vote;
     private final Formatter formatter;
     private final Map<Player, Ballot> ballots;
 
-    public VoteHandler(Plugin p, Vote v, Formatter f) {
+    public Handler(Plugin p, Vote v, Formatter f) {
         this.plugin = p;
         this.vote = v;
         this.formatter = f;

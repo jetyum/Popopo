@@ -29,8 +29,6 @@ public class ExplosionListener implements Listener {
         return judge.allows(l, EXPLOSION, OPTION_BLOCK);
     }
 
-
-
     @EventHandler
     public void onExplosionPrime(ExplosionPrimeEvent e) {
         Location l = e.getEntity().getLocation();

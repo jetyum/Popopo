@@ -17,7 +17,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 
 @Command(name = "console")
-public class ConsolePlugin extends Function implements Listener {
+public class ConsoleFunc extends Function implements Listener {
     @Variable
     private Plugin plugin;
     @Variable
@@ -39,20 +39,16 @@ public class ConsolePlugin extends Function implements Listener {
     public void exec(Notice n, String... args) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
-
-            return;
-        } if (!SystemUtils.IS_OS_LINUX) {
+        } else if (!SystemUtils.IS_OS_LINUX) {
             n.bad("$", "Can not used except linux");
+        } else {
+            String text = String.join(" ", args);
+            Player p = ((PlayerNotice) n).getPlayer();
+            String name = p.getName();
 
-            return;
-        }
-
-        String text = String.join(" ", args);
-        Player p = ((PlayerNotice) n).getPlayer();
-        String name = p.getName();
-
-        if (!handler.exec(n, name, text)) {
-            n.bad("$", "Already process started");
+            if (!handler.exec(n, name, text)) {
+                n.bad("$", "Already process started");
+            }
         }
     }
 
@@ -60,15 +56,13 @@ public class ConsolePlugin extends Function implements Listener {
     public void stop(Notice n) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
+        } else {
+            Player p = ((PlayerNotice) n).getPlayer();
+            String name = p.getName();
 
-            return;
-        }
-
-        Player p = ((PlayerNotice) n).getPlayer();
-        String name = p.getName();
-
-        if (!handler.destroy(name)) {
-            n.bad("$", "Process was not found");
+            if (!handler.destroy(name)) {
+                n.bad("$", "Process was not found");
+            }
         }
     }
 

@@ -95,22 +95,18 @@ public class ProtectFunc extends Function {
     public void add(Notice n, String name) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
-
-            return;
         } else if (reserves.containsKey(name)) {
             n.bad("Error", "Reserve already exists");
-
-            return;
-        }
-
-        Player p = ((PlayerNotice) n).getPlayer();
-        Cuboid s = selector.getSelectedArea(p);
-
-        if (s == null) {
-            n.bad("Error", "Please select cuboid area");
         } else {
-            reserves.put(name, new Reserve(name, s));
-            n.good("Done", "Reserve was added");
+            Player p = ((PlayerNotice) n).getPlayer();
+            Cuboid s = selector.getSelectedArea(p);
+
+            if (s == null) {
+                n.bad("Error", "Please select cuboid area");
+            } else {
+                reserves.put(name, new Reserve(name, s));
+                n.good("Done", "Reserve was added");
+            }
         }
     }
 

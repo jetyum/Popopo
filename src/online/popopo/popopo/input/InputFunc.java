@@ -6,6 +6,7 @@ import online.popopo.api.io.Injector;
 import online.popopo.api.io.tree.Resource;
 import online.popopo.api.notice.Formatter;
 import online.popopo.api.function.Function;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +14,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.IOException;
 import java.util.*;
@@ -68,35 +69,32 @@ public class InputFunc extends Function implements Listener {
     @EventHandler
     public void onChatTab(PlayerChatTabCompleteEvent e) {
         Player p = e.getPlayer();
-        String s = e.getLastToken();
+        String token = e.getLastToken();
 
-        if (roster.contains(p.getName())) {
-            return;
-        } else if (s.length() > MAX_LENGTH) {
+        if (roster.contains(p.getName())
+                || token.length() > MAX_LENGTH) {
             return;
         }
 
         Collection<String> c = e.getTabCompletions();
 
         c.clear();
-        c.addAll(candidateOf(s));
+        c.addAll(candidateOf(token));
 
         if (!c.isEmpty()) return;
 
-        c.addAll(japanese.convert(s, true));
+        BukkitScheduler s = Bukkit.getScheduler();
 
+        c.addAll(japanese.convert(token, true));
         roster.add(p.getName());
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (buffer.size() > BUFF_SIZE) {
-                    buffer.pop();
-                }
-
-                buffer.push(japanese.convert(s, false));
-                roster.remove(p.getName());
+        s.runTaskAsynchronously(plugin, () -> {
+            if (buffer.size() > BUFF_SIZE) {
+                buffer.pop();
             }
-        }.runTaskAsynchronously(plugin);
+
+            buffer.push(japanese.convert(token, false));
+            roster.remove(p.getName());
+        });
     }
 
     @EventHandler

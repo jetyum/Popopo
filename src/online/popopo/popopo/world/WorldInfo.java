@@ -7,7 +7,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
-class WorldInfo {
+public class WorldInfo {
     @Name
     private String name;
 
@@ -35,7 +35,7 @@ class WorldInfo {
     @Inject(key = "pvp")
     private boolean pvp = true;
 
-    WorldCreator worldCreator() {
+    public WorldCreator worldCreator() {
         WorldCreator c = WorldCreator.name(name);
 
         if (environment != null) {
@@ -61,15 +61,15 @@ class WorldInfo {
         return c;
     }
 
-    boolean isLobbyWorld() {
+    public boolean isLobbyWorld() {
         return lobby;
     }
 
-    Difficulty getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    boolean getPVP() {
+    public boolean getPVP() {
         return pvp;
     }
 }

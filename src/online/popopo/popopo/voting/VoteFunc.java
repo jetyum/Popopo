@@ -31,7 +31,7 @@ public class VoteFunc extends Function implements Listener {
     @Variable
     private CommandManager commandManager;
 
-    private VoteHandler handler = null;
+    private Handler handler = null;
 
     @Override
     public void enable() {
@@ -43,26 +43,22 @@ public class VoteFunc extends Function implements Listener {
     public void start(Notice n, String t, String... i) {
         if (!(n instanceof PlayerNotice)) {
             n.bad("Error", "Can't used except player");
-
-            return;
         } else if (handler != null) {
             n.bad("Error", "Already started voting");
+        } else {
+            Player p = ((PlayerNotice) n).getPlayer();
+            Vote v = new Vote(p, t, i);
+            Handler h = new Handler(plugin, v, formatter);
+            BukkitScheduler s = Bukkit.getScheduler();
 
-            return;
+            n.info("Info", "Start voting at now");
+            h.start();
+            handler = h;
+
+            s.runTaskLater(plugin, () -> {
+                if (h.equals(handler)) stop();
+            }, PERIOD);
         }
-
-        Player p = ((PlayerNotice) n).getPlayer();
-        Vote v = new Vote(p, t, i);
-        VoteHandler h = new VoteHandler(plugin, v, formatter);
-        BukkitScheduler s = Bukkit.getScheduler();
-
-        n.info("Info", "Start voting at now");
-        h.start();
-        handler = h;
-
-        s.runTaskLater(plugin, () -> {
-            if (h.equals(handler)) stop();
-        }, PERIOD);
     }
 
     public void stop() {
