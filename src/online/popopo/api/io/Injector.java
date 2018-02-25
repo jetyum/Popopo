@@ -21,16 +21,14 @@ public class Injector {
         for (Field f : t.getDeclaredFields()) {
             String k = getKeyIfHas(f);
 
-            if (k != null && from.contains(k)) {
-                try {
-                    boolean flag = f.isAccessible();
+            if (k != null && from.contains(k)) try {
+                boolean flag = f.isAccessible();
 
-                    f.setAccessible(true);
-                    f.set(to, from.get(k, f.getType()));
-                    f.setAccessible(flag);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                f.setAccessible(true);
+                f.set(to, from.get(k, f.getType()));
+                f.setAccessible(flag);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -41,16 +39,14 @@ public class Injector {
         for (Field f : t.getDeclaredFields()) {
             String k = getKeyIfHas(f);
 
-            if (k != null) {
-                try {
-                    boolean flag = f.isAccessible();
+            if (k != null) try {
+                boolean flag = f.isAccessible();
 
-                    f.setAccessible(true);
-                    to.set(k, f.get(from));
-                    f.setAccessible(flag);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                f.setAccessible(true);
+                to.set(k, f.get(from));
+                f.setAccessible(flag);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
     }

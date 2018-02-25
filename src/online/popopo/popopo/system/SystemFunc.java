@@ -12,39 +12,14 @@ import java.lang.management.ManagementFactory;
 
 @Command(name = "system")
 public class SystemFunc extends Function {
+    private static final String[] byteUnit = {"B", "kB", "MB", "GB", "TB"};
+
     @Variable
     private CommandManager commandManager;
 
     @Override
     public void enable() {
         commandManager.register(this);
-    }
-
-    private String memoryToString(long m) {
-        int uint = 0;
-        double memory = m;
-
-        while (memory > 1024) {
-            memory /= 1024;
-            uint += 1;
-        }
-
-        String s = String.format("%.2f", memory);
-
-        switch (uint) {
-            case 0:
-                return s + "B";
-            case 1:
-                return s + "KB";
-            case 2:
-                return s + "MB";
-            case 3:
-                return s + "GB";
-            case 4:
-                return s + "TB";
-            default:
-                return "-";
-        }
     }
 
     @SubCommand(name = "cpu")
@@ -61,22 +36,29 @@ public class SystemFunc extends Function {
         n.info("CPU", buf.toString());
     }
 
+    private String memoryToString(long m) {
+        int i = 0;
+        double memory = m;
+
+        while (memory > 1024) {
+            memory /= 1024;
+            i++;
+        }
+
+        String s = String.format("%.2f", memory);
+
+        return i < 5 ? s + byteUnit[i] : "error";
+    }
+
     @SubCommand(name = "ram")
     public void showRam(Notice n) {
         long total = Runtime.getRuntime().totalMemory();
         long free = Runtime.getRuntime().freeMemory();
         long used = total - free;
-        long rate = used * 100 / total;
-        StringBuilder buf = new StringBuilder();
+        int rate = (int) (used * 100 / total);
 
-        buf.append("Current usage is ");
-        buf.append((int) rate);
-        buf.append("% (");
-        buf.append(memoryToString(used));
-        buf.append("/");
-        buf.append(memoryToString(total));
-        buf.append(")");
-
-        n.info("RAM", buf.toString());
+        n.info("RAM", "Current usage is " + rate
+                + "% (" + memoryToString(used) + "/"
+                + memoryToString(total) + ")");
     }
 }

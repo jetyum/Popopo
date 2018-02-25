@@ -58,10 +58,8 @@ public class Judge {
         Reserve r = getReserve(l);
         String n = p.getName();
 
-        if (r == null) return true;
-        if (r.getMembers().contains(n)) return true;
-
-        return allows(r, a, License.OPTION_PLAYER);
+        return r == null || r.getMembers().contains(n)
+                || allows(r, a, License.OPTION_PLAYER);
     }
 
     public boolean allows(Player p, Block b, String a) {
@@ -75,9 +73,7 @@ public class Judge {
     public boolean allows(Location l, String a, String o) {
         Reserve r = getReserve(l);
 
-        if (r == null) return true;
-
-        return allows(r, a, o);
+        return r == null || allows(r, a, o);
     }
 
     public boolean allows(Block b, String a, String o) {

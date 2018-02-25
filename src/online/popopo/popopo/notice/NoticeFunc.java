@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class NoticeFunc extends Function implements Listener, Runnable {
+public class NoticeFunc extends Function implements Listener {
     @Variable
     private Plugin plugin;
     @Variable
@@ -32,6 +33,8 @@ public class NoticeFunc extends Function implements Listener, Runnable {
 
     private final ServerNotice news;
     private final Random random;
+
+    private BukkitRunnable task = null;
 
     public NoticeFunc() {
         this.news = new ServerNotice();
@@ -47,18 +50,6 @@ public class NoticeFunc extends Function implements Listener, Runnable {
         } catch (IOException e) {
             plugin.getLogger().info("Server notice wasn't loaded");
         }
-
-        if (news.getInfoArticles() == null) return;
-
-        BukkitScheduler s = Bukkit.getScheduler();
-        int t = news.getInfoPeriod();
-
-        s.runTaskTimerAsynchronously(plugin, this, t, t);
-    }
-
-    @Override
-    public void enable() {
-        listenerManager.register(this);
     }
 
     private void show(Notice n, String prefix,
@@ -84,6 +75,27 @@ public class NoticeFunc extends Function implements Listener, Runnable {
         });
     }
 
+    @Override
+    public void enable() {
+        listenerManager.register(this);
+
+        if (news.getInfoArticles() == null) return;
+
+        List<Map<String, String>> a = news.getInfoArticles();
+        int t = news.getInfoPeriod();
+
+        task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                Notice n = Notice.create(formatter);
+                int i = random.nextInt(a.size());
+
+                show(n, "Info", a.get(i));
+            }
+        };
+        task.runTaskTimerAsynchronously(plugin, t, t);
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
@@ -107,11 +119,7 @@ public class NoticeFunc extends Function implements Listener, Runnable {
     }
 
     @Override
-    public void run() {
-        Notice n = Notice.create(formatter);
-        List<Map<String, String>> a = news.getInfoArticles();
-        int i = random.nextInt(a.size());
-
-        show(n, "Info", a.get(i));
+    public void disable() {
+        if (task != null) task.cancel();
     }
 }

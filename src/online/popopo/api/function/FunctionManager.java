@@ -27,16 +27,14 @@ public class FunctionManager {
 
             for (Field f : t.getDeclaredFields()) {
                 if (f.isAnnotationPresent(Variable.class)
-                        && f.getType().isInstance(o)) {
-                    try {
-                        boolean flag = f.isAccessible();
+                        && f.getType().isInstance(o)) try {
+                    boolean flag = f.isAccessible();
 
-                        f.setAccessible(true);
-                        f.set(function, o);
-                        f.setAccessible(flag);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+                    f.setAccessible(true);
+                    f.set(function, o);
+                    f.setAccessible(flag);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
             }
         }
