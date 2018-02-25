@@ -1,0 +1,64 @@
+body {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #fff2db;
+    font-family: 'Avenir', 'Corbel', 'Osaka', sans-serif;
+}
+
+.panels {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.footer {
+    box-shadow: 0 0 5px 0 #e8dbc5;
+    justify-content: space-around;
+    color: #5f4f37;
+    width: 100%;
+    bottom: 0;
+    height: 40px;
+    font-size: 14px;
+    background: #ffdca6;
+}
+
+/* for player panel */
+.panel .time {
+    width: 98px;
+    margin-left: 8px;
+    background: #b5e291;
+}
+
+.panel .online {
+    margin-right: 8px;
+    background: #aad9f0;
+}
+
+.panel .offline {
+    margin-right: 8px;
+    background: #f48369;
+}
+
+/* for system panel */
+.panel .ram_use {
+    margin-top: 8px;
+    width: 63px;
+    background: #eda981;
+}
+
+.panel .ram_reserve {
+    width: 63px;
+    margin-left: 2px;
+    background: #b5e291;
+}
+
+.panel .ram_max {
+    width: 63px;
+    margin-right: 2px;
+    background: #efcc99;
+}
