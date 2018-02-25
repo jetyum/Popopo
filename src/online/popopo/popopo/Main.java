@@ -1,6 +1,7 @@
 package online.popopo.popopo;
 
 import online.popopo.api.function.FunctionManager;
+import online.popopo.popopo.monitor.MonitorFunc;
 import online.popopo.api.wrapper.command.CommandManager;
 import online.popopo.api.io.*;
 import online.popopo.api.io.tree.Config;
@@ -42,6 +43,7 @@ public class Main extends JavaPlugin {
                 new ConsoleFunc(),
                 new DomainFunc(),
                 new InputFunc(),
+                new MonitorFunc(),
                 new NoticeFunc(),
                 new PortalFunc(),
                 new ProtectFunc(),
