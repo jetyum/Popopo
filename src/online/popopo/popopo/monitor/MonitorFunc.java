@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.*;
+import java.util.Collections;
 
 public class MonitorFunc extends Function {
     private static final int PORT = 8123;
@@ -23,14 +24,25 @@ public class MonitorFunc extends Function {
 
     private BukkitRunnable task = null;
 
+    private FileSystem getFileSystem(URI uri) throws IOException {
+        try {
+            return FileSystems.getFileSystem(uri);
+        } catch (FileSystemNotFoundException e) {
+            return FileSystems.newFileSystem(
+                    uri, Collections.emptyMap()
+            );
+        }
+    }
+
     @Override
     public void enable() {
         File f = new File(plugin.getDataFolder(), "/web");
 
         if (!f.exists()) try {
             URI uri = getClass().getResource("/web/").toURI();
+            FileSystem sys = getFileSystem(uri);
 
-            Files.walk(Paths.get(uri)).forEach((p) -> {
+            Files.walk(sys.getPath("/web/")).forEach((p) -> {
                 String s = p.toString().substring(1);
 
                 if (!s.endsWith("/")) {
